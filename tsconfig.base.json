@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/node-lts/tsconfig.json"
+  ],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "strictNullChecks": true,
+    "resolvePackageJsonImports": true,
+    "resolvePackageJsonExports": true,
+    "incremental": true,
+    "noErrorTruncation": true,
+    "outDir": "dist/src"
+  }
+}

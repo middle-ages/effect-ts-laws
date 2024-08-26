@@ -1,0 +1,6 @@
+*.log
+.buildinfo
+.dev
+dist
+node_modules
+tmp

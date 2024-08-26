@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+path="${1:-src}"
+output="${2:-dot}"
+config="--config .dependency-cruiser.mjs"
+out=".dev/dependency-graph.svg"
+
+EXE='./node_modules/.bin/depcruise'
+
+if [ "$output" =~ "dot$" ]; then
+  $EXE "$path" \
+       $config \
+       --output-type "$output" | dot -T svg | 
+       sed 's/stroke-width="2"/stroke-width="0.8"/g' > \
+       "$out"
+elif [ "$output" = "dagre" ]; then
+  $EXE "$path" \
+       $config \
+       --output-type d2 | d2 --layout dagre --scale 1 - > \
+       "$out"
+else
+  $EXE "$path" \
+       $config \
+       --output-type d2 | d2 --layout elk --scale 1 - > \
+       "$out"
+fi
+
+
