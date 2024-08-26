@@ -18,10 +18,13 @@ export interface LawList<ArgLists extends UnknownArgs[] = UnknownArgs[]> {
    */
   unitName: string
 
-  /** List of laws that must pass for the law to pass. */
+  /** List of laws that must pass for the law list to pass. */
   laws: {[K in keyof ArgLists]: LawTest<ArgLists[K]>}
 
-  /** List of predicates extracted from the laws, one per law. */
+  /**
+   * List of predicates extracted from the laws, one per law. Useful when you
+   * want to test the laws using your own data.
+   */
   predicates: LawPredicates<ArgLists>
 }
 
@@ -86,6 +89,7 @@ export const verboseLaws = <ArgLists extends UnknownArgs[]>(
   testLaws(lawList, {...parameters, verbose: true})
 }
 
-type LawPredicates<ArgLists extends UnknownArgs[]> = {
+/** The type of all predicates extracted from every law in a `LawList`. */
+export type LawPredicates<ArgLists extends UnknownArgs[]> = {
   [K in keyof ArgLists]: LawTest<ArgLists[K]>['predicate']
 }

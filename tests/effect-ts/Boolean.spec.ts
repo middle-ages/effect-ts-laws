@@ -9,59 +9,38 @@ import {
   SemigroupSome,
   SemigroupXor,
 } from '@effect/typeclass/data/Boolean'
-import {Boolean as BO, pipe} from 'effect'
+import {Boolean as BO} from 'effect'
+import {testConcreteTypeclassLaws, testMonoid} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {testConcreteTypeclassLaws} from '../../src/laws.js'
 
 describe('@effect/typeclass/data/Boolean', () => {
   describe('Equivalence/order', () => {
-    testConcreteTypeclassLaws({
-      Equivalence: BO.Equivalence,
-      Order: BO.Order,
-    })({a: fc.boolean(), equalsA: (a: boolean, b: boolean) => a === b})
+    testConcreteTypeclassLaws(
+      {
+        Equivalence: BO.Equivalence,
+        Order: BO.Order,
+      },
+      {a: fc.boolean(), equalsA: (a, b) => a === b},
+    )
   })
 
   describe('Semigroup/monoid', () => {
-    const options = {
-      a: fc.boolean(),
-      equalsA: (a: boolean, b: boolean) => a === b,
-    }
+    const testBoolean = testMonoid(fc.boolean(), (a, b) => a === b)
 
-    describe('Equivalence semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupEqv, Monoid: MonoidEqv}),
-      )
+    describe('eqv', () => {
+      testBoolean(MonoidEqv, SemigroupEqv)
     })
 
-    describe('Every semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({
-          Semigroup: SemigroupEvery,
-          Monoid: MonoidEvery,
-        }),
-      )
+    describe('every', () => {
+      testBoolean(MonoidEvery, SemigroupEvery)
     })
 
-    describe('Some semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({
-          Semigroup: SemigroupSome,
-          Monoid: MonoidSome,
-        }),
-      )
+    describe('some', () => {
+      testBoolean(MonoidSome, SemigroupSome)
     })
 
-    describe('Xor semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({
-          Semigroup: SemigroupXor,
-          Monoid: MonoidXor,
-        }),
-      )
+    describe('xor', () => {
+      testBoolean(MonoidXor, SemigroupXor)
     })
   })
 })

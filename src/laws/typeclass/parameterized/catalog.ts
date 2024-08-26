@@ -1,4 +1,5 @@
 import {Kind, TypeLambda} from 'effect/HKT'
+import {Applicative} from './Applicative.js'
 import {Covariant} from './Covariant.js'
 import {Invariant} from './Invariant.js'
 import {Monad} from './Monad.js'
@@ -8,7 +9,12 @@ import {ParameterizedMap} from './options.js'
  * Map of typeclass name to their laws, for typeclasses of parameterized
  * types.
  */
-const parameterizedLaws = {Invariant, Covariant, Monad} as const
+export const parameterizedLaws = {
+  Invariant,
+  Covariant,
+  Monad,
+  Applicative,
+} as const
 
 /** A name of a typeclasses for parameterized types. */
 export type ParameterizedTypeclass = keyof typeof parameterizedLaws

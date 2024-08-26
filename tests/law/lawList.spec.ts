@@ -1,5 +1,5 @@
+import {lawTest, lawTests, testLaws} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {lawTest, lawTests, testLaws} from '../../src/law.js'
 
 const int = fc.integer({min: 1, max: 100})
 

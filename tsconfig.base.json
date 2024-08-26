@@ -13,7 +13,6 @@
     "resolvePackageJsonImports": true,
     "resolvePackageJsonExports": true,
     "incremental": true,
-    "noErrorTruncation": true,
-    "outDir": "dist/src"
+    "noErrorTruncation": true
   }
 }

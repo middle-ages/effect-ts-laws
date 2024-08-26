@@ -1,10 +1,12 @@
-import {Semigroup as SE} from '@effect/typeclass'
+import {Semigroup as SG} from '@effect/typeclass'
 import {getSemigroup as arraySemigroup} from '@effect/typeclass/data/Array'
 import {Array as AR, Equivalence as EQ, Number as NU, Order as OD} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../arbitraries.js'
-import {GetArbitrary, GetEquivalence, ParameterOverrides} from '../../../law.js'
+import {tinyInteger} from '../../../arbitraries/data.js'
+import {LiftArbitrary} from '../../../arbitraries/types.js'
+import {LiftEquivalence} from '../../../law/equivalence.js'
+import {ParameterOverrides} from '../../../law/lawList.js'
 import {testTypeclassLawsFor, TypeclassInstances} from './typeclass.js'
 
 /**
@@ -24,7 +26,7 @@ export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
 export const monoOrder: OD.Order<Mono> = AR.getOrder(NU.Order)
 
 /** The semigroup used for {@link testTypeclassLaws}. */
-export const monoSemigroup: SE.Semigroup<Mono> = arraySemigroup<number>()
+export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()
 
 /** Options for the monomorphic typeclass test runner. */
 export interface MonomorphicOptions<
@@ -33,8 +35,8 @@ export interface MonomorphicOptions<
   Out2 = unknown,
   Out1 = unknown,
 > {
-  getArbitrary: GetArbitrary<F, In1, Out2, Out1>
-  getEquivalence: GetEquivalence<F, In1, Out2, Out1>
+  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
+  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
 }
 
 /**
@@ -58,10 +60,11 @@ export const testTypeclassLaws = <
   Out2 = unknown,
   Out1 = unknown,
 >(
-  instances: Partial<TypeclassInstances<F, Mono, In1, Out2, Out1>>,
-  {getEquivalence, getArbitrary}: MonomorphicOptions<F, In1, Out2, Out1>,
+  instances: TypeclassInstances<F, Mono, In1, Out2, Out1>,
+  options: MonomorphicOptions<F, In1, Out2, Out1>,
   parameters?: ParameterOverrides,
 ) => {
+  const {getEquivalence, getArbitrary} = options
   const a: fc.Arbitrary<Mono> = fc.array(tinyInteger),
     equalsA: EQ.Equivalence<Mono> = AR.getEquivalence(NU.Equivalence),
     run = testTypeclassLawsFor<F, Mono>()<typeof instances, In1, Out2, Out1>(

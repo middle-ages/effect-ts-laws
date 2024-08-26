@@ -133,10 +133,10 @@ module.exports = {
         "or there's something in the test folder that isn't a test.",
       severity: 'error',
       from: {
-        pathNot: '^(test)'
+        pathNot: '^(tests)'
       },
       to: {
-        path: '^(test)'
+        path: '^(tests)'
       }
     },
     {
@@ -211,22 +211,22 @@ module.exports = {
   ],
   options: {
 
-    experimentalStats: true,
-
+    /* Which modules not to follow further when encountered */
     doNotFollow: {
-      path: ['node_modules'],
+      /* path: an array of regular expressions in strings to match against */
+      path: ['node_modules', 'index.ts']
     },
-    exclude: {
-      path: ['node_modules'],
+
+    /* Which modules to exclude */
+    exclude : {
+      /* path: an array of regular expressions in strings to match against */
+      path: ['node_modules', 'index.ts']
     },
-    includeOnly: ['^src', '^tests'],
 
     /* Which modules to exclusively include (array of regular expressions in strings)
        dependency-cruiser will skip everything not matching this pattern
-       includeOnly : [''],
-
     */
-
+    // includeOnly : [''],
 
     /* List of module systems to cruise.
        When left out dependency-cruiser will fall back to the list of _all_
@@ -237,8 +237,8 @@ module.exports = {
        As in practice only commonjs ('cjs') and ecmascript modules ('es6')
        are widely used, you can limit the moduleSystems to those.
      */
-
-    moduleSystems: ['es6'],
+    
+    // moduleSystems: ['cjs', 'es6'],
 
     /* prefix for links in html and svg output (e.g. 'https://github.com/you/yourrepo/blob/main/'
        to open it on your online repo or `vscode://file/${process.cwd()}/` to 
@@ -251,14 +251,14 @@ module.exports = {
        "specify": for each dependency identify whether it only exists before compilation or also after
      */
     tsPreCompilationDeps: true,
-
+    
     /* list of extensions to scan that aren't javascript or compile-to-javascript.
        Empty by default. Only put extensions in here that you want to take into
        account that are _not_ parsable.
     */
     // extraExtensionsToScan: [".json", ".jpg", ".png", ".svg", ".webp"],
 
-    /* if true combines the package.json found from the module up to the base
+    /* if true combines the package.jsons found from the module up to the base
        folder the cruise is initiated from. Useful for how (some) mono-repos
        manage dependencies & dependency definitions.
      */
@@ -276,7 +276,7 @@ module.exports = {
        defaults to './tsconfig.json'.
      */
     tsConfig: {
-      fileName: 'tsconfig.build.json'
+      fileName: 'tsconfig.src.json'
     },
 
     /* Webpack configuration to use to get resolve options from.
@@ -308,7 +308,7 @@ module.exports = {
        a hack.
     */
     // exoticRequireStrings: [],
-
+    
     /* options to pass on to enhanced-resolve, the package dependency-cruiser
        uses to resolve module references to disk. The values below should be
        suitable for most situations
@@ -317,12 +317,12 @@ module.exports = {
        there will override the ones specified here.
      */
     enhancedResolveOptions: {
-      /* What to consider as an 'exports' field in package.json */
+      /* What to consider as an 'exports' field in package.jsons */ 
       exportsFields: ["exports"],
       /* List of conditions to check for in the exports field.
          Only works when the 'exportsFields' array is non-empty.
       */
-      conditionNames: ["import", "default", "types"],
+      conditionNames: ["import", "require", "node", "default", "types", "test"],
       /*
          The extensions, by default are the same as the ones dependency-cruiser
          can access (run `npx depcruise --info` to see which ones that are in
@@ -357,23 +357,22 @@ module.exports = {
            for details and some examples. If you don't specify a theme
            dependency-cruiser falls back to a built-in one.
         */
-        theme: {
-          graph: {
-            /* splines: "ortho" gives straight lines, but is slow on big graphs
-               splines: "true" gives bezier curves (fast, not as nice as ortho)
-           */
-            splines: "true"
-          },
-        }
+        // theme: {
+        //   graph: {
+        //     /* splines: "ortho" gives straight lines, but is slow on big graphs
+        //        splines: "true" gives bezier curves (fast, not as nice as ortho)
+        //    */
+        //     splines: "true"
+        //   },
+        // }
       },
       archi: {
         /* pattern of modules that can be consolidated in the high level
           graphical dependency graph. If you use the high level graphical
           dependency graph reporter (`archi`) you probably want to tweak
           this collapsePattern to your situation.
-        collapsePattern: '^(?:packages|src/*|lib(s?)|app(s?)|bin|test(s?)|spec(s?))/[^/]+|node_modules/(?:@[^/]+/[^/]+|[^/]+)',
         */
-        collapsePattern: '^(src(/([^/]+)){3})'
+        collapsePattern: '^(?:packages|src|lib(s?)|app(s?)|bin|test(s?)|spec(s?))/[^/]+|node_modules/(?:@[^/]+/[^/]+|[^/]+)',
 
         /* Options to tweak the appearance of your graph. If you don't specify a
            theme for 'archi' dependency-cruiser will use the one specified in the
@@ -387,4 +386,4 @@ module.exports = {
     }
   }
 };
-// generated: dependency-cruiser@16.3.9 on 2024-07-22T11:20:45.504Z
+// generated: dependency-cruiser@16.4.0 on 2024-08-26T13:34:49.463Z

@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Boolean` data type. */
+/** Typeclass law tests for `Number` data type. */
 import {
   MonoidMax,
   MonoidMin,
@@ -9,50 +9,44 @@ import {
   SemigroupMultiply,
   SemigroupSum,
 } from '@effect/typeclass/data/Number'
-import {Number as NU, pipe} from 'effect'
-import {tinyInteger} from '../../src/arbitraries.js'
-import {testConcreteTypeclassLaws} from '../../src/laws.js'
+import {Number as NU} from 'effect'
+import {
+  testConcreteTypeclassLaws,
+  testMonoid,
+  tinyInteger,
+} from 'effect-ts-laws'
 
 describe('@effect/typeclass/data/Number', () => {
-  const options = {a: tinyInteger, equalsA: (a: number, b: number) => a === b}
+  const a = tinyInteger,
+    equalsA = (a: number, b: number) => a === b
 
   describe('Equivalence/order', () => {
-    testConcreteTypeclassLaws({
-      Equivalence: NU.Equivalence,
-      Order: NU.Order,
-    })(options)
+    testConcreteTypeclassLaws(
+      {
+        Equivalence: NU.Equivalence,
+        Order: NU.Order,
+      },
+      {a, equalsA},
+    )
   })
 
   describe('Semigroup/monoid', () => {
-    describe('Sum semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupSum, Monoid: MonoidSum}),
-      )
+    const testNumber = testMonoid(a, equalsA)
+
+    describe('sum', () => {
+      testNumber(MonoidSum, SemigroupSum)
     })
 
-    describe('Multiply semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({
-          Semigroup: SemigroupMultiply,
-          Monoid: MonoidMultiply,
-        }),
-      )
+    describe('multiply', () => {
+      testNumber(MonoidMultiply, SemigroupMultiply)
     })
 
-    describe('Minimum semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupMin, Monoid: MonoidMin}),
-      )
+    describe('min', () => {
+      testNumber(MonoidMin, SemigroupMin)
     })
 
-    describe('Maximum semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupMax, Monoid: MonoidMax}),
-      )
+    describe('max', () => {
+      testNumber(MonoidMax, SemigroupMax)
     })
   })
 })

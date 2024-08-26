@@ -1,10 +1,13 @@
 import {Invariant as IN} from '@effect/typeclass'
 import {flow, identity, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {unaryFunction} from '../../../arbitraries.js'
-import {lawTest, lawTests} from '../../../law.js'
+import {unaryFunction} from '../../../arbitraries/function.js'
+import {liftEquivalences} from '../../../law/equivalence.js'
+import {lawTests} from '../../../law/lawList.js'
+import {lawTest} from '../../../law/lawTest.js'
 import {CommonOptions} from './options.js'
 
+/** Test Invariant laws. */
 export const Invariant = <F extends TypeLambda, A, B, C, In1, Out2, Out1>({
   a,
   b,
@@ -17,12 +20,12 @@ export const Invariant = <F extends TypeLambda, A, B, C, In1, Out2, Out1>({
 }: CommonOptions<InvariantTypeLambda, F, A, B, C, In1, Out2, Out1>) => {
   type Data = Kind<F, In1, Out2, Out1, A>
   const fa = getArbitrary(a),
-    [equalsFa, equalsFc] = [getEquivalence(equalsA), getEquivalence(equalsC)],
+    [equalsFa, equalsFc] = liftEquivalences(getEquivalence)(equalsA, equalsC),
     [fab, fbc, fba, fcb] = [
-      unaryFunction(b)<A>(),
-      unaryFunction(c)<B>(),
-      unaryFunction(a)<B>(),
-      unaryFunction(b)<C>(),
+      unaryFunction<A>()(b),
+      unaryFunction<B>()(c),
+      unaryFunction<B>()(a),
+      unaryFunction<C>()(b),
     ]
 
   return lawTests(

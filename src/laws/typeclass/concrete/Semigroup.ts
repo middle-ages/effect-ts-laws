@@ -1,5 +1,6 @@
 import {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
-import {lawTest, lawTests} from '../../../law.js'
+import {lawTests} from '../../../law/lawList.js'
+import {lawTest} from '../../../law/lawTest.js'
 import {ConcreteOptions} from './options.js'
 
 declare module './options.js' {
@@ -11,6 +12,7 @@ declare module './options.js' {
   }
 }
 
+/** Test Semigroup laws. */
 export const Semigroup = <A>({
   F,
   equalsA,

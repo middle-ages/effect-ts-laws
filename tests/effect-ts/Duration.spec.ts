@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Boolean` data type. */
+/** Typeclass law tests for `Duration` data type. */
 import {
   MonoidMax,
   MonoidMin,
@@ -7,44 +7,37 @@ import {
   SemigroupMin,
   SemigroupSum,
 } from '@effect/typeclass/data/Duration'
-import {Duration as DU, pipe} from 'effect'
-import fc from 'fast-check'
-import {testConcreteTypeclassLaws} from '../../src/laws.js'
+import {Duration as DU} from 'effect'
+import {duration, testConcreteTypeclassLaws, testMonoid} from 'effect-ts-laws'
 
 describe('@effect/typeclass/data/Number', () => {
-  const options = {
-    a: fc.integer().map(i => DU.millis(i)),
-    equalsA: (a: DU.Duration, b: DU.Duration) =>
-      DU.toMillis(a) === DU.toMillis(b),
-  }
+  const a = duration(),
+    equalsA = (a: DU.Duration, b: DU.Duration) =>
+      DU.toMillis(a) === DU.toMillis(b)
 
   describe('Equivalence/order', () => {
-    testConcreteTypeclassLaws({
-      Equivalence: DU.Equivalence,
-      Order: DU.Order,
-    })(options)
+    testConcreteTypeclassLaws(
+      {
+        Equivalence: DU.Equivalence,
+        Order: DU.Order,
+      },
+      {a, equalsA},
+    )
   })
 
   describe('Semigroup/monoid', () => {
-    describe('Sum semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupSum, Monoid: MonoidSum}),
-      )
+    const testDuration = testMonoid<DU.Duration>(a, equalsA)
+
+    describe('sum', () => {
+      testDuration(MonoidSum, SemigroupSum)
     })
 
-    describe('Minimum semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupMin, Monoid: MonoidMin}),
-      )
+    describe('min', () => {
+      testDuration(MonoidMin, SemigroupMin)
     })
 
-    describe('Maximum semigroup/monoid', () => {
-      pipe(
-        options,
-        testConcreteTypeclassLaws({Semigroup: SemigroupMax, Monoid: MonoidMax}),
-      )
+    describe('max', () => {
+      testDuration(MonoidMax, SemigroupMax)
     })
   })
 })

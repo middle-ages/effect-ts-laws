@@ -1,8 +1,6 @@
 import {Number as NU, Order as OD, pipe} from 'effect'
+import {Order, tinyInteger, verboseLaws} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../src/arbitraries.js'
-import {verboseLaws} from '../../../src/law.js'
-import {Order} from '../../../src/laws.js'
 
 const instance = NU.Order,
   equalsA = NU.Equivalence,

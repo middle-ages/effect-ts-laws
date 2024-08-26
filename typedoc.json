@@ -1,0 +1,12 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./index.ts"],
+  "out": "../effect-ts-laws-docs",
+  "readme": "./README.md",
+  "hideGenerator": true,
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "tsconfig": "./tsconfig.build.json",
+  "githubPages": true,
+  "cleanOutputDir": false
+}

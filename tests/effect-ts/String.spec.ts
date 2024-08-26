@@ -1,17 +1,16 @@
-/** Typeclass law tests for `Predicate` data type. */
+/** Typeclass law tests for `String` data type. */
 import {Monoid, Semigroup} from '@effect/typeclass/data/String'
-import {pipe, String as STR} from 'effect'
+import {String as STR} from 'effect'
+import {testConcreteTypeclassLaws} from 'effect-ts-laws'
 import {Equivalence} from 'effect/String'
 import fc from 'fast-check'
-import {testConcreteTypeclassLaws} from '../../src/laws.js'
 
 describe('@effect/typeclass/data/String', () => {
-  pipe(
+  testConcreteTypeclassLaws(
+    {Semigroup, Monoid, Equivalence},
     {
       a: fc.string(),
       equalsA: STR.Equivalence,
     },
-
-    testConcreteTypeclassLaws({Semigroup, Monoid, Equivalence}),
   )
 })

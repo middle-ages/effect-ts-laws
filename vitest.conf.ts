@@ -13,7 +13,15 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: './.dev',
-      exclude: ['dist', 'dev', 'src/dev', 'tests', 'vitest.conf.ts'],
+      exclude: [
+        'dist',
+        'dev',
+        'src/dev',
+        'tests',
+        'vitest.conf.ts',
+        'eslint.config.js',
+        '.dependency-cruiser.cjs',
+      ],
     },
   },
   resolve: {

@@ -6,7 +6,8 @@
     "sourceMap": true,
     "incremental": true,
     "composite": false,
-    "noEmit": false
+    "noEmit": false,
+    "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src", "index.ts"]
 }

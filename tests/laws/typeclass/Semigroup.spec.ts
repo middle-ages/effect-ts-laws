@@ -1,19 +1,17 @@
-import {Semigroup as SE} from '@effect/typeclass'
+import {Semigroup as SG} from '@effect/typeclass'
 import {getSemigroup} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
+import {Semigroup, tinyInteger, verboseLaws} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../src/arbitraries.js'
-import {verboseLaws} from '../../../src/law.js'
-import {Semigroup} from '../../../src/laws.js'
 
 const intArray = fc.array(tinyInteger),
   instance = getSemigroup<number>(),
   equalsA = AR.getEquivalence(NU.Equivalence),
-  laws = (instance: SE.Semigroup<readonly number[]>) =>
+  laws = (instance: SG.Semigroup<readonly number[]>) =>
     Semigroup({F: instance, equalsA, a: intArray})
 
 const predicate =
-  (instance: SE.Semigroup<readonly number[]>) =>
+  (instance: SG.Semigroup<readonly number[]>) =>
   (
     a: readonly number[],
     b: readonly number[],
@@ -23,7 +21,7 @@ const predicate =
     return associativity(a, b, c) && combineManyAssociativity(a, b, c)
   }
 
-const assertInstance = (instance: SE.Semigroup<readonly number[]>) => {
+const assertInstance = (instance: SG.Semigroup<readonly number[]>) => {
   fc.assert(fc.property(intArray, intArray, intArray, predicate(instance)))
 }
 

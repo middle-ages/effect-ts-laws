@@ -1,8 +1,6 @@
 import {Equivalence as EQ, Number as NU, pipe} from 'effect'
+import {Equivalence, tinyInteger, verboseLaws} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../src/arbitraries.js'
-import {verboseLaws} from '../../../src/law.js'
-import {Equivalence} from '../../../src/laws.js'
 
 const instance = NU.Equivalence,
   laws = (instance: EQ.Equivalence<number>) =>

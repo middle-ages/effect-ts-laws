@@ -1,6 +1,7 @@
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
-import {lawTest, lawTests} from '../../../law.js'
+import {lawTests} from '../../../law/lawList.js'
+import {lawTest} from '../../../law/lawTest.js'
 import {ConcreteOptions} from './options.js'
 
 declare module './options.js' {
@@ -12,6 +13,7 @@ declare module './options.js' {
   }
 }
 
+/** Test Monoid laws. */
 export const Monoid = <A>({
   F,
   equalsA,

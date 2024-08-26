@@ -1,5 +1,6 @@
 /** Typeclass law tests for readonly array instances. */
 import {
+  Applicative,
   Covariant,
   getMonoid,
   getSemigroup,
@@ -7,13 +8,13 @@ import {
   Monad,
 } from '@effect/typeclass/data/Array'
 import {Array as AR} from 'effect'
-import fc from 'fast-check'
 import {
   Mono,
   monoEquivalence,
   monoOrder,
   testTypeclassLaws,
-} from '../../src/laws.js'
+} from 'effect-ts-laws'
+import fc from 'fast-check'
 
 describe('@effect/typeclass/data/Array', () => {
   testTypeclassLaws(
@@ -24,6 +25,7 @@ describe('@effect/typeclass/data/Array', () => {
       Monoid: getMonoid<Mono>(),
       Invariant,
       Covariant,
+      Applicative,
       Monad,
     },
     {getEquivalence: AR.getEquivalence, getArbitrary: fc.array},

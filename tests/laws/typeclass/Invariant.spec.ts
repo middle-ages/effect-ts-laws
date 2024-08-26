@@ -4,9 +4,7 @@ import {Array as AR, Number as NU, pipe} from 'effect'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../src/arbitraries.js'
-import {verboseLaws} from '../../../src/law.js'
-import {Invariant} from '../../../src/laws.js'
+import {Invariant, tinyInteger, verboseLaws} from 'effect-ts-laws'
 
 type Instance = IN.Invariant<ReadonlyArrayTypeLambda>
 

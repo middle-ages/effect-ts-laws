@@ -26,6 +26,7 @@ export default tseslint.config(
 
   {
     rules: {
+      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {

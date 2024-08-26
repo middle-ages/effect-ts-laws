@@ -1,7 +1,5 @@
 # Self-Tests for the Typeclass Laws
 
-The tests here test the [typeclass laws](../../../src/laws/typeclass).
-
 For each typeclass we test:
 
 1. The laws pass on some well tested instance, such as `ReadonlyArray<number>`.

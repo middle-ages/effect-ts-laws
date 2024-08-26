@@ -1,7 +1,4 @@
-<h1 align='center' style='border: 0px !important'>
-  ⚖
-  <code style='color:#555'>️ effect-ts-laws</code>
-</h1>
+<h1 align='center' style='border: 0px !important'>⚖ effect-ts-laws</h1>
 
 <h3 align='center' style='border: 0px !important'>
   Law Testing for
@@ -11,87 +8,160 @@
 
 A library for testing [effect-ts](https://github.com/Effect-ts/effect)
 typeclass laws using
-[fast-check](https://github.com/dubzzz/fast-check).
+[fast-check](https://github.com/dubzzz/fast-check). API is
+[documented here](https://middle-ages.github.io/effect-ts-laws-docs/).
 
-1. [Synopsis](#synopsis)
-2. [About](#about)
-3. [Using](#using)
-4. [Limitations](#limitations)
-5. [Based Upon](#based-upon)
+1. [About](#about)
+2. [Limitations](#limitations)
+3. [More Information](#more-information)
+4. [Based Upon](#based-upon)
+5. [See Also](#see-also)
 
-## Synopsis
+<h2>Synopsis</h2>
 
-Run typeclass law tests on  `effect-ts` function `Array.map`
-for numeric arrays:
+<details><summary style='background:#f0f6ff'>Introductory Examples <span style='float: right'>👈 <i>click</i></span></summary>
+
+---
+
+You wrote a new data type: `MyTuple`, and an instance of the effect-ts
+`Covariant` typeclass. Lets test it for free:
 
 ```ts
-import {Number, Array} from 'Effect'
-import {ArrayTypeLambda, Covariant} from '@Effect/typeclass/Covariant'
-import {testLaws, covariant} from 'effect-ts-laws/typeclass'
+import {Covariant as CO, Invariant as IN} from '@effect/typeclass'
+import {Array as AR} from 'effect'
+import {dual} from 'effect/Function'
+import {TypeLambda} from 'effect/HKT'
+import fc from 'fast-check'
+import {testTypeclassLaws} from '../src/index.js'
 
-const laws: Laws<Covariant<ArrayTypeLambda>> = covariant('Array')(
-                          // Provide a name for test labels ⬏
-  Covariant,              // The Covariant instance we are testing.
-  fc.array(fc.integer()), // Arbitrary required for Covariant laws.
-  Array.getEquivalence,   // Equivalence is also required.
-)(
-  Number.Increment,       // A pair of functions are required. Their
-  Number.multiply(10),    // types must match the given arbitrary.
-  Number.Equivalence,     // Finally, Equivalence for underlying type.
-)
+describe('MyTuple', () => {
+  type MyTuple<A> = [A]
 
-describe('Array instance Covariant laws', () => {
-  testLaws(laws)
+  interface MyTupleTypeLambda extends TypeLambda {
+    readonly type: MyTuple<this['Target']>
+  }
+
+  const map: CO.Covariant<MyTupleTypeLambda>['map'] = dual(
+    2,
+    <A, B>([a]: MyTuple<A>, ab: (a: A) => B): MyTuple<B> => [ab(a)],
+  )
+
+  // The instance we want to test
+  const Covariant: CO.Covariant<MyTupleTypeLambda> = {
+    map,
+    imap: CO.imap<MyTupleTypeLambda>(map),
+  }
+
+  testTypeclassLaws(
+    {Invariant, Covariant},
+    {getEquivalence: AR.getEquivalence, getArbitrary: fc.tuple},
+  )
 })
 ```
 
-When run would show:
+`fast-check` will try to find a counter example that breaks the laws. If no such
+example is found, you should see:
 
-<pre style='background:black;color:#eee'>
-<font color='green'>✓</font> Covariant.identity    ≡ ∀ a ∈ Array: a ▹ map(I) = a ▹ I
-<font color='green'>✓</font> Covariant.composition ≡ ∀ a ∈ Array: a ▹ map(f₁ ∘ f₂) = a ▹ map(f₁) ∘ map(f₂)
-</pre>
+<img src='docs/synopsis-tuple.png' alt='synopsis output' width=100%>
 
-Showing the the pair of functor laws passed.
+---
+
+Run the typeclass law tests on the `Order` and `Monad` instances of the
+effect-ts `Option` data type:
+
+```ts
+import {Monad} from '@effect/typeclass/data/Option'
+import {Option as OP} from 'effect'
+import {Arbitraries, monoOrder, testTypeclassLaws} from 'effect-ts-laws'
+
+describe('@effect/typeclass/data/Option', () => {
+  testTypeclassLaws(
+    {Order: OP.getOrder(monoOrder), Monad},
+    {getEquivalence: OP.getEquivalence, getArbitrary: Arbitraries.option},
+  )
+})
+```
+
+_Vitest reporter_ shows law test results for the `Option` data type:
+
+<img src='docs/synopsis-option.png' alt='synopsis output' width=90%>
+
+</details>
 
 ## About
 
 Law testing is useful when you are building your own data types and their
 associated `effect-ts` instances. Law tests help you verify your instances are
-lawful. This library includes most of the laws associated with the `effect-ts`
-typeclasses so you can easily test your own instances.
+lawful. This is a library of the `effect-ts` typeclass laws, and some law
+testing infrastructure.
 
-Other features:
+The implementation features:
 
-1. A test suite for most of `effect-ts` built-in instances.
-2. Reusable `fast-check` properties for functions and relations, including
-   `Injective`, `Surjective`, `Bijective`, `Reflexive`, `Symmetric`,
-   and more. The full list is here: Algebraic Properties
-3. Examples of creating lawful instances for your data types
-   and of using algebraic property tests for free testing
-   of a simple web application.
+* `effect-ts` Data Type Tests. Because:
+  * It could help `effect-ts`.
+  * Serves as an excellent _self-test_ suite.
+  * See [status](#status) for details on what is ready.
+* _Randomness_. Uses `fast-check` property testing. For
+  _parameterized type_ typeclass laws, all functions are randomly generated as
+  well.
+* Minimal work to test instances for your own data types: it can all be
+  done with single function that takes the instances under test and
+  a pair of functions: `getEquivalence` and `getArbitrary`.
+  * Lovely test coverage for the price of writing two functions. You
+    probably have them somewhere already.
+* Excellent tests and reasonable documentation.  
 
-## Using
+API is [documented here](https://middle-ages.github.io/effect-ts-laws-docs/).
 
-<font color='red'>TODO</font>:
+# Status
 
-1. Importing
-2. API docs
-3. Examples
+<details><summary style='background:#f0f6ff'>Coverage Matrix <span style='float: right'>👈 <i>click</i></span></summary>
+
+---
+
+Matrix showing _data-types_ (in columns) vs. _typeclass law tests_ (in rows).
+Each intersection of data type and typeclass can be either:
+**ready** (✅), **not ready** (❌), or **not relevant** (☐). First data row
+show the _typeclass laws_ implementation status, and first data column shows
+_data type tests_ implementation status.
+
+|           | Typeclass→ |     | Equivalence | Order | Semigroup | Monoid | Invariant | Covariant | Applicative | Monad | Traversable |
+| --------- | ---------- | --- | ----------- | ----- | --------- | ------ | --------- | --------- | ----------- | ----- | ----------- |
+|           |            |     | ✅           | ✅     | ✅         | ✅      | ✅         | ✅         | ✅           | ✅     | ❌           |
+|           |            |     |             |       |           |        |           |           |             |       |             |
+| **↓Data** |            |     |             |       |           |        |           |           |             |       |             |
+| Boolean   | ✅          |     | ✅           | ✅     | ✅         | ✅      | ☐         | ☐         | ☐           | ☐     | ☐           |
+| Number    | ✅          |     | ✅           | ✅     | ✅         | ✅      | ☐         | ☐         | ☐           | ☐     | ☐           |
+| String    | ✅          |     | ✅           | ✅     | ✅         | ✅      | ☐         | ☐         | ☐           | ☐     | ☐           |
+| BigInt    | ✅          |     | ✅           | ✅     | ✅         | ✅      | ☐         | ☐         | ☐           | ☐     | ☐           |
+| Duration  | ✅          |     | ✅           | ✅     | ✅         | ✅      | ☐         | ☐         | ☐           | ☐     | ☐           |
+| DateTime  | ✅          |     | ✅           | ✅     | ☐         | ☐      | ☐         | ☐         | ☐           | ☐     | ☐           |
+| Identity  | ✅          |     | ☐           | ☐     | ☐         | ☐      | ✅         | ✅         | ✅           | ✅     | ❌           |
+| Option    | ✅          |     | ✅           | ✅     | ✅         | ✅      | ✅         | ✅         | ✅           | ✅     | ❌           |
+| Either    | ✅          |     | ✅           | ☐     | ☐         | ☐      | ✅         | ✅         | ✅           | ✅     | ❌           |
+| Array     | ✅          |     | ✅           | ✅     | ✅         | ✅      | ✅         | ✅         | ✅           | ✅     | ❌           |
+| Struct    | ❌          |     | ❌           | ❌     | ❌         | ❌      | ❌         | ❌         | ❌           | ❌     | ❌           |
+| Record    | ❌          |     | ❌           | ❌     | ❌         | ❌      | ❌         | ❌         | ❌           | ❌     | ❌           |
+| Effect    | ❌          |     | ❌           | ❌     | ❌         | ❌      | ❌         | ❌         | ❌           | ❌     | ❌           |
+
+</details>
 
 ## Limitations
 
-1. Ignorant of typeclass hierarchy.
-2. Laws for typeclasses on
-   [parameterized types](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
-   all run on a single underlying value type: `readonly number[]`. This means,
-   for example, that when your `map` function is tested, the function it is
-   given is of type
-   `(a: readonly number[]) ⇒ readonly number[]`. The code supports setting exact
-   types if you need them, so you can for example test your `map` function using
-   a function of type `(a: RegExp) ⇒ boolean` by building the laws with your own
-   functions. See [the example](./examples) if for are working untyped maybe
-3. The code lets you test with any
+1. Very early release.
+2. Ignorant of typeclass hierarchy. You must flatten your typeclass hierarchy
+   manually. The
+   [diagrams here](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
+   should help.
+3. Testing multiple instances of same data type, for example for `sum` and
+   `multiply` monoids, is not as simple as it could be.
+
+## More Information
+
+* [API documentation](https://middle-ages.github.io/effect-ts-laws-docs/).
+* `README` at [the laws for typeclasses](src/laws/typeclass/concrete/README.md) on concrete types.
+* `README` at [the laws for typeclasses](src/laws/typeclass/parameterized/README.md) on parameterized types.
+* `README` at the typeclass laws [self-tests](tests/laws/typeclass/README.md).
 
 ## Based Upon
 
@@ -99,18 +169,11 @@ Other features:
    [Giulio Canti](https://github.com/gcanti)
 2. Scala's [Discipline](https://typelevel.org/cats/typeclasses/lawtesting.html)
 
-eeeeeeeeeee
+## See Also
 
 1. [fast-check](https://github.com/dubzzz/fast-check)
 2. [effect-ts](https://github.com/Effect-ts/effect)
 
-run laws on your own data
-
-Typeclasses
-
-Data Types
-
-
-ts-fp typelevel thingy
-
-let user format the bad examples of their data type
+<style>
+  summary:hover { background: #e0edf8 !important }
+</style>

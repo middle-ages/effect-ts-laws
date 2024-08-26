@@ -4,12 +4,10 @@ import {
   Invariant as arrayInvariant,
 } from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
+import {Covariant, tinyInteger, verboseLaws} from 'effect-ts-laws'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../src/arbitraries.js'
-import {Covariant} from '../../../src/laws.js'
-import {verboseLaws} from '../../../src/law.js'
 
 type Instance = CO.Covariant<ReadonlyArrayTypeLambda>
 

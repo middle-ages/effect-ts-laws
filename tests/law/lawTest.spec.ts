@@ -1,6 +1,6 @@
 import {Boolean as BO, flow, pipe} from 'effect'
+import {asProperty, LawTest, lawTest, testLaw} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {asProperty, LawTest, lawTest, testLaw} from '../../src/law.js'
 
 const int = fc.integer({min: 0, max: 100})
 

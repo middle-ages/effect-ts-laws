@@ -1,6 +1,6 @@
 import {pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {LawList, ParameterOverrides, verboseLaws} from '../../../law.js'
+import {LawList, ParameterOverrides, verboseLaws} from '../../../law/lawList.js'
 import {
   ParameterizedInstances,
   parameterizedLawsFor,
@@ -52,14 +52,17 @@ export const testParameterizedTypeclassLaw =
  * Test [parameterized type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
  * typeclass laws for the given instances of some data type.
  *
- * @param instances - Instances to test. Key is typeclass name and value is the
+ * Call with no parameters but with the type lambda of your data type. You will
+ * get back a function that takes two required and one optional arguments:
+ *
+ * 1. `instances` - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Monad: Option.Monad }` will run
  * the monad typeclass laws on `Option`.
- * @param options - The union of all options required for testing the instances
+ * 2. `options` - The union of all options required for testing the instances
  * given in the `instances` argument. The specific options depend on the list
  * of instances being tested, but they are all either equalities, arbitraries,
  * or functions on the underlying types, that are required for testing the laws.
- * @param parameters - Optional run-time `fc-check` parameters.
+ * 3. `parameters` - Optional run-time `fc-check` parameters.
  */
 export const testParameterizedTypeclassLaws =
   <F extends TypeLambda, A, B = A, C = A>() =>

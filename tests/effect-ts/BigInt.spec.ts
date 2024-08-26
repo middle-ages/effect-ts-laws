@@ -1,31 +1,21 @@
-/** Typeclass law tests for `Boolean` data type. */
+/** Typeclass law tests for `BigInt` data type. */
 import {
   MonoidMultiply,
   MonoidSum,
   SemigroupMultiply,
   SemigroupSum,
 } from '@effect/typeclass/data/BigInt'
-import {pipe} from 'effect'
+import {testMonoid} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {testConcreteTypeclassLaws} from '../../src/laws.js'
 
 describe('@effect/typeclass/data/BigInt', () => {
-  const options = {a: fc.bigInt(), equalsA: (a: bigint, b: bigint) => a === b}
+  const testBigInt = testMonoid(fc.bigInt(), (a, b) => a === b)
 
-  describe('Sum semigroup/monoid', () => {
-    pipe(
-      options,
-      testConcreteTypeclassLaws({Semigroup: SemigroupSum, Monoid: MonoidSum}),
-    )
+  describe('sum', () => {
+    testBigInt(MonoidSum, SemigroupSum)
   })
 
-  describe('Multiply semigroup/monoid', () => {
-    pipe(
-      options,
-      testConcreteTypeclassLaws({
-        Semigroup: SemigroupMultiply,
-        Monoid: MonoidMultiply,
-      }),
-    )
+  describe('multiply', () => {
+    testBigInt(MonoidMultiply, SemigroupMultiply)
   })
 })

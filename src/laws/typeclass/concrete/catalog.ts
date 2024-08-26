@@ -6,7 +6,7 @@ import {Order} from './Order.js'
 import {Semigroup} from './Semigroup.js'
 
 /** Map of typeclass name to their laws, for typeclasses of concrete types. */
-const concreteLaws = {
+export const concreteLaws = {
   Equivalence,
   Monoid,
   Order,

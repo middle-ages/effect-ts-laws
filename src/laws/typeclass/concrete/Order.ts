@@ -1,6 +1,7 @@
 import {Boolean as BO} from 'effect'
 import {OrderTypeLambda} from 'effect/Order'
-import {lawTest, lawTests} from '../../../law.js'
+import {lawTests} from '../../../law/lawList.js'
+import {lawTest} from '../../../law/lawTest.js'
 import {ConcreteOptions} from './options.js'
 
 declare module './options.js' {
@@ -12,6 +13,7 @@ declare module './options.js' {
   }
 }
 
+/** Test Order laws. */
 export const Order = <A>({
   F,
   a,

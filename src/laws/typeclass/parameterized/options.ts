@@ -3,7 +3,8 @@
 import {Equivalence as EQ} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {GetArbitrary, GetEquivalence} from '../../../law/law.js'
+import {LiftArbitrary} from '../../../arbitraries/types.js'
+import {LiftEquivalence} from '../../../law/equivalence.js'
 
 /**
  * Options for testing
@@ -42,7 +43,7 @@ export interface CommonOptions<
    * A function that will get an equivalence for the type under test from an
    * equivalence for the underlying type.
    */
-  getEquivalence: GetEquivalence<F, In1, Out2, Out1>
+  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
 
   /**
    * A function that will build an arbitrary for the data type under test
@@ -51,7 +52,7 @@ export interface CommonOptions<
    * function of the type
    * `<A>(a: fc.Arbitrary<A>) ⇒ fc.Arbitrary<Either<A, string>>`.
    */
-  getArbitrary: GetArbitrary<F, In1, Out2, Out1>
+  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
 
   /**
    * An arbitrary for the underlying type. For example, when testing `Option`

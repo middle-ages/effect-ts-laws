@@ -1,6 +1,6 @@
 import {Array as AR, pipe, Tuple as TU} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {ParameterOverrides} from '../../../law.js'
+import {ParameterOverrides} from '../../../law/lawList.js'
 import {ConcreteInstances, ConcreteTypeclass} from '../concrete/catalog.js'
 import {
   isParameterizedTypeclassName,
@@ -17,14 +17,18 @@ export type Typeclass = ParameterizedTypeclass | ConcreteTypeclass
 /**
  * Test typeclass laws for the given instances of some data type.
  *
- * @param instances - Instances to test. Key is typeclass name and value is the
+ * Call with no parameters but with the type lambda of your data type, and the
+ * type parameters for your underlying types. You will get back a function that
+ * takes two required and one optional arguments:
+ *
+ * 1. `instances` - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Monad: Option.Monad }` will run
  * the monad typeclass laws on `Option`.
- * * @param options - The union of all options required for testing the instances
+ * 2. `options` - The union of all options required for testing the instances
  * given in the `instances` argument. The specific options depend on the list
  * of instances being tested, but they are all either equalities, arbitraries,
  * or functions on the underlying types, that are required for testing the laws.
- * @param parameters - Optional run-time `fc-check` parameters.
+ * 3. `parameters` - Optional run-time `fc-check` parameters.
  */
 export const testTypeclassLawsFor =
   <F extends TypeLambda, A, B = A, C = A>() =>
@@ -61,7 +65,8 @@ export const testTypeclassLawsFor =
     const {getEquivalence, equalsA, getArbitrary, a} = options
 
     if (Object.keys(concrete).length !== 0)
-      testConcreteTypeclassLaws(concrete)(
+      testConcreteTypeclassLaws(
+        concrete,
         {a: getArbitrary(a), equalsA: getEquivalence(equalsA)},
         parameters,
       )

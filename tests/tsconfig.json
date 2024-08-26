@@ -2,10 +2,8 @@
   "extends": ["../tsconfig.base.json"],
   "compilerOptions": {
     "types": ["vitest/globals"],
-
-    "noEmit": false,
     "composite": true,
-    "outDir": "dist/src/tests"
+    "outDir": "../dist/tests"
   },
   "references": [
     {

@@ -1,10 +1,8 @@
 import {Monoid as MO} from '@effect/typeclass'
 import {getMonoid} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
+import {Monoid, tinyInteger, verboseLaws} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {tinyInteger} from '../../../src/arbitraries.js'
-import {verboseLaws} from '../../../src/law.js'
-import {Monoid} from '../../../src/laws.js'
 
 const intArray = fc.array(tinyInteger),
   instance = getMonoid<number>(),

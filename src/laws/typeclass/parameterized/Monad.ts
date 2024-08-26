@@ -1,11 +1,13 @@
 import {Monad as MD} from '@effect/typeclass'
 import {Equivalence as EQ, flow, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
-import fc from 'fast-check'
-import {unaryFunction} from '../../../arbitraries.js'
-import {lawTest, lawTests} from '../../../law.js'
+import {unaryFunction, unaryKleisli} from '../../../arbitraries/function.js'
+import {liftEquivalences} from '../../../law/equivalence.js'
+import {lawTests} from '../../../law/lawList.js'
+import {lawTest} from '../../../law/lawTest.js'
 import {CommonOptions} from './options.js'
 
+/** Test the Monad typeclass laws. */
 export const Monad = <
   F extends TypeLambda,
   A,
@@ -27,18 +29,16 @@ export const Monad = <
 }: MonadOptions<F, A, B, C, In1, Out2, Out1>) => {
   type Data<T> = Kind<F, In1, Out2, Out1, T>
 
-  const [fa, equalsFa, equalsFb, equalsFc] = [
-      getArbitrary(a),
-      getEquivalence(equalsA),
-      getEquivalence(equalsB),
-      getEquivalence(equalsC),
-    ],
-    [faB, fbC]: [
-      fc.Arbitrary<(a: A) => Data<B>>,
-      fc.Arbitrary<(b: B) => Data<C>>,
-    ] = [
-      pipe(b, getArbitrary, unaryFunction)<A>(),
-      pipe(c, getArbitrary, unaryFunction)<B>(),
+  const fa = getArbitrary(a),
+    [equalsFa, equalsFb, equalsFc] = liftEquivalences(getEquivalence)(
+      equalsA,
+      equalsB,
+      equalsC,
+    ),
+    ab = unaryFunction<A>()(b),
+    [faB, fbC] = [
+      pipe(b, unaryKleisli<A>()(getArbitrary)),
+      pipe(c, unaryKleisli<B>()(getArbitrary)),
     ]
 
   return lawTests(
@@ -65,6 +65,13 @@ export const Monad = <
           ),
         'flatMap(f₁) ∘ flatMap(f₂) = flatMap(f₁ ∘ flatMap(f₂))',
       )([fa, faB, fbC]),
+
+      lawTest(
+        'map',
+        (fa: Data<A>, ab: (a: A) => B) =>
+          equalsFb(pipe(fa, F.map(ab)), pipe(fa, F.flatMap(flow(ab, F.of)))),
+        'map(ab) = flatMap(ab ∘ of)',
+      )([fa, ab]),
     ],
     'Monad',
   )

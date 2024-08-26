@@ -1,6 +1,7 @@
 import {Boolean as BO} from 'effect'
 import {EquivalenceTypeLambda} from 'effect/Equivalence'
-import {lawTest, lawTests} from '../../../law.js'
+import {lawTests} from '../../../law/lawList.js'
+import {lawTest} from '../../../law/lawTest.js'
 import {ConcreteOptions} from './options.js'
 
 declare module './options.js' {
@@ -12,6 +13,7 @@ declare module './options.js' {
   }
 }
 
+/** Test Equivalence laws. */
 export const Equivalence = <A>({
   F,
   a,

@@ -1,6 +1,8 @@
-import {pipe} from 'effect'
+import {Monoid as MO, Semigroup as SG} from '@effect/typeclass'
+import {Equivalence as EQ, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {LawList, ParameterOverrides, verboseLaws} from '../../../law.js'
+import fc from 'fast-check'
+import {LawList, ParameterOverrides, verboseLaws} from '../../../law/lawList.js'
 import {
   ConcreteInstances,
   concreteLawsFor,
@@ -34,18 +36,30 @@ export const testConcreteTypeclassLaw =
  * for the underlying type of the test.
  * @param parameters - Optional run-time `fc-check` parameters.
  */
-export const testConcreteTypeclassLaws =
-  <A>(instances: Partial<ConcreteInstances<A>>) =>
-  (
-    options: Omit<ConcreteOptions<TypeLambda, A>, 'F'>,
-    parameters?: ParameterOverrides,
-  ) => {
-    for (const key of Object.keys(instances)) {
-      const typeclass = key as ConcreteTypeclass
-      const instanceOptions = {
-        ...options,
-        F: instances[typeclass],
-      } as ConcreteOptionsFor<typeof typeclass, A>
-      testConcreteTypeclassLaw(typeclass)(instanceOptions, parameters)
-    }
+export const testConcreteTypeclassLaws = <A>(
+  instances: Partial<ConcreteInstances<A>>,
+  options: Omit<ConcreteOptions<TypeLambda, A>, 'F'>,
+  parameters?: ParameterOverrides,
+) => {
+  for (const key of Object.keys(instances)) {
+    const typeclass = key as ConcreteTypeclass
+    const instanceOptions = {
+      ...options,
+      F: instances[typeclass],
+    } as ConcreteOptionsFor<typeof typeclass, A>
+    testConcreteTypeclassLaw(typeclass)(instanceOptions, parameters)
+  }
+}
+
+/**
+ * Run the given monoid/semigroup instances through their respective typeclass
+ * law tests.
+ *
+ * @param a - An arbitrary for the underlying type `A`.
+ * @param equalsA - Equivalence for the underlying type `A`.
+ */
+export const testMonoid =
+  <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>
+  (Monoid: MO.Monoid<A>, Semigroup: SG.Semigroup<A> = Monoid) => {
+    testConcreteTypeclassLaws({Semigroup, Monoid}, {a, equalsA})
   }

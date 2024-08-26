@@ -3,13 +3,13 @@ import {
   IdentityTypeLambda,
 } from '@effect/typeclass/data/Identity'
 import {identity, Number as NU} from 'effect'
-import {tinyInteger} from '../../../src/arbitraries.js'
 import {
   testConcreteTypeclassLaw,
   testConcreteTypeclassLaws,
   testParameterizedTypeclassLaw,
   testParameterizedTypeclassLaws,
-} from '../../../src/laws.js'
+  tinyInteger,
+} from 'effect-ts-laws'
 
 describe('typeclass test runners', () => {
   describe('testConcreteTypeclassLaw', () => {
@@ -21,10 +21,13 @@ describe('typeclass test runners', () => {
   })
 
   describe('testConcreteTypeclassLaw', () => {
-    testConcreteTypeclassLaws({Equivalence: NU.Equivalence, Order: NU.Order})({
-      a: tinyInteger,
-      equalsA: NU.Equivalence,
-    })
+    testConcreteTypeclassLaws(
+      {Equivalence: NU.Equivalence, Order: NU.Order},
+      {
+        a: tinyInteger,
+        equalsA: NU.Equivalence,
+      },
+    )
   })
 
   describe('testParameterizedTypeClassLaw', () => {

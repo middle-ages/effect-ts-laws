@@ -1,6 +1,4 @@
-import {Array as AR, Equivalence as EQ, Option as OP} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
-import fc from 'fast-check'
+import {Array as AR, Option as OP} from 'effect'
 
 /** The base law type is a predicate with a name and a note. */
 export interface Law<Args extends UnknownArgs> {
@@ -29,35 +27,20 @@ export type UnknownArgs = AR.NonEmptyArray<unknown>
 /**
  * Build a law from a name, a predicate, and optional note. Useful when you want
  * to reuse a law where you have test data already available.
+ *
+ * @typeParam Args -  Argument type of predicate. For example, if the law
+ * predicate signature is `(a: number, b: string) ⇒ boolean`, then `Args`
+ * would be `[a: number, b: string]`.
+ *
+ * @param name - Law name, shown as test label.
+ * @param predicate - Law predicate. Its argument type is encoded in the `Args`
+ * type parameter.
+ * @param note - Optional note. Will be shown only on failure or in verbose mode.
+ *
+ * @returns A new `Law` object.
  */
 export const buildLaw = <Args extends UnknownArgs>(
   name: string,
   predicate: NAryPredicate<Args>,
   note?: string,
 ): Law<Args> => ({name, note: OP.fromNullable(note), predicate})
-
-/**
- * A function that given any equivalence of type `A`, returns an equivalence
- * for `F<A>`.
- */
-export interface GetEquivalence<
-  F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> {
-  <O>(equals: EQ.Equivalence<O>): EQ.Equivalence<Kind<F, In1, Out2, Out1, O>>
-}
-
-/**
- * A function that given any equivalence of type `A`, returns an arbitrary
- * for `F<A>`.
- */
-export interface GetArbitrary<
-  F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> {
-  <A>(arbitraryA: fc.Arbitrary<A>): fc.Arbitrary<Kind<F, In1, Out2, Out1, A>>
-}

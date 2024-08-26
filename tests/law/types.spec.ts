@@ -1,5 +1,5 @@
+import {ArbitrariesFor, LawList, LawTest} from 'effect-ts-laws'
 import fc from 'fast-check'
-import {ArbitrariesFor, LawList, LawTest} from '../../src/law.js'
 
 describe('types', () => {
   describe('ArbitrariesFor', () => {

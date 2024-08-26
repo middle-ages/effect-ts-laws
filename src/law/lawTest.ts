@@ -20,7 +20,12 @@ export interface LawTest<Args extends UnknownArgs = UnknownArgs>
   parameters?: fc.Parameters<Args>
 }
 
-/** The type of the arbitrary tuple that is required for a predicate of `Args`. */
+/**
+ * The type of the arbitrary tuple that is required for a predicate of `Args`.
+ * For example if the predicate is `(a: number, b: string) ⇒ boolean`, then
+ * the type of its arbitraries tuple, `ArbtrariesFor<[a: number, b: string]>`
+ * will be `[fc.Arbitrary<number>, fc.Arbitrary<string>]`.
+ */
 export type ArbitrariesFor<Args extends UnknownArgs> = {
   [K in keyof Args]: fc.Arbitrary<Args[K]>
 }
@@ -36,15 +41,15 @@ export type ArbitrariesFor<Args extends UnknownArgs> = {
  * [documented here](https://fast-check.dev/api/v2/interfaces/fc.Parameters.html).
  */
 export const lawTest =
-  <Args extends UnknownArgs>(
+  <LawArgs extends UnknownArgs>(
     name: string,
-    predicate: NAryPredicate<Args>,
+    predicate: NAryPredicate<LawArgs>,
     note?: string,
   ) =>
   (
-    arbitraries: ArbitrariesFor<Args>,
-    parameters?: fc.Parameters<Args>,
-  ): LawTest<Args> => ({
+    arbitraries: ArbitrariesFor<LawArgs>,
+    parameters?: fc.Parameters<LawArgs>,
+  ): LawTest<LawArgs> => ({
     ...buildLaw(name, predicate, note),
     ...(parameters !== undefined && {parameters}),
     arbitraries,
@@ -55,12 +60,12 @@ export const lawTest =
  * [fast-check property](https://fast-check.dev/docs/core-blocks/properties/).
  * The optional note will be displayed on failure or in verbose mode.
  */
-export const asProperty = <Args extends UnknownArgs>({
+export const asProperty = <LawArgs extends UnknownArgs>({
   note,
   predicate,
   arbitraries,
-}: LawTest<Args>): fc.IPropertyWithHooks<Args> =>
-  fc.property<Args>(...arbitraries, (...args: Args) => {
+}: LawTest<LawArgs>): fc.IPropertyWithHooks<LawArgs> =>
+  fc.property<LawArgs>(...arbitraries, (...args: LawArgs) => {
     expect(
       predicate(...args),
       pipe(
@@ -71,15 +76,23 @@ export const asProperty = <Args extends UnknownArgs>({
   })
 
 /**
- * Attempts to find a counter example for a single {@link LawTest}.
+ * Attempts to find a counter example for the single given {@link LawTest}.
  *
  * Meant to be called from inside a `vitest` test suite, perhaps inside some
- * `describe()` block, but _not_ inside a `test()` or `it()` block.
+ * `describe()` block, but _not_ inside a `test()` or `it()` block. For
+ * example:
+ * 
+ * @example
+ * ```ts
+ * const lawTest: LawTest<[number, number]> = …
+
+ * describe('testLaw', () => { testLaw(iut) })
+ * ```
  */
-export const testLaw = <Args extends UnknownArgs>({
-  parameters,
-  ...law
-}: LawTest<Args>) => {
+export const testLaw = <LawArgs extends UnknownArgs>(
+  lawTest: LawTest<LawArgs>,
+) => {
+  const {parameters, ...law} = lawTest
   const property = asProperty(law)
 
   const note =

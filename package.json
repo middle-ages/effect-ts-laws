@@ -1,9 +1,15 @@
 {
   "name": "effect-ts-laws",
   "version": "1.0.0",
-  "type": "module",
   "description": "Law testing using fast-check.",
+  "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
+  "homepage": "https://github.com/middle-ages/effect-ts-laws",
+  "bugs": "https://github.com/middle-ages/effect-ts-laws/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/middle-ages/effect-ts-laws.git"
+  },
   "license": "MIT",
   "keywords": [
     "effect-ts",
@@ -11,44 +17,46 @@
     "law-testing"
   ],
   "scripts": {
-    "clean": "scripts/clean",
-    "lint": "eslint .",
-    "lint-fix": "eslint --fix .",
-    "typecheck": "tsc --project tsconfig.json",
+    "clean": "dev/clean",
+    "lint": "eslint src index.ts tests",
+    "lint-fix": "eslint --fix src index.ts tests",
+    "typecheck": "tsc --project tsconfig.build.json",
+    "test-dependencies": "depcruise src index.ts -c .dependency-cruiser.cjs",
+    "graph-dependencies": "dev/graph-dependencies",
     "test": "vitest -c vitest.conf.ts --reporter=verbose",
     "coverage": "vitest -c vitest.conf.ts run --reporter=verbose --coverage",
     "test-run": "vitest -c vitest.conf.ts run",
-    "test-dependencies": "depcruise src -c config/dependency-cruiser.cjs",
     "build": "tsc --project tsconfig.build.json",
     "run-tsx": "tsx --conditions test",
     "ls-deps": "pnpm ls --prod",
     "ls-deps-dev": "pnpm ls --dev",
-    "graph-dependencies": "scripts/graph-dependencies"
+    "build-docs": "typedoc index.ts"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
-    "@fast-check/vitest": "^0.1.2",
+    "@eslint/js": "^9.9.1",
+    "@fast-check/vitest": "^0.1.3",
     "@tsconfig/node-lts": "^20.1.3",
     "@tsconfig/strictest": "^2.0.5",
     "@types/eslint__eslintrc": "^2.1.2",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.4.1",
+    "@types/node": "^22.5.0",
     "@vitest/coverage-v8": "^2.0.5",
     "dependency-cruiser": "^16.4.0",
-    "eslint": "^9.9.0",
+    "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "fast-check": "^3.21.0",
+    "fast-check": "^3.22.0",
     "prettier": "^3.3.3",
-    "tsx": "^4.17.0",
+    "tsx": "^4.19.0",
+    "typedoc": "^0.26.6",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.2.0",
-    "vite": "^5.4.1",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2",
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@effect/typeclass": "^0.25.4",
-    "effect": "^3.6.4"
+    "@effect/typeclass": "^0.25.6",
+    "effect": "^3.6.6"
   },
   "peerDependencies": {
     "effect": "workspace:^",
@@ -63,5 +71,21 @@
     "bracketSpacing": false,
     "bracketSameLine": true,
     "endOfLine": "lf"
+  },
+  "packageManager": "pnpm@9.2.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "test": "./index.js",
+        "import": "./dist/index.js",
+        "default": "./index.js"
+      }
+    }
   }
 }

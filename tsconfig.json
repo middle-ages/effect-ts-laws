@@ -6,7 +6,10 @@
   "references": [
     {
       "path": "./tests/tsconfig.json"
+    },
+    {
+      "path": "./tsconfig.src.json"
     }
   ],
-  "exclude": ["dist", "tests"]
+  "exclude": ["dist", "tests", "src"]
 }
