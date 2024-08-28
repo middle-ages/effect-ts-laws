@@ -11,5 +11,5 @@
       "path": "./tsconfig.src.json"
     }
   ],
-  "exclude": ["dist", "tests", "src"]
+  "exclude": ["dist", "tests", "src", "index.ts"]
 }

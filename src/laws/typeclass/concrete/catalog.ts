@@ -7,8 +7,7 @@ import {Semigroup} from './Semigroup.js'
 
 /**
  * Map of typeclass name to their laws, for typeclasses of concrete types.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
 export const concreteLaws = {
   Equivalence,
@@ -18,25 +17,23 @@ export const concreteLaws = {
 } as const
 
 /**
- * A name of a typeclasses for concrete types.
- *
- * @category Build Typeclass Laws
+ * Union of all names of typeclasses for concrete types.
+ * @category model
  */
-export type ConcreteTypeclass = keyof typeof concreteLaws
+export type ConcreteClass = keyof typeof concreteLaws
 
 /**
  * Maps typeclass name to its instance type. For example to get
  * the type of `Monoid` instance for `readonly number[]`:
- *
+ * @example
  * ```ts
  * type MyMonoidInstance = Instances<readonly number[]>['Monoid']
  * // MyMonoidInstance ≡ Monoid<readonly number[]>
  * ```
- *
- * @category Build Typeclass Laws
+ * @category model
  */
-export type ConcreteInstances<A> = {
-  [Key in ConcreteTypeclass]: Kind<
+export type Concrete<A> = {
+  [Key in ConcreteClass]: Kind<
     ConcreteMap<A>[Key]['lambda'],
     never,
     unknown,
@@ -47,20 +44,18 @@ export type ConcreteInstances<A> = {
 
 /**
  * Maps typeclass name to its law options type.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
 export type ConcreteOptionsFor<
-  Typeclass extends ConcreteTypeclass,
+  Typeclass extends ConcreteClass,
   A,
 > = ConcreteOptions<ConcreteMap<A>[Typeclass]['lambda'], A>
 
 /**
  * Get the typeclass laws for the given typeclass name.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
-export const concreteLawsFor = <const Typeclass extends ConcreteTypeclass>(
+export const concreteLawsFor = <const Typeclass extends ConcreteClass>(
   name: Typeclass,
 ) =>
   concreteLaws[name] as <A>(

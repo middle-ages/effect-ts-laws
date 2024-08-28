@@ -4,70 +4,67 @@ import {Covariant} from './Covariant.js'
 import {Invariant} from './Invariant.js'
 import {Monad} from './Monad.js'
 import {ParameterizedMap} from './options.js'
+import {Traversable} from './Traversable.js'
 
 /**
  * Map of typeclass name to their laws, for typeclasses of parameterized
  * types.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
 export const parameterizedLaws = {
   Invariant,
   Covariant,
   Monad,
   Applicative,
+  Traversable,
 } as const
 
 /**
- * A name of a typeclasses for parameterized types.
- *
- * @category Build Typeclass Laws
+ * Union of all names of typeclasses for parameterized types.
+ * @category model
  */
-export type ParameterizedTypeclass = keyof typeof parameterizedLaws
+export type ParameterizedClass = keyof typeof parameterizedLaws
 
 /**
  * Maps typeclass name to its instance type. For example to get the type of the
  * `Monad` instance for `ReadonlyArray`:
- *
+ * @example
  * ```ts
  * type MyMonad = ParameterizedInstances<ReadonlyArrayTypeLambda>['Monad']
  * // MyMonad ≡ Monad<ReadonlyArrayTypeLambda>
  * ```
- *
- * @category Build Typeclass Laws
+ * @category model
  */
-export type ParameterizedInstances<
+export type Parameterized<
   F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 > = {
-  [Key in ParameterizedTypeclass]: Kind<
+  [Key in ParameterizedClass]: Kind<
     ParameterizedMap<F, unknown>[Key]['lambda'],
-    In1,
-    Out2,
-    Out1,
+    R,
+    O,
+    E,
     F
   >
 }
 
 /**
  * Type guard for parameterized type typeclass names.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
 export const isParameterizedTypeclassName = (
   o: string,
-): o is ParameterizedTypeclass => o in parameterizedLaws
+): o is ParameterizedClass => o in parameterizedLaws
 
 /**
  * Get the typeclass laws for the given typeclass name. Returns a function that
  * when given the required options, will run the typeclass law tests.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
 export const parameterizedLawsFor = <
-  const Typeclass extends ParameterizedTypeclass,
+  const Typeclass extends ParameterizedClass,
 >(
   name: Typeclass,
 ) =>
@@ -76,48 +73,9 @@ export const parameterizedLawsFor = <
     A,
     B,
     C,
-    In1 = never,
-    Out2 = unknown,
-    Out1 = unknown,
+    R = never,
+    O = unknown,
+    E = unknown,
   >(
-    options: ParameterizedMap<
-      F,
-      A,
-      B,
-      C,
-      In1,
-      Out2,
-      Out1
-    >[Typeclass]['options'],
-  ) => ParameterizedMap<
-    F,
-    number,
-    string,
-    boolean,
-    In1,
-    Out2,
-    Out1
-  >[Typeclass]['laws']
-
-/**
- * The type of options required for testing the typeclass laws for the given
- * instances.
- *
- * @category Build Typeclass Laws
- */
-export type ParameterizedOptions<
-  Classes extends Partial<ParameterizedInstances<F, In1, Out2, Out1>>,
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> = {
-  [Key in keyof Classes]: Omit<
-    ParameterizedMap<F, A, B, C, In1, Out2, Out1>[Key &
-      ParameterizedTypeclass]['options'],
-    'F'
-  >
-}[keyof Classes]
+    options: ParameterizedMap<F, A, B, C, R, O, E>[Typeclass]['options'],
+  ) => ParameterizedMap<F, number, string, boolean, R, O, E>[Typeclass]['laws']

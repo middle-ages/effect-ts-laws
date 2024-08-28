@@ -1,37 +1,28 @@
+import {unary, unaryToKind} from '#arbitrary'
+import {Law, LawSet, liftEquivalences} from '#law'
 import {Monad as MD} from '@effect/typeclass'
-import {Equivalence as EQ, flow, pipe} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {unaryFunction, unaryKleisli} from '../../../arbitraries/function.js'
-import {liftEquivalences} from '../../../law/equivalence.js'
-import {lawTests} from '../../../law/lawList.js'
-import {lawTest} from '../../../law/lawTest.js'
-import {CommonOptions} from './options.js'
+import {flow, pipe} from 'effect'
+import {TypeLambda} from 'effect/HKT'
+import {Covariant} from './Covariant.js'
+import {Options} from './options.js'
 
 /**
- * Test Monad laws.
- *
- * @category Test Typeclass Laws
+ * Test typeclass laws for `Monad`.
+ * @category typeclass laws
  */
 export const Monad = <
   F extends TypeLambda,
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
->({
-  a,
-  b,
-  c,
-  F,
-  equalsA,
-  equalsB,
-  equalsC,
-  getEquivalence,
-  getArbitrary,
-}: MonadOptions<F, A, B, C, In1, Out2, Out1>) => {
-  type Data<T> = Kind<F, In1, Out2, Out1, T>
+  R = never,
+  O = unknown,
+  E = unknown,
+>(
+  options: Options<MonadTypeLambda, F, A, B, C, R, O, E>,
+) => {
+  const {a, b, c, F, equalsA, equalsB, equalsC, getEquivalence, getArbitrary} =
+    options
 
   const fa = getArbitrary(a),
     [equalsFa, equalsFb, equalsFc] = liftEquivalences(getEquivalence)(
@@ -39,63 +30,65 @@ export const Monad = <
       equalsB,
       equalsC,
     ),
-    ab = unaryFunction<A>()(b),
+    ab = unary<A>()(b),
     [faB, fbC] = [
-      pipe(b, unaryKleisli<A>()(getArbitrary)),
-      pipe(c, unaryKleisli<B>()(getArbitrary)),
+      pipe(b, unaryToKind<A>()(getArbitrary)),
+      pipe(c, unaryToKind<B>()(getArbitrary)),
     ]
 
-  return lawTests(
-    [
-      lawTest(
-        'leftIdentity',
-        (a: A, faB: (a: A) => Data<B>) =>
-          equalsFb(pipe(a, F.of, F.flatMap(faB)), faB(a)),
-        'of ∘ flatMap(f) = f',
-      )([a, faB]),
-
-      lawTest(
-        'rightIdentity',
-        (fa: Data<A>) => equalsFa(pipe(fa, F.flatMap(F.of)), fa),
-        'flatMap(of) = id',
-      )([fa]),
-
-      lawTest(
-        'associativity',
-        (fa: Data<A>, faB: (a: A) => Data<B>, fbC: (b: B) => Data<C>) =>
-          equalsFc(
-            pipe(fa, F.flatMap(faB), F.flatMap(fbC)),
-            pipe(fa, F.flatMap(flow(faB, F.flatMap(fbC)))),
-          ),
-        'flatMap(f₁) ∘ flatMap(f₂) = flatMap(f₁ ∘ flatMap(f₂))',
-      )([fa, faB, fbC]),
-
-      lawTest(
-        'map',
-        (fa: Data<A>, ab: (a: A) => B) =>
-          equalsFb(pipe(fa, F.map(ab)), pipe(fa, F.flatMap(flow(ab, F.of)))),
-        'map(ab) = flatMap(ab ∘ of)',
-      )([fa, ab]),
-    ],
+  return LawSet(Covariant(options))(
     'Monad',
+    Law(
+      'leftIdentity',
+      'of ∘ flatMap(f) = f',
+      a,
+      faB,
+    )((a, faB) => equalsFb(pipe(a, F.of, F.flatMap(faB)), faB(a))),
+
+    Law(
+      'rightIdentity',
+      'flatMap(of) = id',
+      fa,
+    )(fa => equalsFa(pipe(fa, F.flatMap(F.of)), fa)),
+
+    Law(
+      'associativity',
+      'flatMap(f₁) ∘ flatMap(f₂) = flatMap(f₁ ∘ flatMap(f₂))',
+      fa,
+      faB,
+      fbC,
+    )((fa, faB, fbC) =>
+      equalsFc(
+        pipe(fa, F.flatMap(faB), F.flatMap(fbC)),
+        pipe(fa, F.flatMap(flow(faB, F.flatMap(fbC)))),
+      ),
+    ),
+
+    Law(
+      'mapConsistency',
+      'map(ab) = flatMap(ab ∘ of)',
+      fa,
+      ab,
+    )((fa, ab) =>
+      equalsFb(pipe(fa, F.map(ab)), pipe(fa, F.flatMap(flow(ab, F.of)))),
+    ),
   )
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Monad: {
-      lambda: MonadTypeLambda
-      options: MonadOptions<F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Monad<F, A, B, C, In1, Out2, Out1>>
-    }
-  }
-}
-
+/**
+ * Type lambda for the `Monad` typeclass.
+ * @category type lambda
+ */
 export interface MonadTypeLambda extends TypeLambda {
   readonly type: MD.Monad<this['Target'] & TypeLambda>
 }
 
-export interface MonadOptions<F extends TypeLambda, A, B, C, In1, Out2, Out1>
-  extends CommonOptions<MonadTypeLambda, F, A, B, C, In1, Out2, Out1> {
-  equalsB: EQ.Equivalence<B>
+declare module './options.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+    Monad: {
+      lambda: MonadTypeLambda
+      options: Options<MonadTypeLambda, F, A, B, C, R, O, E>
+      laws: ReturnType<typeof Monad<F, A, B, C, R, O, E>>
+    }
+  }
 }

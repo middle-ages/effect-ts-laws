@@ -5,29 +5,27 @@ import {Kind, TypeLambda} from 'effect/HKT'
 /**
  * The type of a function that given any equivalence of type `A`, returns an
  * equivalence for `F<A>`. For example:
- *
  * @example
  * ```ts
  * const makeOptionEquivalence: LiftEquivalence<OptionTypeLambda> = liftEquivalence<OptionTypeLambda>
  * ```
- *
- * @category Equivalence Combinators
+ * @category lifting
  */
 export interface LiftEquivalence<
   F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 > {
-  <O>(equals: EQ.Equivalence<O>): EQ.Equivalence<Kind<F, In1, Out2, Out1, O>>
+  <T>(equals: EQ.Equivalence<T>): EQ.Equivalence<Kind<F, R, O, E, T>>
 }
 
 /**
  * Given a {@link LiftEquivalence} function, and 1..n `Equivalence`s for
  * different types `A₁, A₂, ...Aₙ`, returns the given list except every
  * equivalence for type `Aᵢ` has been replaced by an equivalence for type
- * `Kind<F,In1,Out2,Out1,Aᵢ>`. For example:
- *
+ * `Kind<F,R,O,E,Aᵢ>`. For example:
+ * @example
  * ```ts
  * const [eqOptionString, eqOptionNumber] = lifeEquivalences<OptionTypeLambda>(
  *   OP.getEquivalence,
@@ -38,23 +36,28 @@ export interface LiftEquivalence<
  * // eqOptionString ≡ Equivalence<Option<string>>
  * // eqOptionNumber ≡ Equivalence<Option<number>>
  * ```
- *
- * @category Equivalence Combinators
+ * @category lifting
  */
-export const liftEquivalences = <
-  F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
->(
-  liftEquivalence: LiftEquivalence<F, In1, Out2, Out1>,
-) => {
-  type Data<T> = Kind<F, In1, Out2, Out1, T>
+export const liftEquivalences =
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    liftEquivalence: LiftEquivalence<F, R, O, E>,
+  ) =>
+  <const Eqs extends EQ.Equivalence<never>[]>(...eqs: Eqs) =>
+    AR.map(eqs, liftEquivalence) as LiftedEquivalences<Eqs, F, R, O, E>
 
-  return <const Eqs extends EQ.Equivalence<never>[]>(...eqs: Eqs) =>
-    AR.map(eqs, liftEquivalence) as {
-      [K in keyof Eqs]: EQ.Equivalence<
-        Data<Eqs[K] extends EQ.Equivalence<infer T> ? T : never>
-      >
-    }
+/**
+ * Given the tuple of equalities for types `A₁, A₂, ...Aₙ`, returns the tuple of
+ * equalities for types `F<A₁>, F<A₂>, ...F<Aₙ>`.
+ * @category lifting
+ */
+export type LiftedEquivalences<
+  Eqs extends EQ.Equivalence<never>[],
+  F extends TypeLambda,
+  R,
+  O,
+  E,
+> = {
+  [K in keyof Eqs]: EQ.Equivalence<
+    Kind<F, R, O, E, Eqs[K] extends EQ.Equivalence<infer T> ? T : never>
+  >
 }

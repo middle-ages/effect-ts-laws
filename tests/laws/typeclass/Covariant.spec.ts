@@ -1,20 +1,14 @@
 import {Covariant as CO} from '@effect/typeclass'
-import {
-  Covariant as arrayCovariant,
-  Invariant as arrayInvariant,
-} from '@effect/typeclass/data/Array'
+import {Covariant as arrayCovariant} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {Covariant, tinyInteger, verboseLaws} from 'effect-ts-laws'
+import {checkLaws, Covariant, testLaws, tinyInteger} from 'effect-ts-laws'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
 import fc from 'fast-check'
 
 type Instance = CO.Covariant<ReadonlyArrayTypeLambda>
 
-const intArray = fc.array(tinyInteger),
-  instance = arrayCovariant,
-  fab = NU.increment,
-  fbc = NU.multiply(1_000),
+const instance = arrayCovariant,
   laws = (instance: Instance) =>
     Covariant({
       F: instance,
@@ -22,37 +16,23 @@ const intArray = fc.array(tinyInteger),
       b: tinyInteger,
       c: tinyInteger,
       equalsA: NU.Equivalence,
+      equalsB: NU.Equivalence,
       equalsC: NU.Equivalence,
       getEquivalence,
       getArbitrary: fc.array,
     })
 
-const predicate =
-  (instance: Instance) =>
-  (fa: readonly number[]): boolean => {
-    const [identity, composition] = laws(instance).predicates
-    return identity(fa) && composition(fa, fab, fbc)
-  }
-
-const assertInstance = (instance: Instance) => {
-  fc.assert(fc.property(intArray, predicate(instance)))
-}
-
 describe('Covariant laws self-test', () => {
-  pipe(instance, laws, verboseLaws)
+  pipe(instance, laws, testLaws)
 
-  test('Covariant pass', () => {
-    assertInstance(instance)
-  })
+  test('failure: “removing an element” breaks identity law', () => {
+    const unlawful: CO.Covariant<ReadonlyArrayTypeLambda> = {
+      ...instance,
+      map: dual(2, <A, B>(self: readonly A[], f: (a: A) => B) =>
+        pipe(self, AR.map(f), AR.drop(1)),
+      ),
+    }
 
-  test('Covariant failure: “removing an element” breaks identity law', () => {
-    assert.throws(() => {
-      assertInstance({
-        imap: arrayInvariant.imap,
-        map: dual(2, <A, B>(self: readonly A[], f: (a: A) => B) =>
-          pipe(self, AR.map(f), AR.drop(1)),
-        ),
-      })
-    })
+    expect(pipe(unlawful, laws, checkLaws)[0]).toMatch(/identity/)
   })
 })

@@ -6,18 +6,20 @@ import {identity, Number as NU} from 'effect'
 import {
   testConcreteTypeclassLaw,
   testConcreteTypeclassLaws,
-  testParameterizedTypeclassLaw,
   testParameterizedTypeclassLaws,
   tinyInteger,
 } from 'effect-ts-laws'
 
 describe('typeclass test runners', () => {
   describe('testConcreteTypeclassLaw', () => {
-    testConcreteTypeclassLaw('Equivalence')({
-      a: tinyInteger,
-      equalsA: NU.Equivalence,
-      F: NU.Equivalence,
-    })
+    testConcreteTypeclassLaw('Equivalence')(
+      {
+        a: tinyInteger,
+        equalsA: NU.Equivalence,
+        F: NU.Equivalence,
+      },
+      {verbose: false},
+    )
   })
 
   describe('testConcreteTypeclassLaw', () => {
@@ -27,20 +29,8 @@ describe('typeclass test runners', () => {
         a: tinyInteger,
         equalsA: NU.Equivalence,
       },
+      {verbose: false},
     )
-  })
-
-  describe('testParameterizedTypeClassLaw', () => {
-    testParameterizedTypeclassLaw('Covariant')<IdentityTypeLambda, number>({
-      F: identityCovariant,
-      a: tinyInteger,
-      b: tinyInteger,
-      c: tinyInteger,
-      equalsA: NU.Equivalence,
-      equalsC: NU.Equivalence,
-      getEquivalence: identity,
-      getArbitrary: identity,
-    })
   })
 
   describe('testParametricTypeclassLaws', () => {
@@ -53,10 +43,12 @@ describe('typeclass test runners', () => {
         b: tinyInteger,
         c: tinyInteger,
         equalsA: NU.Equivalence,
+        equalsB: NU.Equivalence,
         equalsC: NU.Equivalence,
         getEquivalence: identity,
         getArbitrary: identity,
       },
+      {verbose: false},
     )
   })
 })

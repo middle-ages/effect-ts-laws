@@ -1,42 +1,23 @@
 import {Equivalence as EQ, Number as NU, pipe} from 'effect'
-import {Equivalence, tinyInteger, verboseLaws} from 'effect-ts-laws'
-import fc from 'fast-check'
+import {checkLaws, Equivalence, testLaws, tinyInteger} from 'effect-ts-laws'
 
-const instance = NU.Equivalence,
-  laws = (instance: EQ.Equivalence<number>) =>
-    Equivalence({F: instance, equalsA: instance, a: tinyInteger})
+const instance = NU.Equivalence
 
-const predicate =
-  (instance: EQ.Equivalence<number>) =>
-  (a: number, b: number, c: number): boolean => {
-    const [transitivity, symmetry, reflexivity] = laws(instance).predicates
-    return transitivity(a, b, c) && symmetry(a, b) && reflexivity(a)
-  }
-
-const assertInstance = (instance: EQ.Equivalence<number>) => {
-  fc.assert(
-    fc.property(tinyInteger, tinyInteger, tinyInteger, predicate(instance)),
-  )
-}
+const laws = (instance: EQ.Equivalence<number>) =>
+  Equivalence({F: instance, equalsA: instance, a: tinyInteger})
 
 describe('Equivalence laws self-test', () => {
-  pipe(instance, laws, verboseLaws)
+  pipe(instance, laws, testLaws)
 
-  test('Equivalence pass', () => {
-    assertInstance(NU.Equivalence)
-  })
-
-  describe('Equivalence failure', () => {
+  describe('failure', () => {
     test('“less than” is not symmetric', () => {
-      assert.throws(() => {
-        assertInstance(NU.lessThan)
-      })
+      expect(pipe(NU.lessThan, laws, checkLaws)[0]).toMatch(/symmetry/)
     })
 
-    test('“sum is positive” is not transitive', () => {
-      assert.throws(() => {
-        assertInstance((a, b) => a + b > 0)
-      })
+    test('“sum > 0” is not transitive', () => {
+      expect(
+        pipe((a: number, b: number) => a + b > 0, laws, checkLaws)[0],
+      ).toMatch(/transitivity/)
     })
   })
 })

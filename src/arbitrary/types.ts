@@ -5,22 +5,20 @@ import fc from 'fast-check'
 /**
  * The type of a function that given any arbitrary of type `A`, returns an
  * arbitrary for `F<A>`.
- *
- * @category Arbitraries
+ * @category lifting
  */
 export interface LiftArbitrary<
   F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 > {
-  <A>(a: fc.Arbitrary<A>): fc.Arbitrary<Kind<F, In1, Out2, Out1, A>>
+  <A>(a: fc.Arbitrary<A>): fc.Arbitrary<Kind<F, R, O, E, A>>
 }
 
 /**
  * Convert an equivalence of `A` to an arbitrary of `A`.
- *
- * @category Arbitraries
+ * @category mapping
  */
 export type EquivalenceToArbitrary<Eq extends EQ.Equivalence<never>> = (
   eq: Eq,
@@ -28,8 +26,7 @@ export type EquivalenceToArbitrary<Eq extends EQ.Equivalence<never>> = (
 
 /**
  * Convert an arbitrary of `A` to an equivalence of `A`.
- *
- * @category Arbitraries
+ * @category mapping
  */
 export type ArbitraryToEquivalence<Arb extends fc.Arbitrary<never>> = (
   arb: Arb,

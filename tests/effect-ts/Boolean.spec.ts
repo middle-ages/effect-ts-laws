@@ -1,13 +1,9 @@
-/** Typeclass law tests for `Boolean` data type. */
+/** Typeclass law tests for `Boolean` datatype. */
 import {
   MonoidEqv,
   MonoidEvery,
   MonoidSome,
   MonoidXor,
-  SemigroupEqv,
-  SemigroupEvery,
-  SemigroupSome,
-  SemigroupXor,
 } from '@effect/typeclass/data/Boolean'
 import {Boolean as BO} from 'effect'
 import {testConcreteTypeclassLaws, testMonoid} from 'effect-ts-laws'
@@ -28,19 +24,19 @@ describe('@effect/typeclass/data/Boolean', () => {
     const testBoolean = testMonoid(fc.boolean(), (a, b) => a === b)
 
     describe('eqv', () => {
-      testBoolean(MonoidEqv, SemigroupEqv)
+      testBoolean(MonoidEqv)
     })
 
     describe('every', () => {
-      testBoolean(MonoidEvery, SemigroupEvery)
+      testBoolean(MonoidEvery)
     })
 
     describe('some', () => {
-      testBoolean(MonoidSome, SemigroupSome)
+      testBoolean(MonoidSome)
     })
 
     describe('xor', () => {
-      testBoolean(MonoidXor, SemigroupXor)
+      testBoolean(MonoidXor)
     })
   })
 })

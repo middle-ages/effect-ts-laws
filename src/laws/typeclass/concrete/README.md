@@ -1,4 +1,4 @@
- Typeclass Laws for Typeclasses on Concrete Types
+# Typeclass Laws for Typeclasses on Concrete Types
 
 These are typeclasses with a concrete underlying type.
 

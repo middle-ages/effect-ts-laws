@@ -1,11 +1,9 @@
 /** Typeclass law tests for readonly array instances. */
 import {
   Applicative,
-  Covariant,
   getMonoid,
-  getSemigroup,
-  Invariant,
   Monad,
+  Traversable,
 } from '@effect/typeclass/data/Array'
 import {Array as AR} from 'effect'
 import {
@@ -14,20 +12,19 @@ import {
   monoOrder,
   testTypeclassLaws,
 } from 'effect-ts-laws'
+import {ReadonlyArrayTypeLambda} from 'effect/Array'
 import fc from 'fast-check'
 
 describe('@effect/typeclass/data/Array', () => {
-  testTypeclassLaws(
-    {
-      Equivalence: AR.getEquivalence(monoEquivalence),
-      Order: AR.getOrder(monoOrder),
-      Semigroup: getSemigroup<Mono>(),
-      Monoid: getMonoid<Mono>(),
-      Invariant,
-      Covariant,
-      Applicative,
-      Monad,
-    },
-    {getEquivalence: AR.getEquivalence, getArbitrary: fc.array},
-  )
+  testTypeclassLaws<ReadonlyArrayTypeLambda>({
+    getEquivalence: AR.getEquivalence,
+    getArbitrary: arb => fc.array(arb, {maxLength: 4}),
+  })({
+    Equivalence: AR.getEquivalence(monoEquivalence),
+    Order: AR.getOrder(monoOrder),
+    Monoid: getMonoid<Mono>(),
+    Applicative,
+    Monad,
+    Traversable,
+  })
 })

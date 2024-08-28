@@ -7,10 +7,15 @@ import fc from 'fast-check'
  * typeclasses that do not expect a higher-kinded type as their parameter.
  *
  * All the concrete typeclass laws expect these options to be provided.
- *
- * @category Build Typeclass Laws
+ * @category options
  */
-export interface ConcreteOptions<F extends TypeLambda, A> {
+export interface ConcreteOptions<
+  F extends TypeLambda,
+  A,
+  R = never,
+  O = unknown,
+  E = unknown,
+> {
   /**
    * An arbitrary for the values used to test the typeclass. For example when
    * testing `Monoid` on `Option<number>`, this should return an equivalence
@@ -31,7 +36,7 @@ export interface ConcreteOptions<F extends TypeLambda, A> {
    * `number`, then the type parameter `A` would be set at `Option<number>` and
    * this field at `Monoid<Option<number>>`.
    */
-  F: Kind<F, never, unknown, unknown, A>
+  F: Kind<F, R, O, E, A>
 }
 
 /**
@@ -40,19 +45,18 @@ export interface ConcreteOptions<F extends TypeLambda, A> {
  * Used to map from typeclass name to its various test type. For example,
  * to get the types related to the `Monoid` laws for the `Option` instance
  * on `number`:
- *
+ * @example
  * ```ts
  * type MyMonoidTypes = ConcreteMap<number>['Monoid]
  * // MyMonoidTypes ≡ {
  * //   lambda: MonoidTypeLambda
- * //   laws: LawList<[[a: number], [a: number]]>
+ * //   laws: LawSet<[[a: number], [a: number]]>
  * // }
  * ```
  *
  * Use [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
  * to add entries here for a new typeclasses.
- *
- * @category Build Typeclass Laws
+ * @category model
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unused-vars
 export interface ConcreteMap<A> {}

@@ -1,10 +1,9 @@
-/** Typeclass law tests for `Option` data type. */
+/** Typeclass law tests for `Option` datatype. */
 import {
   Applicative,
-  Covariant,
   getOptionalMonoid,
-  Invariant,
   Monad,
+  Traversable,
 } from '@effect/typeclass/data/Option'
 import {Option as OP} from 'effect'
 import {
@@ -14,19 +13,18 @@ import {
   option,
   testTypeclassLaws,
 } from 'effect-ts-laws'
+import {OptionTypeLambda} from 'effect/Option'
 
 describe('@effect/typeclass/data/Option', () => {
-  testTypeclassLaws(
-    {
-      Equivalence: OP.getEquivalence(monoEquivalence),
-      Order: OP.getOrder(monoOrder),
-      Semigroup: getOptionalMonoid(monoSemigroup),
-      Monoid: getOptionalMonoid(monoSemigroup),
-      Invariant,
-      Covariant,
-      Applicative,
-      Monad,
-    },
-    {getEquivalence: OP.getEquivalence, getArbitrary: option},
-  )
+  testTypeclassLaws<OptionTypeLambda>({
+    getEquivalence: OP.getEquivalence,
+    getArbitrary: option,
+  })({
+    Equivalence: OP.getEquivalence(monoEquivalence),
+    Order: OP.getOrder(monoOrder),
+    Monoid: getOptionalMonoid(monoSemigroup),
+    Applicative,
+    Monad,
+    Traversable,
+  })
 })

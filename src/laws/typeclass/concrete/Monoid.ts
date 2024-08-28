@@ -1,8 +1,8 @@
+import {Law, LawSet} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
-import {lawTests} from '../../../law/lawList.js'
-import {lawTest} from '../../../law/lawTest.js'
 import {ConcreteOptions} from './options.js'
+import {Semigroup} from './Semigroup.js'
 
 declare module './options.js' {
   interface ConcreteMap<A> {
@@ -14,32 +14,32 @@ declare module './options.js' {
 }
 
 /**
- * Test Monoid laws.
- *
- * @category Test Typeclass Laws
+ * Test typeclass laws for `Monoid` and its requirement `Semigroup` laws.
+ * @category typeclass laws
  */
-export const Monoid = <A>({
-  F,
-  equalsA,
-  a,
-}: ConcreteOptions<MonoidTypeLambda, A>) =>
-  lawTests(
-    [
-      lawTest(
-        'leftIdentity',
-        (a: A) => equalsA(F.combine(F.empty, a), a),
-        '∅ ⊹ a = a',
-      )([a]),
+export const Monoid = <A>(options: ConcreteOptions<MonoidTypeLambda, A>) => {
+  const {F, equalsA, a} = options
 
-      lawTest(
-        'rightIdentity',
-        (a: A) => equalsA(F.combine(a, F.empty), a),
-        'a = a ⊹ ∅',
-      )([a]),
-    ],
+  return LawSet(Semigroup(options))(
     'Monoid',
-  )
+    Law(
+      'leftIdentity',
+      '∅ ⊹ a = a',
+      a,
+    )((a: A) => equalsA(F.combine(F.empty, a), a)),
 
+    Law(
+      'rightIdentity',
+      'a = a ⊹ ∅',
+      a,
+    )((a: A) => equalsA(F.combine(a, F.empty), a)),
+  )
+}
+
+/**
+ * Type lambda for the `Monoid` type class.
+ * @category type lambda
+ */
 export interface MonoidTypeLambda extends TypeLambda {
   readonly type: MO.Monoid<this['Target']>
 }

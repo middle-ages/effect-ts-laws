@@ -1,7 +1,6 @@
+import {Law, lawTests} from '#law'
 import {Boolean as BO} from 'effect'
 import {OrderTypeLambda} from 'effect/Order'
-import {lawTests} from '../../../law/lawList.js'
-import {lawTest} from '../../../law/lawTest.js'
 import {ConcreteOptions} from './options.js'
 
 declare module './options.js' {
@@ -14,9 +13,8 @@ declare module './options.js' {
 }
 
 /**
- * Test Order laws.
- *
- * @category Test Typeclass Laws
+ * Test typeclass laws for `Order`.
+ * @category typeclass laws
  */
 export const Order = <A>({
   F,
@@ -26,27 +24,29 @@ export const Order = <A>({
   const lte = (a: A, b: A): boolean => F(a, b) <= 0
 
   return lawTests(
-    [
-      lawTest(
-        'transitivity',
-        (a: A, b: A, c: A) => BO.implies(lte(a, b) && lte(b, c), lte(a, c)),
-        '∀a,b,c ∈ T: a≤b ∧ b≤c ⇒ a≤c',
-      )([a, a, a]),
-
-      lawTest(
-        'antisymmetry',
-        (a: A, b: A) => BO.implies(lte(a, b) && lte(b, a), equalsA(a, b)),
-        '∀a,b ∈ T: a≤b ∧ b≤a ⇒ a=b',
-      )([a, a]),
-
-      lawTest('reflexivity', (a: A) => lte(a, a), '∀a ∈ T: a≤a')([a]),
-
-      lawTest(
-        'connectivity',
-        (a: A, b: A) => lte(a, b) || lte(b, a),
-        '∀a,b ∈ T: a≤b ∨ b≤a',
-      )([a, a]),
-    ],
     'Order',
+    Law(
+      'transitivity',
+      '∀a,b,c ∈ T: a≤b ∧ b≤c ⇒ a≤c',
+      a,
+      a,
+      a,
+    )((a, b, c) => BO.implies(lte(a, b) && lte(b, c), lte(a, c))),
+
+    Law(
+      'antisymmetry',
+      '∀a,b ∈ T: a≤b ∧ b≤a ⇒ a=b',
+      a,
+      a,
+    )((a, b) => BO.implies(lte(a, b) && lte(b, a), equalsA(a, b))),
+
+    Law('reflexivity', '∀a ∈ T: a≤a', a)((a: A) => lte(a, a)),
+
+    Law(
+      'connectivity',
+      '∀a,b ∈ T: a≤b ∨ b≤a',
+      a,
+      a,
+    )((a, b) => lte(a, b) || lte(b, a)),
   )
 }

@@ -1,10 +1,5 @@
-/** Typeclass law tests for `Either` data type. */
-import {
-  Applicative,
-  Covariant,
-  Invariant,
-  Monad,
-} from '@effect/typeclass/data/Either'
+/** Typeclass law tests for `Either` datatype. */
+import {Applicative, Monad, Traversable} from '@effect/typeclass/data/Either'
 import {Either as EI, String as STR} from 'effect'
 import {
   either,
@@ -31,15 +26,10 @@ describe('@effect/typeclass/data/Either', () => {
     unknown,
     string
   > = arbitraryA => either(fc.string(), arbitraryA)
-
-  testTypeclassLaws<EitherTypeLambda, never, unknown, string>(
-    {
-      Equivalence: getEquivalence(monoEquivalence),
-      Invariant,
-      Covariant,
-      Applicative,
-      Monad,
-    },
-    {getEquivalence, getArbitrary},
-  )
+  testTypeclassLaws({getEquivalence, getArbitrary})({
+    Equivalence: getEquivalence(monoEquivalence),
+    Applicative,
+    Monad,
+    Traversable,
+  })
 })

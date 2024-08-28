@@ -6,8 +6,7 @@ import {LiftArbitrary} from './types.js'
 /**
  * Returns an `Either` arbitrary given a pair of arbitraries for the underlying
  * left and right values.
- *
- * @category Arbitraries
+ * @category arbitraries
  */
 export const either = <A, E>(
   e: fc.Arbitrary<E>,
@@ -17,8 +16,7 @@ export const either = <A, E>(
 
 /**
  * Returns an `Option` arbitrary given an arbitrary for the underlying value.
- *
- * @category Arbitraries
+ * @category arbitraries
  */
 export const option = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<OP.Option<A>> =>
   fc.oneof(a.map(OP.some), fc.constant(OP.none<A>()))
@@ -26,8 +24,7 @@ export const option = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<OP.Option<A>> =>
 /**
  * An integer arbitrary small enough so that we can avoid having to think about
  * numeric overflows in generated functions.
- *
- * @category Arbitraries
+ * @category arbitraries
  */
 export const tinyInteger: fc.Arbitrary<number> = fc.integer({
   min: -100,
@@ -38,8 +35,8 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
  * Given a {@link LiftArbitrary} function, and 1..n `Arbitrary`s for
  * different types `A₁, A₂, ...Aₙ`, returns the given list except every
  * arbitrary for type `Aᵢ` has been replaced by an arbitrary for type
- * `Kind<F,In1,Out2,Out1,Aᵢ>`. For example:
- *
+ * `Kind<F,R,O,E,Aᵢ>`. For example:
+ * @example
  * ```ts
  * const [arbOptionString, arbOptionNumber] = liftArbitraries<OptionTypeLambda>(
  *   Arbitraries.option,
@@ -50,18 +47,17 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
  * // arbOptionString ≡ fc.Arbitrary<Option<string>>
  * // arbOptionNumber ≡ fc.Arbitrary<Option<number>>
  * ```
- *
- * @category Arbitraries
+ * @category lifting
  */
 export const liftArbitraries = <
   F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  liftArbitrary: LiftArbitrary<F, In1, Out2, Out1>,
+  liftArbitrary: LiftArbitrary<F, R, O, E>,
 ) => {
-  type Data<T> = Kind<F, In1, Out2, Out1, T>
+  type Data<T> = Kind<F, R, O, E, T>
 
   return <const Arbs extends fc.Arbitrary<unknown>[]>(...arbs: Arbs) =>
     AR.map(arbs, (arb: fc.Arbitrary<unknown>) => liftArbitrary(arb)) as {

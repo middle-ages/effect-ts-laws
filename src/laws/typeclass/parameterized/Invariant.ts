@@ -1,75 +1,95 @@
+import {option, unary} from '#arbitrary'
+import {addLawSet, Law, lawTests, liftEquivalences} from '#law'
 import {Invariant as IN} from '@effect/typeclass'
-import {flow, identity, pipe} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {unaryFunction} from '../../../arbitraries/function.js'
-import {liftEquivalences} from '../../../law/equivalence.js'
-import {lawTests} from '../../../law/lawList.js'
-import {lawTest} from '../../../law/lawTest.js'
-import {CommonOptions} from './options.js'
+import {Invariant as optionInvariant} from '@effect/typeclass/data/Option'
+import {flow, identity, Option as OP, pipe} from 'effect'
+import {TypeLambda} from 'effect/HKT'
+import {OptionTypeLambda} from 'effect/Option'
+import {liftOptions, Options} from './options.js'
 
 /**
- * Test Invariant laws.
- *
- * @category Test Typeclass Laws
+ * Test typeclass laws for `Invariant`.
+ * @category typeclass laws
  */
-export const Invariant = <F extends TypeLambda, A, B, C, In1, Out2, Out1>({
-  a,
-  b,
-  c,
-  F,
-  equalsA,
-  equalsC,
-  getEquivalence,
-  getArbitrary,
-}: CommonOptions<InvariantTypeLambda, F, A, B, C, In1, Out2, Out1>) => {
-  type Data = Kind<F, In1, Out2, Out1, A>
+export const Invariant = <F extends TypeLambda, A, B, C, R, O, E>(
+  options: Options<InvariantTypeLambda, F, A, B, C, R, O, E>,
+) => {
+  const composition = buildLaws(
+    ...liftOptions<InvariantTypeLambda, F, OptionTypeLambda>()(
+      'Invariant',
+      'Option<F>',
+    )<typeof options, A, B, C, R, O, E>(
+      options,
+      optionInvariant,
+      OP.getEquivalence,
+      option,
+    ),
+  )
+
+  return pipe(buildLaws('Invariant', options), addLawSet(composition))
+}
+
+const buildLaws = <F extends TypeLambda, A, B, C, R, O, E>(
+  name: string,
+  {
+    a,
+    b,
+    c,
+    F,
+    equalsA,
+    equalsC,
+    getEquivalence,
+    getArbitrary,
+  }: Options<InvariantTypeLambda, F, A, B, C, R, O, E>,
+) => {
   const fa = getArbitrary(a),
     [equalsFa, equalsFc] = liftEquivalences(getEquivalence)(equalsA, equalsC),
     [fab, fbc, fba, fcb] = [
-      unaryFunction<A>()(b),
-      unaryFunction<B>()(c),
-      unaryFunction<B>()(a),
-      unaryFunction<C>()(b),
+      unary<A>()(b),
+      unary<B>()(c),
+      unary<B>()(a),
+      unary<C>()(b),
     ]
 
   return lawTests(
-    [
-      lawTest(
-        'identity',
-        (a: Data) => equalsFa(F.imap(a, identity, identity), a),
-        'imap(id, id) = id',
-      )([fa]),
+    name,
+    Law(
+      'identity',
+      'imap(id, id) = id',
+      fa,
+    )(a => equalsFa(F.imap(a, identity, identity), a)),
 
-      lawTest(
-        'composition',
-        (
-          a: Data,
-          fab: (a: A) => B,
-          fbc: (b: B) => C,
-          fba: (b: B) => A,
-          fcb: (c: C) => B,
-        ) =>
-          equalsFc(
-            pipe(a, F.imap(fab, fba), F.imap(fbc, fcb)),
-            pipe(a, F.imap(flow(fab, fbc), flow(fcb, fba))),
-          ),
-        'a ▹ imap(f₁, f₂) ▹ imap(g₁, g₂) = a ▹ imap(f₁ ∘ g₁, g₂ ∘  f₂)',
-      )([fa, fab, fbc, fba, fcb]),
-    ],
-    'Invariant',
+    Law(
+      'composition',
+      'a ▹ imap(f₁, f₂) ▹ imap(g₁, g₂) = a ▹ imap(f₁ ∘ g₁, g₂ ∘  f₂)',
+      fa,
+      fab,
+      fbc,
+      fba,
+      fcb,
+    )((a, fab, fbc, fba, fcb) =>
+      equalsFc(
+        pipe(a, F.imap(fab, fba), F.imap(fbc, fcb)),
+        pipe(a, F.imap(flow(fab, fbc), flow(fcb, fba))),
+      ),
+    ),
   )
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Invariant: {
-      lambda: InvariantTypeLambda
-      options: CommonOptions<InvariantTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Invariant<F, A, B, C, In1, Out2, Out1>>
-    }
-  }
-}
-
+/**
+ * Type lambda for the `Invariant` typeclass.
+ * @category type lambda
+ */
 export interface InvariantTypeLambda extends TypeLambda {
   readonly type: IN.Invariant<this['Target'] & TypeLambda>
+}
+
+declare module './options.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+    Invariant: {
+      lambda: InvariantTypeLambda
+      options: Options<InvariantTypeLambda, F, A, B, C, R, O, E>
+      laws: ReturnType<typeof Invariant<F, A, B, C, R, O, E>>
+    }
+  }
 }

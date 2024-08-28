@@ -1,72 +1,93 @@
+import {option, unary} from '#arbitrary'
+import {addLawSet, Law, lawTests, liftEquivalences} from '#law'
 import {Covariant as CO} from '@effect/typeclass'
-import {flow, identity, pipe} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {unaryFunction} from '../../../arbitraries/function.js'
-import {liftEquivalences} from '../../../law/equivalence.js'
-import {lawTests} from '../../../law/lawList.js'
-import {lawTest} from '../../../law/lawTest.js'
-import {CommonOptions} from './options.js'
+import {Covariant as optionCovariant} from '@effect/typeclass/data/Option'
+import {flow, identity, Option as OP, pipe} from 'effect'
+import {TypeLambda} from 'effect/HKT'
+import {OptionTypeLambda} from 'effect/Option'
+import {Invariant} from './Invariant.js'
+import {liftOptions, Options} from './options.js'
 
 /**
- * Test Covariant laws.
- *
- * @category Test Typeclass Laws
+ * Test typeclass laws for `Covariant` and its requirements: `Invariant`.
+ * @category typeclass laws
  */
 export const Covariant = <
   F extends TypeLambda,
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
->({
-  F,
-  equalsA,
-  equalsC,
-  getEquivalence,
-  getArbitrary,
-  a,
-  b,
-  c,
-}: CommonOptions<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>) => {
-  type Data = Kind<F, In1, Out2, Out1, A>
-  const fa = getArbitrary(a),
-    [equalsFa, equalsFc] = liftEquivalences(getEquivalence)(equalsA, equalsC),
-    [arbitraryFab, arbitraryFbc] = [
-      unaryFunction<A>()(b),
-      unaryFunction<B>()(c),
-    ]
+  R = never,
+  O = unknown,
+  E = unknown,
+>(
+  options: Options<CovariantTypeLambda, F, A, B, C, R, O, E>,
+) => {
+  const composition = buildLaws(
+    ...liftOptions<CovariantTypeLambda, F, OptionTypeLambda>()(
+      'Covariant',
+      'Option<F>',
+    )<typeof options, A, B, C, R, O, E>(
+      options,
+      optionCovariant,
+      OP.getEquivalence,
+      option,
+    ),
+  )
 
-  return lawTests(
-    [
-      lawTest(
-        'identity',
-        (a: Data) => equalsFa(F.map(a, identity), a),
-        'map(id) = id',
-      )([fa]),
-
-      lawTest(
-        'composition',
-        (a: Data, fab: (a: A) => B, fbc: (a: B) => C) =>
-          equalsFc(F.map(a, flow(fab, fbc)), pipe(a, F.map(fab), F.map(fbc))),
-        'map(f₁ ∘ f₂) = map(f₁) ∘ map(f₂)',
-      )([fa, arbitraryFab, arbitraryFbc]),
-    ],
-    'Covariant',
+  return pipe(
+    buildLaws('Covariant', options),
+    pipe(options, Invariant, addLawSet),
+    addLawSet(composition),
   )
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Covariant: {
-      lambda: CovariantTypeLambda
-      options: CommonOptions<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Covariant<F, A, B, C, In1, Out2, Out1>>
-    }
-  }
+const buildLaws = <
+  F extends TypeLambda,
+  A,
+  B = A,
+  C = A,
+  R = never,
+  O = unknown,
+  E = unknown,
+>(
+  name: string,
+  options: Options<CovariantTypeLambda, F, A, B, C, R, O, E>,
+) => {
+  const {F, equalsA, equalsC, getEquivalence, getArbitrary, a, b, c} = options
+  const fa = getArbitrary(a),
+    [equalsFa, equalsFc] = liftEquivalences(getEquivalence)(equalsA, equalsC),
+    [ab, bc] = [unary<A>()(b), unary<B>()(c)]
+
+  return lawTests(
+    name,
+    Law('identity', 'map(id) = id', fa)(a => equalsFa(F.map(a, identity), a)),
+    Law(
+      'composition',
+      'map(f₁ ∘ f₂) = map(f₁) ∘ map(f₂)',
+      fa,
+      ab,
+      bc,
+    )((a, ab, bc) =>
+      equalsFc(F.map(a, flow(ab, bc)), pipe(a, F.map(ab), F.map(bc))),
+    ),
+  )
 }
 
+/**
+ * Type lambda for the `Covariant` typeclass.
+ * @category type lambda
+ */
 export interface CovariantTypeLambda extends TypeLambda {
   readonly type: CO.Covariant<this['Target'] & TypeLambda>
+}
+
+declare module './options.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+    Covariant: {
+      lambda: CovariantTypeLambda
+      options: Options<CovariantTypeLambda, F, A, B, C, R, O, E>
+      laws: ReturnType<typeof Covariant<F, A, B, C, R, O, E>>
+    }
+  }
 }

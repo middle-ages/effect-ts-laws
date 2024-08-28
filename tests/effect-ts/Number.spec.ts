@@ -1,13 +1,9 @@
-/** Typeclass law tests for `Number` data type. */
+/** Typeclass law tests for `Number` datatype. */
 import {
   MonoidMax,
   MonoidMin,
   MonoidMultiply,
   MonoidSum,
-  SemigroupMax,
-  SemigroupMin,
-  SemigroupMultiply,
-  SemigroupSum,
 } from '@effect/typeclass/data/Number'
 import {Number as NU} from 'effect'
 import {
@@ -34,19 +30,19 @@ describe('@effect/typeclass/data/Number', () => {
     const testNumber = testMonoid(a, equalsA)
 
     describe('sum', () => {
-      testNumber(MonoidSum, SemigroupSum)
+      testNumber(MonoidSum)
     })
 
     describe('multiply', () => {
-      testNumber(MonoidMultiply, SemigroupMultiply)
+      testNumber(MonoidMultiply)
     })
 
     describe('min', () => {
-      testNumber(MonoidMin, SemigroupMin)
+      testNumber(MonoidMin)
     })
 
     describe('max', () => {
-      testNumber(MonoidMax, SemigroupMax)
+      testNumber(MonoidMax)
     })
   })
 })

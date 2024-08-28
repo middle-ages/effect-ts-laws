@@ -1,12 +1,5 @@
-/** Typeclass law tests for `Duration` data type. */
-import {
-  MonoidMax,
-  MonoidMin,
-  MonoidSum,
-  SemigroupMax,
-  SemigroupMin,
-  SemigroupSum,
-} from '@effect/typeclass/data/Duration'
+/** Typeclass law tests for `Duration` datatype. */
+import {MonoidMax, MonoidMin, MonoidSum} from '@effect/typeclass/data/Duration'
 import {Duration as DU} from 'effect'
 import {duration, testConcreteTypeclassLaws, testMonoid} from 'effect-ts-laws'
 
@@ -29,15 +22,15 @@ describe('@effect/typeclass/data/Number', () => {
     const testDuration = testMonoid<DU.Duration>(a, equalsA)
 
     describe('sum', () => {
-      testDuration(MonoidSum, SemigroupSum)
+      testDuration(MonoidSum)
     })
 
     describe('min', () => {
-      testDuration(MonoidMin, SemigroupMin)
+      testDuration(MonoidMin)
     })
 
     describe('max', () => {
-      testDuration(MonoidMax, SemigroupMax)
+      testDuration(MonoidMax)
     })
   })
 })
