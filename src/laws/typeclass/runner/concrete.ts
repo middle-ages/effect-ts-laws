@@ -11,7 +11,11 @@ import {
 } from '../concrete/catalog.js'
 import {ConcreteOptions} from '../concrete/options.js'
 
-/** Run a single instance through the given typeclass laws. */
+/**
+ * Run a single instance through the given typeclass laws.
+ *
+ * @category Typeclass Law Runner
+ */
 export const testConcreteTypeclassLaw =
   <Typeclass extends ConcreteTypeclass>(typeclass: Typeclass) =>
   <A>(
@@ -34,7 +38,9 @@ export const testConcreteTypeclassLaw =
  * the instance through the `Equivalence` typeclass laws.
  * @param options - The common concrete options: equivalence and an arbitrary
  * for the underlying type of the test.
- * @param parameters - Optional run-time `fc-check` parameters.
+ * @param parameters - Optional runtime `fc-check` parameters.
+ *
+ * @category Typeclass Law Runner
  */
 export const testConcreteTypeclassLaws = <A>(
   instances: Partial<ConcreteInstances<A>>,
@@ -57,6 +63,8 @@ export const testConcreteTypeclassLaws = <A>(
  *
  * @param a - An arbitrary for the underlying type `A`.
  * @param equalsA - Equivalence for the underlying type `A`.
+ *
+ * @category Typeclass Law Runner
  */
 export const testMonoid =
   <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>

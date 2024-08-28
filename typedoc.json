@@ -8,5 +8,10 @@
   "searchInDocuments": true,
   "tsconfig": "./tsconfig.build.json",
   "githubPages": true,
-  "cleanOutputDir": false
+  "cleanOutputDir": false,
+  "navigation": {
+    "includeCategories": true,
+    "includeFolders": true
+  },
+  "visibilityFilters": {}
 }

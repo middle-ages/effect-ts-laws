@@ -1,6 +1,10 @@
 import {Array as AR, Option as OP} from 'effect'
 
-/** The base law type is a predicate with a name and a note. */
+/**
+ * The base law type is a predicate with a name and a note.
+ *
+ * @category Build Laws
+ */
 export interface Law<Args extends UnknownArgs> {
   /**
    * Law name to be used as test name. You can include a description of the
@@ -9,19 +13,27 @@ export interface Law<Args extends UnknownArgs> {
    */
   name: string
 
-  /** An optional note to shown only on failure or in verbose mode. */
+  /**
+   * An optional note shown only on failure or in verbose mode.
+   */
   note: OP.Option<string>
 
-  /** Predicate to be tested */
+  /**
+   * Predicate to be tested.
+   */
   predicate: NAryPredicate<Args>
 }
 
-/** The type of predicate that takes `Args` as arguments. */
+/**
+ * The type of predicate that takes `Args` as arguments.
+ */
 export interface NAryPredicate<Args extends UnknownArgs> {
   (...args: Args): boolean
 }
 
-/** The exact type of unknown args used in `fast-check` types. */
+/**
+ * The exact type of unknown args used in `fast-check` types.
+ */
 export type UnknownArgs = AR.NonEmptyArray<unknown>
 
 /**
@@ -38,6 +50,8 @@ export type UnknownArgs = AR.NonEmptyArray<unknown>
  * @param note - Optional note. Will be shown only on failure or in verbose mode.
  *
  * @returns A new `Law` object.
+ *
+ * @category Build Laws
  */
 export const buildLaw = <Args extends UnknownArgs>(
   name: string,

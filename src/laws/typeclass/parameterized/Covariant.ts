@@ -7,7 +7,11 @@ import {lawTests} from '../../../law/lawList.js'
 import {lawTest} from '../../../law/lawTest.js'
 import {CommonOptions} from './options.js'
 
-/** Test Covariant laws. */
+/**
+ * Test Covariant laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Covariant = <
   F extends TypeLambda,
   A,

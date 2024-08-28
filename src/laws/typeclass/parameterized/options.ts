@@ -15,6 +15,8 @@ import {LiftEquivalence} from '../../../law/equivalence.js'
  *
  * The type lambda `Class` is for the typeclass under test and
  * `F` is for the parameterized data type under test.
+ *
+ * @category Build Typeclass Laws
  */
 export interface CommonOptions<
   Class extends TypeLambda,
@@ -90,6 +92,8 @@ export interface CommonOptions<
  * //   laws: LawList<[[a: number], [fa: Option<number>], [fa: Option<number>]]>
  * // }
  * ```
+ *
+ * @category Build Typeclass Laws
  */
 export interface ParameterizedMap<
   F extends TypeLambda,

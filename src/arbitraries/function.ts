@@ -11,6 +11,8 @@ import {LiftArbitrary} from './types.js'
  *
  * The generated function will explicitly discard all its arguments except the
  * first.
+ *
+ * @category Arbitraries
  */
 export const unaryFunction =
   <A>() =>
@@ -24,6 +26,8 @@ export const unaryFunction =
  * value of type `F<B>`.
  *
  * @returns An arbitrary of type `(a: A) => F<B>`.
+ *
+ * @category Arbitraries
  */
 export const unaryKleisli =
   <A>() =>
@@ -37,6 +41,10 @@ export const unaryKleisli =
       (a: A) => Kind<F, In1, Out2, Out1, B>
     >
 
-/** An arbitrary predicate of `A`. */
+/**
+ * An arbitrary predicate of `A`.
+ *
+ * @category Arbitraries
+ */
 export const predicate = <A>(): fc.Arbitrary<PR.Predicate<A>> =>
   unaryFunction<A>()(fc.boolean())

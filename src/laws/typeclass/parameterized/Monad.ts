@@ -7,7 +7,11 @@ import {lawTests} from '../../../law/lawList.js'
 import {lawTest} from '../../../law/lawTest.js'
 import {CommonOptions} from './options.js'
 
-/** Test the Monad typeclass laws. */
+/**
+ * Test Monad laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Monad = <
   F extends TypeLambda,
   A,

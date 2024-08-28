@@ -39,7 +39,7 @@
     "@tsconfig/strictest": "^2.0.5",
     "@types/eslint__eslintrc": "^2.1.2",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.5.0",
+    "@types/node": "^22.5.1",
     "@vitest/coverage-v8": "^2.0.5",
     "dependency-cruiser": "^16.4.0",
     "eslint": "^9.9.1",
@@ -55,8 +55,8 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@effect/typeclass": "^0.25.6",
-    "effect": "^3.6.6"
+    "@effect/typeclass": "^0.25.7",
+    "effect": "^3.6.7"
   },
   "peerDependencies": {
     "effect": "workspace:^",
@@ -82,7 +82,7 @@
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
-        "test": "./index.js",
+        "test": "./index.ts",
         "import": "./dist/index.js",
         "default": "./index.js"
       }

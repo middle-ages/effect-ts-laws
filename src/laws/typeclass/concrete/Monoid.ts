@@ -13,7 +13,11 @@ declare module './options.js' {
   }
 }
 
-/** Test Monoid laws. */
+/**
+ * Test Monoid laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Monoid = <A>({
   F,
   equalsA,

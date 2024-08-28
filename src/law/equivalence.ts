@@ -4,7 +4,14 @@ import {Kind, TypeLambda} from 'effect/HKT'
 
 /**
  * The type of a function that given any equivalence of type `A`, returns an
- * equivalence for `F<A>`.
+ * equivalence for `F<A>`. For example:
+ *
+ * @example
+ * ```ts
+ * const makeOptionEquivalence: LiftEquivalence<OptionTypeLambda> = liftEquivalence<OptionTypeLambda>
+ * ```
+ *
+ * @category Equivalence Combinators
  */
 export interface LiftEquivalence<
   F extends TypeLambda,
@@ -31,6 +38,8 @@ export interface LiftEquivalence<
  * // eqOptionString ≡ Equivalence<Option<string>>
  * // eqOptionNumber ≡ Equivalence<Option<number>>
  * ```
+ *
+ * @category Equivalence Combinators
  */
 export const liftEquivalences = <
   F extends TypeLambda,

@@ -13,7 +13,11 @@ declare module './options.js' {
   }
 }
 
-/** Test Order laws. */
+/**
+ * Test Order laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Order = <A>({
   F,
   a,

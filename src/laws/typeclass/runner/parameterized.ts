@@ -9,7 +9,11 @@ import {
 } from '../parameterized/catalog.js'
 import {ParameterizedMap} from '../parameterized/options.js'
 
-/** Run a single instance through the given typeclass laws. */
+/**
+ * Run a single instance through the given typeclass laws.
+ *
+ * @category Typeclass Law Runner
+ */
 export const testParameterizedTypeclassLaw =
   <Typeclass extends ParameterizedTypeclass>(typeclass: Typeclass) =>
   <
@@ -62,7 +66,9 @@ export const testParameterizedTypeclassLaw =
  * given in the `instances` argument. The specific options depend on the list
  * of instances being tested, but they are all either equalities, arbitraries,
  * or functions on the underlying types, that are required for testing the laws.
- * 3. `parameters` - Optional run-time `fc-check` parameters.
+ * 3. `parameters` - Optional runtime `fc-check` parameters.
+ *
+ * @category Typeclass Law Runner
  */
 export const testParameterizedTypeclassLaws =
   <F extends TypeLambda, A, B = A, C = A>() =>

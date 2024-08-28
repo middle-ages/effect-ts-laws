@@ -10,6 +10,8 @@ const defaultSuiteName = 'laws'
  * A `LawList` is a named list of {@link LawTest}s. It can be run inside a
  * `vitest` suite, and will appear in the test results as a list of tests
  * inside a single `describe()` block.
+ *
+ * @category Build Laws
  */
 export interface LawList<ArgLists extends UnknownArgs[] = UnknownArgs[]> {
   /**
@@ -18,7 +20,9 @@ export interface LawList<ArgLists extends UnknownArgs[] = UnknownArgs[]> {
    */
   unitName: string
 
-  /** List of laws that must pass for the law list to pass. */
+  /**
+   * List of laws that must pass for the law list to pass.
+   */
   laws: {[K in keyof ArgLists]: LawTest<ArgLists[K]>}
 
   /**
@@ -29,10 +33,12 @@ export interface LawList<ArgLists extends UnknownArgs[] = UnknownArgs[]> {
 }
 
 /**
- * `fast-check` run-time
+ * `fast-check` runtime
  * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
  * Fields with a type that depends on the property argument list
  * are omitted here and must be set on individual law tests.
+ *
+ * @category fast-check
  */
 export type ParameterOverrides = Omit<
   fc.Parameters,
@@ -42,6 +48,8 @@ export type ParameterOverrides = Omit<
 /**
  * Assemble a set of laws for some unit under test. You can run them with the
  * function {@link testLaws}.
+ *
+ * @category Build Laws
  */
 export const lawTests = <ArgLists extends UnknownArgs[]>(
   laws: LawList<ArgLists>['laws'],
@@ -67,6 +75,8 @@ export const lawTests = <ArgLists extends UnknownArgs[]>(
  * Entries in the optional configuration will override any `fast-check`
  * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html)
  * found in the laws.
+ *
+ * @category Test Laws
  */
 export const testLaws = <ArgLists extends UnknownArgs[]>(
   {unitName, laws}: LawList<ArgLists>,
@@ -81,7 +91,14 @@ export const testLaws = <ArgLists extends UnknownArgs[]>(
   })
 }
 
-/** Just like  {@link testLaws}, but in _verbose_ mode. */
+/**
+ * Just like  {@link testLaws}, but in _verbose_ mode.
+ *
+ * @param lawList - List of laws to be tested.
+ * @param parameters - Optional `fast-check` runtime parameters.
+ *
+ * @category Test Laws
+ */
 export const verboseLaws = <ArgLists extends UnknownArgs[]>(
   lawList: LawList<ArgLists>,
   parameters: ParameterOverrides = {},
@@ -89,7 +106,11 @@ export const verboseLaws = <ArgLists extends UnknownArgs[]>(
   testLaws(lawList, {...parameters, verbose: true})
 }
 
-/** The type of all predicates extracted from every law in a `LawList`. */
+/**
+ * The type of all predicates extracted from every law in a `LawList`.
+ *
+ * @category Build Laws
+ */
 export type LawPredicates<ArgLists extends UnknownArgs[]> = {
   [K in keyof ArgLists]: LawTest<ArgLists[K]>['predicate']
 }

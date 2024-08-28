@@ -13,7 +13,11 @@ declare module './options.js' {
   }
 }
 
-/** Test Equivalence laws. */
+/**
+ * Test Typeclass laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Equivalence = <A>({
   F,
   a,

@@ -7,6 +7,8 @@ import fc from 'fast-check'
  * typeclasses that do not expect a higher-kinded type as their parameter.
  *
  * All the concrete typeclass laws expect these options to be provided.
+ *
+ * @category Build Typeclass Laws
  */
 export interface ConcreteOptions<F extends TypeLambda, A> {
   /**
@@ -49,6 +51,8 @@ export interface ConcreteOptions<F extends TypeLambda, A> {
  *
  * Use [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
  * to add entries here for a new typeclasses.
+ *
+ * @category Build Typeclass Laws
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unused-vars
 export interface ConcreteMap<A> {}

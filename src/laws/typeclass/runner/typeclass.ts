@@ -11,7 +11,11 @@ import {
 import {testConcreteTypeclassLaws} from './concrete.js'
 import {testParameterizedTypeclassLaws} from './parameterized.js'
 
-/** Union of all typeclass names. */
+/**
+ * Union of all typeclass names.
+ *
+ * @category Build Typeclass Laws
+ */
 export type Typeclass = ParameterizedTypeclass | ConcreteTypeclass
 
 /**
@@ -28,7 +32,9 @@ export type Typeclass = ParameterizedTypeclass | ConcreteTypeclass
  * given in the `instances` argument. The specific options depend on the list
  * of instances being tested, but they are all either equalities, arbitraries,
  * or functions on the underlying types, that are required for testing the laws.
- * 3. `parameters` - Optional run-time `fc-check` parameters.
+ * 3. `parameters` - Optional runtime `fc-check` parameters.
+ *
+ * @category Typeclass Law Runner
  */
 export const testTypeclassLawsFor =
   <F extends TypeLambda, A, B = A, C = A>() =>
@@ -79,6 +85,12 @@ export const testTypeclassLawsFor =
       )
   }
 
+/**
+ * A subset of all typeclass instances implemented for a single data
+ * type.
+ *
+ * @category Typeclass Law Runner
+ */
 export type TypeclassInstances<
   F extends TypeLambda,
   A,

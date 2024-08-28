@@ -14,21 +14,39 @@ import {testTypeclassLawsFor, TypeclassInstances} from './typeclass.js'
  * This means that, for example, if we are testing the `Option`
  * data type, the actual type used in the tests will be
  * `Option<Mono> ≡ Option<readonly number[]>`.
+ *
+ * @category Monomorphic Runner
  */
 export type Mono = readonly number[]
 
-/** The equivalence used for {@link testTypeclassLaws}. */
+/**
+ * The equivalence used for {@link testTypeclassLaws}.
+ *
+ * @category Monomorphic Runner
+ */
 export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
   NU.Equivalence,
 )
 
-/** The order used for {@link testTypeclassLaws}. */
+/**
+ * The order used for {@link testTypeclassLaws}.
+ *
+ * @category Monomorphic Runner
+ */
 export const monoOrder: OD.Order<Mono> = AR.getOrder(NU.Order)
 
-/** The semigroup used for {@link testTypeclassLaws}. */
+/**
+ * The semigroup used for {@link testTypeclassLaws}.
+ *
+ * @category Monomorphic Runner
+ */
 export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()
 
-/** Options for the monomorphic typeclass test runner. */
+/**
+ * Options for the monomorphic typeclass test runner.
+ *
+ * @category Monomorphic Runner
+ */
 export interface MonomorphicOptions<
   F extends TypeLambda,
   In1 = never,
@@ -43,6 +61,7 @@ export interface MonomorphicOptions<
  * Test typeclass laws for the given instances of some data type. This
  * is just like {@link testTypeclassLawsFor}, but with all functions
  * monomorphic on an underlying type of `readonly number[]`.
+ *
  * @param instances - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Monad: Option.Monad }` will run
  * the monad typeclass laws on `Option`.
@@ -52,7 +71,9 @@ export interface MonomorphicOptions<
  * data type from an `Equivalence` for the underlying type.
  * 2. `getArbitrary` - A function that will build an `Arbitrary` for your
  * data type from an `Arbitrary` for the underlying type.
- * * @param parameters - Optional run-time `fc-check` parameters.
+ * @param parameters - Optional runtime `fc-check` parameters.
+ *
+ * @category Monomorphic Runner
  */
 export const testTypeclassLaws = <
   F extends TypeLambda,

@@ -7,7 +7,11 @@ import {lawTests} from '../../../law/lawList.js'
 import {lawTest} from '../../../law/lawTest.js'
 import {CommonOptions} from './options.js'
 
-/** Test Invariant laws. */
+/**
+ * Test Invariant laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Invariant = <F extends TypeLambda, A, B, C, In1, Out2, Out1>({
   a,
   b,

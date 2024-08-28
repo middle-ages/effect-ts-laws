@@ -12,7 +12,11 @@ declare module './options.js' {
   }
 }
 
-/** Test Semigroup laws. */
+/**
+ * Test Semigroup laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Semigroup = <A>({
   F,
   equalsA,

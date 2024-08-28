@@ -8,7 +8,11 @@ import {lawTests} from '../../../law/lawList.js'
 import {lawTest} from '../../../law/lawTest.js'
 import {CommonOptions} from './options.js'
 
-/** Test Applicative laws. */
+/**
+ * Test Applicative laws.
+ *
+ * @category Test Typeclass Laws
+ */
 export const Applicative = <
   F extends TypeLambda,
   A,

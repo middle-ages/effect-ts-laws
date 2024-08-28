@@ -8,6 +8,8 @@ import {ParameterizedMap} from './options.js'
 /**
  * Map of typeclass name to their laws, for typeclasses of parameterized
  * types.
+ *
+ * @category Build Typeclass Laws
  */
 export const parameterizedLaws = {
   Invariant,
@@ -16,7 +18,11 @@ export const parameterizedLaws = {
   Applicative,
 } as const
 
-/** A name of a typeclasses for parameterized types. */
+/**
+ * A name of a typeclasses for parameterized types.
+ *
+ * @category Build Typeclass Laws
+ */
 export type ParameterizedTypeclass = keyof typeof parameterizedLaws
 
 /**
@@ -27,6 +33,8 @@ export type ParameterizedTypeclass = keyof typeof parameterizedLaws
  * type MyMonad = ParameterizedInstances<ReadonlyArrayTypeLambda>['Monad']
  * // MyMonad ≡ Monad<ReadonlyArrayTypeLambda>
  * ```
+ *
+ * @category Build Typeclass Laws
  */
 export type ParameterizedInstances<
   F extends TypeLambda,
@@ -43,7 +51,11 @@ export type ParameterizedInstances<
   >
 }
 
-/** Type guard for parameterized type typeclass names. */
+/**
+ * Type guard for parameterized type typeclass names.
+ *
+ * @category Build Typeclass Laws
+ */
 export const isParameterizedTypeclassName = (
   o: string,
 ): o is ParameterizedTypeclass => o in parameterizedLaws
@@ -51,6 +63,8 @@ export const isParameterizedTypeclassName = (
 /**
  * Get the typeclass laws for the given typeclass name. Returns a function that
  * when given the required options, will run the typeclass law tests.
+ *
+ * @category Build Typeclass Laws
  */
 export const parameterizedLawsFor = <
   const Typeclass extends ParameterizedTypeclass,
@@ -88,6 +102,8 @@ export const parameterizedLawsFor = <
 /**
  * The type of options required for testing the typeclass laws for the given
  * instances.
+ *
+ * @category Build Typeclass Laws
  */
 export type ParameterizedOptions<
   Classes extends Partial<ParameterizedInstances<F, In1, Out2, Out1>>,
