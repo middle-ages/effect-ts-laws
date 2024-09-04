@@ -66,3 +66,12 @@ export const liftArbitraries = <
       >
     }
 }
+
+/**
+ * Build an arbitrary error from an arbitrary of a message.
+ * @param message Arbitrary for the error message string.
+ * @returns Arbitrary error.
+ * @category arbitraries
+ */
+export const error = (message: fc.Arbitrary<string>): fc.Arbitrary<Error> =>
+  message.map(s => new Error(s))

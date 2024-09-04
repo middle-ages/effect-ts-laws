@@ -10,11 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/middle-ages/effect-ts-laws.git"
   },
-  "license": "MIT",
+  "license": "ISC",
   "keywords": [
     "effect-ts",
     "fast-check",
-    "law-testing"
+    "law-testing",
+    "property-testing"
   ],
   "scripts": {
     "clean": "dev/clean",

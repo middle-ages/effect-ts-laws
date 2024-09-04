@@ -117,6 +117,21 @@ const buildLaws = <
       fa,
       ab,
     )((fa, ab) => equalsFb(pipe(fa, map(ab)), pipe(ab, F.of, ap(fa)))),
+
+    Law(
+      'productConsistency',
+      'fab ▹ ap(fa) = product(fab, fa) ▹ map(([ab, a]) ⇒ ab(a))',
+      fa,
+      fab,
+    )((fa, fab) =>
+      equalsFb(
+        pipe(fab, ap(fa)),
+        pipe(
+          F.product(fab, fa),
+          map(([f, a]) => f(a)),
+        ),
+      ),
+    ),
   )
 }
 

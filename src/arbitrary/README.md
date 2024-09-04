@@ -9,6 +9,7 @@
 | tinyInteger |                                      |                                           | `Arbitrary<number>`       |
 | option      | `(a: Arbitrary<A>)`                  | <span style='font-family: serif'>⇒</span> | `Arbitrary<Option<A>>`    |
 | either      | `(e: Arbitrary<E>, a: Arbitrary<A>)` | <span style='font-family: serif'>⇒</span> | `Arbitrary<Either<A, E>>` |
+| error       | `(m: Arbitrary<string>)`             | <span style='font-family: serif'>⇒</span> | `Arbitrary<Error>`        |
 
 ## [Time](./time.ts)
 

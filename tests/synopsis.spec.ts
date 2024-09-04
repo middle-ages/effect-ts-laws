@@ -1,8 +1,8 @@
-import {Covariant as CO, Invariant as IN} from '@effect/typeclass'
+import {Covariant as CO} from '@effect/typeclass'
 import {Monad} from '@effect/typeclass/data/Option'
 import {Array as AR, Option as OP} from 'effect'
 import {monoOrder, option, testTypeclassLaws} from 'effect-ts-laws'
-import {dual, pipe} from 'effect/Function'
+import {dual} from 'effect/Function'
 import {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
 
@@ -18,21 +18,15 @@ describe('synopsis examples', () => {
       2,
       <A, B>([a]: MyTuple<A>, ab: (a: A) => B): MyTuple<B> => [ab(a)],
     )
+    const Covariant: CO.Covariant<MyTupleTypeLambda> = {
+      imap: CO.imap<MyTupleTypeLambda>(map),
+      map,
+    }
 
-    const imap: IN.Invariant<MyTupleTypeLambda>['imap'] =
-      CO.imap<MyTupleTypeLambda>(map)
-
-    // The instances we want to test
-    const Invariant: IN.Invariant<MyTupleTypeLambda> = {imap}
-    const Covariant: CO.Covariant<MyTupleTypeLambda> = {...Invariant, map}
-
-    pipe(
-      {Covariant, Invariant},
-      testTypeclassLaws<MyTupleTypeLambda>({
-        getEquivalence: AR.getEquivalence,
-        getArbitrary: fc.tuple,
-      }),
-    )
+    testTypeclassLaws<MyTupleTypeLambda>({
+      getEquivalence: AR.getEquivalence,
+      getArbitrary: fc.tuple,
+    })({Covariant})
   })
 
   describe('@effect/data/Option', () => {
