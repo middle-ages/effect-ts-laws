@@ -1,10 +1,10 @@
-import {LiftArbitrary, tinyInteger} from '#arbitrary'
-import {LiftEquivalence, Overrides} from '#law'
 import {Semigroup as SG} from '@effect/typeclass'
 import {getSemigroup as arraySemigroup} from '@effect/typeclass/data/Array'
 import {Array as AR, Equivalence as EQ, Number as NU, Order as OD} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
+import {LiftArbitrary, tinyInteger} from '../../../arbitrary.js'
+import {LiftEquivalence, Overrides} from '../../../law.js'
 import {testTypeclassLawsFor, TypeclassInstances} from './typeclass.js'
 
 /**
@@ -12,14 +12,12 @@ import {testTypeclassLawsFor, TypeclassInstances} from './typeclass.js'
  * This means that, for example, if we are testing the `Option`
  * datatype, the actual type used in the tests will be
  * `Option<Mono> ≡ Option<readonly number[]>`.
- *
  * @category monomorphic
  */
 export type Mono = readonly number[]
 
 /**
  * The equivalence used for {@link testTypeclassLaws}.
- *
  * @category monomorphic
  */
 export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
@@ -28,21 +26,18 @@ export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
 
 /**
  * The order used to {@link testTypeclassLaws}.
- *
  * @category monomorphic
  */
 export const monoOrder: OD.Order<Mono> = AR.getOrder(NU.Order)
 
 /**
  * The semigroup used to {@link testTypeclassLaws}.
- *
  * @category monomorphic
  */
 export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()
 
 /**
  * Options for the monomorphic typeclass test runner.
- *
  * @category monomorphic
  */
 export interface MonomorphicOptions<
@@ -81,7 +76,6 @@ export interface MonomorphicOptions<
  * 2. `getArbitrary` - A function that will build an `Arbitrary` for your
  * datatype from an `Arbitrary` for the underlying type.
  * @category harness
- *
  */
 export const testTypeclassLaws =
   <F extends TypeLambda>(

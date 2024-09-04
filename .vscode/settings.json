@@ -9,11 +9,13 @@
     "Covariants",
     "datatypes",
     "deduped",
+    "demi",
     "depcruise",
     "Eilam",
     "Giulio",
     "kinded",
     "Kleisli",
+    "lmsansdemicond",
     "millis",
     "Millis",
     "monoid",
@@ -32,7 +34,8 @@
     "typeclass",
     "Typeclass",
     "typeclasses",
-    "Typeclassopedia"
+    "Typeclassopedia",
+    "webfont"
   ],
   "js/ts.implicitProjectConfig.module": "NodeNext",
   "js/ts.implicitProjectConfig.target": "ESNext",

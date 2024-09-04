@@ -157,7 +157,11 @@ export interface ComposeTypeLambda<
 > extends TypeLambda {
   readonly type: Kind<F, R1, O1, E1, Kind<G, R2, O2, E2, this['Target']>>
 }
-
+/**
+ * Map of typeclass name to the function that can compose a pair of the
+ * typeclass instances to create a new instance of the typeclass.
+ * @category composition
+ */
 export const composeMap = {
   Of: composeOf,
   Invariant: composeInvariant,
@@ -166,4 +170,8 @@ export const composeMap = {
   Traversable: composeTraversable,
 }
 
+/**
+ * Literal string union of typeclasses with a `compose*` function.
+ * @category composition
+ */
 export type ComposeKey = keyof typeof composeMap

@@ -1,10 +1,10 @@
-import {option, unary} from '#arbitrary'
-import {addLawSet, Law, lawTests, liftEquivalences} from '#law'
 import {Covariant as CO} from '@effect/typeclass'
 import {Covariant as optionCovariant} from '@effect/typeclass/data/Option'
 import {flow, identity, Option as OP, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'
+import {option, unary} from '../../../arbitrary.js'
+import {addLawSet, Law, lawTests, liftEquivalences} from '../../../law.js'
 import {Invariant} from './Invariant.js'
 import {liftOptions, Options} from './options.js'
 
@@ -64,7 +64,7 @@ const buildLaws = <
     Law('identity', 'map(id) = id', fa)(a => equalsFa(F.map(a, identity), a)),
     Law(
       'composition',
-      'map(f₁ ∘ f₂) = map(f₁) ∘ map(f₂)',
+      'map(ab ∘ bc) = map(ab) ∘ map(bc)',
       fa,
       ab,
       bc,

@@ -1,6 +1,6 @@
-import {Law, LawSet} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
+import {Law, LawSet} from '../../../law.js'
 import {ConcreteOptions} from './options.js'
 import {Semigroup} from './Semigroup.js'
 

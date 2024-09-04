@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import {LiftArbitrary} from '#arbitrary'
-import {ComposeKey, composeMap, ComposeTypeLambda} from '#compose'
-import {LiftEquivalence} from '#law'
 import {Equivalence as EQ, flow} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
+import {LiftArbitrary} from '../../../arbitrary.js'
+import {ComposeKey, composeMap, ComposeTypeLambda} from '../../../compose.js'
+import {LiftEquivalence} from '../../../law.js'
 
 /**
  * Options for testing

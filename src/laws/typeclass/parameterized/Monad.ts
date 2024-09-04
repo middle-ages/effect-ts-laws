@@ -1,8 +1,8 @@
-import {unary, unaryToKind} from '#arbitrary'
-import {Law, LawSet, liftEquivalences} from '#law'
 import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
+import {unary, unaryToKind} from '../../../arbitrary.js'
+import {Law, LawSet, liftEquivalences} from '../../../law.js'
 import {Covariant} from './Covariant.js'
 import {Options} from './options.js'
 
@@ -31,7 +31,7 @@ export const Monad = <
       equalsC,
     ),
     ab = unary<A>()(b),
-    [faB, fbC] = [
+    [afb, afc] = [
       pipe(b, unaryToKind<A>()(getArbitrary)),
       pipe(c, unaryToKind<B>()(getArbitrary)),
     ]
@@ -40,10 +40,10 @@ export const Monad = <
     'Monad',
     Law(
       'leftIdentity',
-      'of ∘ flatMap(f) = f',
+      'of ∘ flatMap(afb) = afb',
       a,
-      faB,
-    )((a, faB) => equalsFb(pipe(a, F.of, F.flatMap(faB)), faB(a))),
+      afb,
+    )((a, afb) => equalsFb(pipe(a, F.of, F.flatMap(afb)), afb(a))),
 
     Law(
       'rightIdentity',
@@ -53,14 +53,14 @@ export const Monad = <
 
     Law(
       'associativity',
-      'flatMap(f₁) ∘ flatMap(f₂) = flatMap(f₁ ∘ flatMap(f₂))',
+      'flatMap(afb) ∘ flatMap(bfc) = flatMap(afb ∘ flatMap(bfc))',
       fa,
-      faB,
-      fbC,
-    )((fa, faB, fbC) =>
+      afb,
+      afc,
+    )((fa, afb, bfc) =>
       equalsFc(
-        pipe(fa, F.flatMap(faB), F.flatMap(fbC)),
-        pipe(fa, F.flatMap(flow(faB, F.flatMap(fbC)))),
+        pipe(fa, F.flatMap(afb), F.flatMap(bfc)),
+        pipe(fa, F.flatMap(flow(afb, F.flatMap(bfc)))),
       ),
     ),
 

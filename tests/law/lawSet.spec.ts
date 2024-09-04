@@ -1,3 +1,4 @@
+import {pipe} from 'effect'
 import {
   addLaws,
   addLawSet,
@@ -8,8 +9,7 @@ import {
   lawTests,
   negateLaw,
   testLaws,
-} from '#law'
-import {pipe} from 'effect'
+} from 'effect-ts-laws'
 import fc from 'fast-check'
 
 const tinyPositive = fc.integer({min: 1, max: 100})

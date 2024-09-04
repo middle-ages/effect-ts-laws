@@ -1,6 +1,6 @@
-import {Overrides} from '#law'
 import {Array as AR, pipe, Tuple as TU} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
+import {Overrides} from '../../../law.js'
 import {Concrete, ConcreteClass} from '../concrete/catalog.js'
 import {
   isParameterizedTypeclassName,

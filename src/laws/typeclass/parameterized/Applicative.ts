@@ -1,11 +1,11 @@
-import {option, unary} from '#arbitrary'
-import {addLawSet, Law, lawTests, liftEquivalences} from '#law'
 import {Applicative as AP, SemiApplicative as SA} from '@effect/typeclass'
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {identity, Option as OP, pipe} from 'effect'
 import {apply, flow} from 'effect/Function'
 import {TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'
+import {option, unary} from '../../../arbitrary.js'
+import {addLawSet, Law, lawTests, liftEquivalences} from '../../../law.js'
 import {Covariant} from './Covariant.js'
 import {liftOptions, Options} from './options.js'
 
@@ -77,7 +77,7 @@ const buildLaws = <
 
     Law(
       'homomorphism',
-      'fab ▹ of ▹ (a ▹ of ▹ ap) = a ▹ fab ▹ of',
+      'ab ▹ of ▹ (a ▹ of ▹ ap) = a ▹ ab ▹ of',
       a,
       ab,
     )((a, ab) => {

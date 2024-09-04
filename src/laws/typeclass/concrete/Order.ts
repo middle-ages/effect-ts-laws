@@ -1,6 +1,6 @@
-import {Law, lawTests} from '#law'
 import {Boolean as BO} from 'effect'
 import {OrderTypeLambda} from 'effect/Order'
+import {Law, lawTests} from '../../../law.js'
 import {ConcreteOptions} from './options.js'
 
 declare module './options.js' {

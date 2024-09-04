@@ -1,6 +1,6 @@
-import {lawSetTests, Overrides, testLaws} from '#law'
 import {Array as AR, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
+import {lawSetTests, Overrides, testLaws} from '../../../law.js'
 import {
   Parameterized,
   ParameterizedClass,

@@ -1,5 +1,5 @@
-import {checkLaw, Law, negateLaw, testLaw} from '#law'
 import {Option as OP, pipe} from 'effect'
+import {checkLaw, Law, negateLaw, testLaw} from 'effect-ts-laws'
 import fc from 'fast-check'
 
 const tinyPositive = fc.integer({min: 1, max: 100})

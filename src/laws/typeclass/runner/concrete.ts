@@ -1,8 +1,8 @@
-import {LawSet, Overrides, testLaws} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
 import {Equivalence as EQ, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
+import {LawSet, Overrides, testLaws} from '../../../law.js'
 import {
   Concrete,
   ConcreteClass,

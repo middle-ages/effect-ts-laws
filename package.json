@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -11,6 +11,9 @@
     "url": "git+https://github.com/middle-ages/effect-ts-laws.git"
   },
   "license": "ISC",
+  "files": [
+    "dist/**/*"
+  ],
   "keywords": [
     "effect-ts",
     "fast-check",
@@ -31,7 +34,7 @@
     "run-tsx": "tsx --conditions test",
     "ls-deps": "pnpm ls --prod",
     "ls-deps-dev": "pnpm ls --dev",
-    "build-docs": "typedoc index.ts"
+    "build-docs": "typedoc"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
@@ -40,10 +43,10 @@
     "@tsconfig/strictest": "^2.0.5",
     "@types/eslint__eslintrc": "^2.1.2",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.5.1",
+    "@types/node": "^22.5.3",
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/ui": "^2.0.5",
-    "dependency-cruiser": "^16.4.0",
+    "dependency-cruiser": "^16.4.1",
     "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -52,13 +55,13 @@
     "tsx": "^4.19.0",
     "typedoc": "^0.26.6",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^8.3.0",
-    "vite": "^5.4.2",
+    "typescript-eslint": "^8.4.0",
+    "vite": "^5.4.3",
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "@effect/typeclass": "^0.26.0",
-    "effect": "^3.7.0"
+    "@effect/typeclass": "^0.26.2",
+    "effect": "^3.7.2"
   },
   "peerDependencies": {
     "effect": "workspace:^",
@@ -84,7 +87,7 @@
         "types": "./dist/index.d.ts",
         "test": "./index.ts",
         "import": "./dist/index.js",
-        "default": "./index.js"
+        "default": "./dist/index.js"
       }
     },
     "./law": {
@@ -92,7 +95,7 @@
         "types": "./src/law.ts",
         "test": "./src/law.js",
         "import": "./dist/src/law.js",
-        "default": "./src/law.js"
+        "default": "./dist/src/law.js"
       }
     },
     "./arbitrary": {
@@ -100,7 +103,7 @@
         "types": "./src/arbitrary.ts",
         "test": "./src/arbitrary.js",
         "import": "./dist/src/arbitrary.js",
-        "default": "./src/arbitrary.js"
+        "default": "./dist/src/arbitrary.js"
       }
     },
     "./compose": {
@@ -108,7 +111,7 @@
         "types": "./src/compose.ts",
         "test": "./src/compose.js",
         "import": "./dist/src/compose.js",
-        "default": "./src/compose.js"
+        "default": "./dist/src/compose.js"
       }
     },
     "./laws": {
@@ -116,14 +119,8 @@
         "types": "./src/laws.ts",
         "test": "./src/laws.js",
         "import": "./dist/src/laws.js",
-        "default": "./src/laws.js"
+        "default": "./dist/src/laws.js"
       }
     }
-  },
-  "imports": {
-    "#law": "effect-ts-laws/law",
-    "#arbitrary": "effect-ts-laws/arbitrary",
-    "#compose": "effect-ts-laws/compose",
-    "#laws": "effect-ts-laws/laws"
   }
 }

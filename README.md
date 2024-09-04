@@ -9,7 +9,9 @@
 A library for testing [effect-ts](https://github.com/Effect-ts/effect)
 typeclass laws using
 [fast-check](https://github.com/dubzzz/fast-check). API is
-[documented here](https://middle-ages.github.io/effect-ts-laws-docs/).
+[documented here](https://middle-ages.github.io/effect-ts-laws-docs/), 
+and the laws are
+[listed here](https://middle-ages.github.io/effect-ts-laws-docs/catalog-of-laws.html).
 
 1. [About](#about)
    1. [Synopsis](#synopsis)
@@ -35,7 +37,7 @@ import {Option} from 'effect'
 import {Arbitrary, monoOrder, testTypeclassLaws} from 'effect-ts-laws'
 
 describe('@effect/typeclass/data/Option', () => {
-  testTypeclassLaws<OP.OptionTypeLambda>({
+  testTypeclassLaws<Option.OptionTypeLambda>({
     getEquivalence: Option.getEquivalence,
     getArbitrary: Arbitrary.option,
   })({
@@ -154,6 +156,7 @@ _datatype tests_ implementation status.
 ### More Information
 
 * [API documentation](https://middle-ages.github.io/effect-ts-laws-docs/).
+* [Catalog of laws](https://middle-ages.github.io/effect-ts-laws-docs/catalog-of-laws.html).
 * `README` at [the laws for typeclasses](src/laws/typeclass/concrete/README.md) on concrete types.
 * `README` at [the laws for typeclasses](src/laws/typeclass/parameterized/README.md) on parameterized types.
 * `README` at the typeclass laws [self-tests](tests/laws/typeclass/README.md).

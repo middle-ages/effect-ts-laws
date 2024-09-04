@@ -1,6 +1,3 @@
-import {option, unaryToKind} from '#arbitrary'
-import {composeApplicative} from '#compose'
-import {addLawSet, Law, lawTests} from '#law'
 import {Traversable as TA} from '@effect/typeclass'
 import {Applicative as arrayApplicative} from '@effect/typeclass/data/Array'
 import {Applicative as identityApplicative} from '@effect/typeclass/data/Identity'
@@ -21,6 +18,9 @@ import {ReadonlyArrayTypeLambda} from 'effect/Array'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
+import {option, unaryToKind} from '../../../arbitrary.js'
+import {composeApplicative} from '../../../compose.js'
+import {addLawSet, Law, lawTests} from '../../../law.js'
 import {liftOptions, Options} from './options.js'
 
 /**
@@ -121,8 +121,8 @@ const buildLaws = <
 
     Law(
       'composition',
-      'F.traverse(G)(agb) ∘ G.map(F.traverse(H)(bhc)' +
-        ' = traverseGH(agb ∘ mapG(bhc))',
+      'F.traverse(G)(agb) ∘ G.map(F.traverse(H)(bhc))' +
+        ' = traverse(GH)(agb ∘ mapG(bhc))',
       fa,
       agb,
       bhc,

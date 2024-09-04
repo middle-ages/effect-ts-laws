@@ -1,5 +1,5 @@
-import {option, unary} from '#arbitrary'
-import {addLawSet, Law, lawTests, liftEquivalences} from '#law'
+import {option, unary} from '../../../arbitrary.js'
+import {addLawSet, Law, lawTests, liftEquivalences} from '../../../law.js'
 import {Invariant as IN} from '@effect/typeclass'
 import {Invariant as optionInvariant} from '@effect/typeclass/data/Option'
 import {flow, identity, Option as OP, pipe} from 'effect'
@@ -61,16 +61,16 @@ const buildLaws = <F extends TypeLambda, A, B, C, R, O, E>(
 
     Law(
       'composition',
-      'a ▹ imap(f₁, f₂) ▹ imap(g₁, g₂) = a ▹ imap(f₁ ∘ g₁, g₂ ∘  f₂)',
+      'a ▹ imap(fab, fba) ▹ imap(fbc, fcb) = a ▹ imap(fab ∘ fbc, fcb ∘ fba)',
       fa,
       fab,
       fbc,
       fba,
       fcb,
-    )((a, fab, fbc, fba, fcb) =>
+    )((a, ab, bc, ba, cb) =>
       equalsFc(
-        pipe(a, F.imap(fab, fba), F.imap(fbc, fcb)),
-        pipe(a, F.imap(flow(fab, fbc), flow(fcb, fba))),
+        pipe(a, F.imap(ab, ba), F.imap(bc, cb)),
+        pipe(a, F.imap(flow(ab, bc), flow(cb, ba))),
       ),
     ),
   )
