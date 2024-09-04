@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "Law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -11,9 +11,6 @@
     "url": "git+https://github.com/middle-ages/effect-ts-laws.git"
   },
   "license": "ISC",
-  "files": [
-    "dist/**/*"
-  ],
   "keywords": [
     "effect-ts",
     "fast-check",
@@ -34,7 +31,8 @@
     "run-tsx": "tsx --conditions test",
     "ls-deps": "pnpm ls --prod",
     "ls-deps-dev": "pnpm ls --dev",
-    "build-docs": "typedoc"
+    "build-docs": "typedoc",
+    "npm": "dev/publish"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
@@ -84,42 +82,37 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
+        "types": "./index.d.ts",
         "test": "./index.ts",
-        "import": "./dist/index.js",
-        "default": "./dist/index.js"
+        "import": "./index.js"
       }
     },
     "./law": {
       "import": {
-        "types": "./src/law.ts",
-        "test": "./src/law.js",
-        "import": "./dist/src/law.js",
-        "default": "./dist/src/law.js"
+        "types": "./src/law.d.ts",
+        "test": "./src/law.ts",
+        "import": "./src/law.js"
       }
     },
     "./arbitrary": {
       "import": {
-        "types": "./src/arbitrary.ts",
-        "test": "./src/arbitrary.js",
-        "import": "./dist/src/arbitrary.js",
-        "default": "./dist/src/arbitrary.js"
+        "types": "./src/arbitrary.d.ts",
+        "test": "./src/arbitrary.ts",
+        "import": "./src/arbitrary.js"
       }
     },
     "./compose": {
       "import": {
-        "types": "./src/compose.ts",
-        "test": "./src/compose.js",
-        "import": "./dist/src/compose.js",
-        "default": "./dist/src/compose.js"
+        "types": "./src/compose.d.ts",
+        "test": "./src/compose.ts",
+        "import": "./src/compose.js"
       }
     },
     "./laws": {
       "import": {
-        "types": "./src/laws.ts",
-        "test": "./src/laws.js",
-        "import": "./dist/src/laws.js",
-        "default": "./dist/src/laws.js"
+        "types": "./src/law.d.ts",
+        "test": "./src/law.ts",
+        "import": "./src/law.js"
       }
     }
   }
