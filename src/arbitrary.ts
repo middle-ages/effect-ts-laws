@@ -12,15 +12,16 @@ export type {
   ArbitraryToEquivalence,
   EquivalenceToArbitrary,
   LiftArbitrary,
+  LiftedEquivalenceToArbitrary,
 } from './arbitrary/types.js'
 
-export {instances} from './arbitrary/instances.js'
+export {Monad as arbitraryMonad} from './arbitrary/instances.js'
 export type {ArbitraryTypeLambda} from './arbitrary/instances.js'
 
 import fastCheck from 'fast-check'
 import {either, option, tinyInteger} from './arbitrary/data.js'
 import {predicate, unary, unaryToKind} from './arbitrary/function.js'
-import {Covariant, Monad} from './arbitrary/instances.js'
+import {Monad} from './arbitrary/instances.js'
 import {duration, offsetTimezone, utc, zoned} from './arbitrary/time.js'
 
 /**
@@ -40,6 +41,5 @@ export const fc = {
   offsetTimezone,
   utc,
   zoned,
-  Covariant,
   Monad,
 }

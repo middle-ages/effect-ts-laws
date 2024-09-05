@@ -21,7 +21,7 @@ import fc from 'fast-check'
 import {option, unaryToKind} from '../../../arbitrary.js'
 import {composeApplicative} from '../../../compose.js'
 import {addLawSet, Law, lawTests} from '../../../law.js'
-import {liftOptions, Options} from './options.js'
+import {ParameterizedGiven as Given, withOuterOption} from './given.js'
 
 /**
  * Test typeclass laws for `Traversable`.
@@ -32,26 +32,18 @@ export const Traversable = <
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
-  options: Options<TraversableTypeLambda, F, A, B, C, R, O, E>,
-) => {
-  const composition = buildLaws(
-    ...liftOptions<TraversableTypeLambda, F, OptionTypeLambda>()(
-      'Traversable',
-      'Option<F>',
-    )<typeof options, A, B, C, R, O, E>(
-      options,
-      optionTraversable,
-      OP.getEquivalence,
-      option,
+  given: Given<TraversableTypeLambda, F, A, B, C, In1, Out2, Out1>,
+) =>
+  pipe(
+    buildLaws('Traversable', given),
+    addLawSet(
+      buildLaws(...withOuterOption('Traversable', given, optionTraversable)),
     ),
   )
-
-  return pipe(buildLaws('Traversable', options), addLawSet(composition))
-}
 
 /**
  * Test typeclass laws for `Traversable`.
@@ -62,9 +54,9 @@ const buildLaws = <
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   name: string,
   {
@@ -76,9 +68,9 @@ const buildLaws = <
     a,
     b,
     c,
-  }: Options<TraversableTypeLambda, F, A, B, C, R, O, E>,
+  }: Given<TraversableTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) => {
-  type Data<I extends TypeLambda, T> = Kind<I, R, O, E, T>
+  type Data<I extends TypeLambda, T> = Kind<I, In1, Out2, Out1, T>
 
   type G = OptionTypeLambda
   type H = ReadonlyArrayTypeLambda
@@ -100,8 +92,11 @@ const buildLaws = <
       fc.Arbitrary<(a: A) => DataG<B>>,
       fc.Arbitrary<(a: B) => DataH<C>>,
     ] = [
-      pipe(b, unaryToKind<A>()<OptionTypeLambda, R, O, E>(option)),
-      pipe(c, unaryToKind<B>()<ReadonlyArrayTypeLambda, R, O, E>(fc.array)),
+      pipe(b, unaryToKind<A>()<OptionTypeLambda, In1, Out2, Out1>(option)),
+      pipe(
+        c,
+        unaryToKind<B>()<ReadonlyArrayTypeLambda, In1, Out2, Out1>(fc.array),
+      ),
     ]
 
   const equalsGHFc: EQ.Equivalence<OP.Option<readonly DataF<C>[]>> = pipe(
@@ -143,12 +138,12 @@ export interface TraversableTypeLambda extends TypeLambda {
   readonly type: TA.Traversable<this['Target'] & TypeLambda>
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+declare module './given.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
     Traversable: {
       lambda: TraversableTypeLambda
-      options: Options<TraversableTypeLambda, F, A, B, C, R, O, E>
-      laws: ReturnType<typeof Traversable<F, A, B, C, R, O, E>>
+      options: Given<TraversableTypeLambda, F, A, B, C, In1, Out2, Out1>
+      laws: ReturnType<typeof Traversable<F, A, B, C, In1, Out2, Out1>>
     }
   }
 }

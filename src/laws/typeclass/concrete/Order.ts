@@ -1,16 +1,12 @@
-import {Boolean as BO} from 'effect'
-import {OrderTypeLambda} from 'effect/Order'
-import {Law, lawTests} from '../../../law.js'
-import {ConcreteOptions} from './options.js'
-
-declare module './options.js' {
-  interface ConcreteMap<A> {
-    Order: {
-      lambda: OrderTypeLambda
-      laws: ReturnType<typeof Order<A>>
-    }
-  }
-}
+import {Boolean as BO, Equivalence as EQ} from 'effect'
+import {
+  greaterThanOrEqualTo,
+  lessThanOrEqualTo,
+  OrderTypeLambda,
+} from 'effect/Order'
+import fc from 'fast-check'
+import {Law} from '../../../law.js'
+import {ConcreteGiven, concreteLaws} from './given.js'
 
 /**
  * Test typeclass laws for `Order`.
@@ -20,33 +16,58 @@ export const Order = <A>({
   F,
   a,
   equalsA,
-}: ConcreteOptions<OrderTypeLambda, A>) => {
-  const lte = (a: A, b: A): boolean => F(a, b) <= 0
+  suffix,
+}: ConcreteGiven<OrderTypeLambda, A>) => {
+  const build = buildLaws(a, equalsA),
+    [lte, gte] = [lessThanOrEqualTo(F), greaterThanOrEqualTo(F)]
 
-  return lawTests(
-    'Order',
-    Law(
-      'transitivity',
-      '∀a,b,c ∈ T: a≤b ∧ b≤c ⇒ a≤c',
-      a,
-      a,
-      a,
-    )((a, b, c) => BO.implies(lte(a, b) && lte(b, c), lte(a, c))),
+  const consistencyLaw = Law(
+    'orderConsistency',
+    `∀a,b ∈ T: a≤b ∧ b≥a ⇒ a=c`,
+    a,
+    a,
+  )((a, b) => BO.implies(lte(a, b) && gte(a, b), equalsA(a, b)))
 
-    Law(
-      'antisymmetry',
-      '∀a,b ∈ T: a≤b ∧ b≤a ⇒ a=b',
-      a,
-      a,
-    )((a, b) => BO.implies(lte(a, b) && lte(b, a), equalsA(a, b))),
+  const operatorLaws = [build('lte', '≤', lte), build('gte', '≥', gte)]
 
-    Law('reflexivity', '∀a ∈ T: a≤a', a)((a: A) => lte(a, a)),
+  return concreteLaws('Order', consistencyLaw)(suffix, ...operatorLaws)
+}
 
-    Law(
-      'connectivity',
-      '∀a,b ∈ T: a≤b ∨ b≤a',
-      a,
-      a,
-    )((a, b) => lte(a, b) || lte(b, a)),
-  )
+export const buildLaws =
+  <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>
+  (suffix: string, sym: string, op: (a: A, b: A) => boolean) =>
+    concreteLaws(
+      `Order`,
+      Law(
+        'transitivity',
+        `∀a,b,c ∈ T: a${sym}b ∧ b${sym}c ⇒ a${sym}c`,
+        a,
+        a,
+        a,
+      )((a, b, c) => BO.implies(op(a, b) && op(b, c), op(a, c))),
+
+      Law(
+        'antisymmetry',
+        `∀a,b ∈ T: a${sym}b ∧ b${sym}a ⇒ a=b`,
+        a,
+        a,
+      )((a, b) => BO.implies(op(a, b) && op(b, a), equalsA(a, b))),
+
+      Law('reflexivity', '∀a ∈ T: a${sym}a', a)((a: A) => op(a, a)),
+
+      Law(
+        'connectivity',
+        `∀a,b ∈ T: a${sym}b ∨ b${sym}a`,
+        a,
+        a,
+      )((a, b) => op(a, b) || op(b, a)),
+    )(suffix)
+
+declare module './given.js' {
+  interface ConcreteMap<A> {
+    Order: {
+      lambda: OrderTypeLambda
+      laws: ReturnType<typeof Order<A>>
+    }
+  }
 }

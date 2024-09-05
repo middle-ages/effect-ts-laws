@@ -2,6 +2,7 @@ export {
   testConcreteTypeclassLaw,
   testConcreteTypeclassLaws,
   testMonoid,
+  testMonoids,
 } from './laws/typeclass/runner/concrete.js'
 export {
   monoEquivalence,
@@ -13,15 +14,15 @@ export {testParameterizedTypeclassLaws} from './laws/typeclass/runner/parameteri
 export {testTypeclassLawsFor} from './laws/typeclass/runner/typeclass.js'
 
 export type {
+  ConcreteGiven,
   ConcreteMap,
-  ConcreteOptions,
-} from './laws/typeclass/concrete/options.js'
+} from './laws/typeclass/concrete/given.js'
 export type {ApplicativeTypeLambda} from './laws/typeclass/parameterized/Applicative.js'
-export type {MonadTypeLambda} from './laws/typeclass/parameterized/Monad.js'
 export type {
-  Options,
+  ParameterizedGiven,
   ParameterizedMap,
-} from './laws/typeclass/parameterized/options.js'
+} from './laws/typeclass/parameterized/given.js'
+export type {MonadTypeLambda} from './laws/typeclass/parameterized/Monad.js'
 export type {
   Mono,
   MonomorphicOptions,

@@ -27,15 +27,6 @@ const flatMap: FL.FlatMap<ArbitraryTypeLambda>['flatMap'] = dual(
 )
 
 /**
- * Covariant instance for `fc.Arbitrary`.
- * @category fast-check
- */
-export const Covariant: CO.Covariant<ArbitraryTypeLambda> = {
-  map,
-  imap: CO.imap<ArbitraryTypeLambda>(map),
-}
-
-/**
  * Monad instance for `fc.Arbitrary`.
  * @category fast-check
  */
@@ -45,9 +36,3 @@ export const Monad: MD.Monad<ArbitraryTypeLambda> = {
   flatMap,
   of: fc.constant,
 }
-
-/**
- * `Covariant` and `Monad` instances for `fc.Arbitrary`.
- * @category fast-check
- */
-export const instances = {Covariant, Monad}

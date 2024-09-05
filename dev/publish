@@ -3,6 +3,7 @@
 set -Eeuo pipefail
 
 pnpm clean
+pnpm circular
 pnpm lint
 pnpm test-run
 

@@ -9,7 +9,7 @@
 A library for testing [effect-ts](https://github.com/Effect-ts/effect)
 typeclass laws using
 [fast-check](https://github.com/dubzzz/fast-check). API is
-[documented here](https://middle-ages.github.io/effect-ts-laws-docs/), 
+[documented here](https://middle-ages.github.io/effect-ts-laws-docs/),
 and the laws are
 [listed here](https://middle-ages.github.io/effect-ts-laws-docs/catalog-of-laws.html).
 
@@ -171,6 +171,8 @@ _datatype tests_ implementation status.
 
 * Tests
   * [ ] More typeclasses, more datatypes.
+  * [ ] Order laws should check opposite of `orderConsistency`: `≠ ⇒ ≥ ≠ ≤`.
+  
 * Harness
   * [ ] Make it easier to test datatypes with multiple instances for same
         typeclass, for example `Option` and all its `Monoid`s.

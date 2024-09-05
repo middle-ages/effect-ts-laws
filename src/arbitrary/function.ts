@@ -1,8 +1,17 @@
 import fc from 'fast-check'
 
-import {pipe, Predicate as PR} from 'effect'
+import {flow, Predicate as PR} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
+import {Monad as arbitraryMonad} from './instances.js'
 import {LiftArbitrary} from './types.js'
+
+const {map} = arbitraryMonad
+
+// flipped “apply”
+const applyF =
+  <A, B>(f: (a: A) => B) =>
+  (a: A): B =>
+    f(a)
 
 /**
  * Calls
@@ -11,10 +20,9 @@ import {LiftArbitrary} from './types.js'
  * argument.
  * @category arbitraries
  */
-export const unary =
-  <A>() =>
-  <B>(b: fc.Arbitrary<B>) =>
-    fc.func(b).map(f => (a: A) => f(a)) as fc.Arbitrary<(a: A) => B>
+export const unary: <A>() => <B>(
+  b: fc.Arbitrary<B>,
+) => fc.Arbitrary<(a: A) => B> = () => flow(fc.func, map(applyF))
 
 /**
  * An arbitrary for a function from `A` to `F<B>`. Requires an
@@ -25,11 +33,12 @@ export const unary =
  */
 export const unaryToKind =
   <A>() =>
-  <F extends TypeLambda, R, O, E>(getArbitrary: LiftArbitrary<F, R, O, E>) =>
-  <B>(b: fc.Arbitrary<B>): fc.Arbitrary<(a: A) => Kind<F, R, O, E, B>> =>
-    pipe(b, getArbitrary, fc.func).map(f => (a: A) => f(a)) as fc.Arbitrary<
-      (a: A) => Kind<F, R, O, E, B>
-    >
+  <F extends TypeLambda, In1, Out2, Out1>(
+    getArbitrary: LiftArbitrary<F, In1, Out2, Out1>,
+  ): (<B>(
+    b: fc.Arbitrary<B>,
+  ) => fc.Arbitrary<(a: A) => Kind<F, In1, Out2, Out1, B>>) =>
+    flow(getArbitrary, fc.func, map(applyF))
 
 /**
  * An arbitrary for a function from `F<A>` to `B`. Requires an
@@ -37,10 +46,17 @@ export const unaryToKind =
  * @returns An arbitrary of type `(a: F<A>) => B`.
  * @category arbitraries
  */
-export const unaryFromKind =
-  <A, F extends TypeLambda, R = never, O = unknown, E = unknown>() =>
-  <B>(b: fc.Arbitrary<B>): fc.Arbitrary<(fa: Kind<F, R, O, E, A>) => B> =>
-    fc.func(b).map(f => (fa: Kind<F, R, O, E, A>) => f(fa))
+export const unaryFromKind = <
+  A,
+  F extends TypeLambda,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
+>(): (<B>(
+  b: fc.Arbitrary<B>,
+) => fc.Arbitrary<(fa: Kind<F, In1, Out2, Out1, A>) => B>) =>
+  flow(fc.func, map(applyF))
+
 /**
  * An arbitrary for the type `F<A⇒B>`. Requires an arbitrary of `B`, a
  * function lifting `A` to `F<A>`, and the _type_ `A`.
@@ -49,9 +65,12 @@ export const unaryFromKind =
  */
 export const unaryInKind =
   <A>() =>
-  <F extends TypeLambda, R, O, E>(of: <T>(t: T) => Kind<F, R, O, E, T>) =>
-  <B>(b: fc.Arbitrary<B>): fc.Arbitrary<Kind<F, R, O, E, (a: A) => B>> =>
-    unary<A>()(b).map(of)
+  <F extends TypeLambda, In1, Out2, Out1>(
+    of: <T>(t: T) => Kind<F, In1, Out2, Out1, T>,
+  ): (<B>(
+    b: fc.Arbitrary<B>,
+  ) => fc.Arbitrary<Kind<F, In1, Out2, Out1, (a: A) => B>>) =>
+    flow(unary<A>(), map(of))
 
 /**
  * An arbitrary predicate of `A`.

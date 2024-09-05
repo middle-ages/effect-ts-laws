@@ -22,7 +22,7 @@
     "lint": "eslint src index.ts tests",
     "lint-fix": "eslint --fix src index.ts tests",
     "typecheck": "tsc --project tsconfig.build.json --noEmit",
-    "test-dependencies": "depcruise src index.ts -c .dependency-cruiser.cjs",
+    "circular": "depcruise src index.ts -c .dependency-cruiser.cjs",
     "graph-dependencies": "dev/graph-dependencies",
     "test": "vitest -c vitest.conf.ts --reporter=verbose",
     "coverage": "vitest -c vitest.conf.ts run --reporter=verbose --coverage",

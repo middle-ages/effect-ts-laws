@@ -42,12 +42,12 @@ export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()
  */
 export interface MonomorphicOptions<
   F extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 > {
-  getArbitrary: LiftArbitrary<F, R, O, E>
-  getEquivalence: LiftEquivalence<F, R, O, E>
+  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
+  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
 }
 
 /**

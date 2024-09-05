@@ -33,14 +33,16 @@ import {Kind, TypeLambda} from 'effect/HKT'
 export const composeOf = <
   F extends TypeLambda,
   G extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   F: OF.Of<F>,
   G: OF.Of<G>,
-): OF.Of<ComposeTypeLambda<F, G, R, O, E>> => ({
-  of: ofComposition(F, G) as OF.Of<ComposeTypeLambda<F, G, R, O, E>>['of'],
+): OF.Of<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
+  of: ofComposition(F, G) as OF.Of<
+    ComposeTypeLambda<F, G, In1, Out2, Out1>
+  >['of'],
 })
 
 /**
@@ -51,13 +53,13 @@ export const composeOf = <
 export const composeInvariant = <
   F extends TypeLambda,
   G extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   F: IN.Invariant<F>,
   G: IN.Invariant<G>,
-): IN.Invariant<ComposeTypeLambda<F, G, R, O, E>> => ({
+): IN.Invariant<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
   imap: dual(3, imapComposition(F, G)),
 })
 
@@ -69,13 +71,13 @@ export const composeInvariant = <
 export const composeCovariant = <
   F extends TypeLambda,
   G extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   F: CO.Covariant<F>,
   G: CO.Covariant<G>,
-): CO.Covariant<ComposeTypeLambda<F, G, R, O, E>> => ({
+): CO.Covariant<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
   ...composeInvariant(F, G),
   map: dual(2, mapComposition(F, G)),
 })
@@ -88,13 +90,13 @@ export const composeCovariant = <
 export const composeApplicative = <
   F extends TypeLambda,
   G extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   F: AP.Applicative<F>,
   G: AP.Applicative<G>,
-): AP.Applicative<ComposeTypeLambda<F, G, R, O, E>> => ({
+): AP.Applicative<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
   ...composeCovariant(F, G),
   ...composeOf(F, G),
   product: productComposition(F, G),
@@ -110,13 +112,13 @@ export const composeApplicative = <
 export const composeTraversable = <
   F extends TypeLambda,
   G extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   F: TA.Traversable<F>,
   G: TA.Traversable<G>,
-): TA.Traversable<ComposeTypeLambda<F, G, R, O, E>> => ({
+): TA.Traversable<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
   traverse: <P extends TypeLambda>(P: AP.Applicative<P>) =>
     dual(2, traverseComposition(F, G)(P)),
 })

@@ -1,22 +1,25 @@
+import {pipe} from 'effect'
 import * as EF from 'effect/Effect'
 import fc from 'fast-check'
+import {Monad as arbitraryMonad} from './instances.js'
 import {LiftArbitrary} from './types.js'
+
+const {map} = arbitraryMonad
 
 /**
  * Convert an arbitrary of `T` into a successful effect of `T`.
  * @category arbitraries
  */
 export const succeed: LiftArbitrary<EF.EffectTypeLambda, never, never> = a =>
-  a.map(a => EF.succeed(a))
+  pipe(a, map(EF.succeed))
 
 /**
  * Convert an arbitrary of a string error message into a fail effect.
  * @category arbitraries
  */
-export const fail = (
+export const fail: (
   message: fc.Arbitrary<string>,
-): fc.Arbitrary<EF.Effect<never, Error>> =>
-  message.map(m => EF.fail(new Error(m)))
+) => fc.Arbitrary<EF.Effect<never, Error>> = map(m => EF.fail(new Error(m)))
 
 /**
  * Convert an arbitrary of a string error message and an arbitrary of `T`

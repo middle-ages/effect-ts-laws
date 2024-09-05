@@ -80,7 +80,7 @@ describe('lawSet', () => {
 
   describe('lawSetTests', () => {
     describe('pass', () => {
-      testLaws(lawSetTests([setA, setA, lawSetTests([setA, setA])]))
+      testLaws(lawSetTests(setA, setA, lawSetTests(setA, setA)))
     })
   })
 })

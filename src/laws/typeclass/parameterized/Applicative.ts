@@ -1,13 +1,15 @@
 import {Applicative as AP, SemiApplicative as SA} from '@effect/typeclass'
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
-import {identity, Option as OP, pipe} from 'effect'
+import {identity, pipe} from 'effect'
 import {apply, flow} from 'effect/Function'
 import {TypeLambda} from 'effect/HKT'
-import {OptionTypeLambda} from 'effect/Option'
-import {option, unary} from '../../../arbitrary.js'
-import {addLawSet, Law, lawTests, liftEquivalences} from '../../../law.js'
+import {addLawSet, Law, lawTests} from '../../../law.js'
 import {Covariant} from './Covariant.js'
-import {liftOptions, Options} from './options.js'
+import {
+  ParameterizedGiven as Given,
+  unfoldGiven,
+  withOuterOption,
+} from './given.js'
 
 /**
  * Test typeclass laws for `Applicative`.
@@ -18,54 +20,38 @@ export const Applicative = <
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
-  options: Options<ApplicativeTypeLambda, F, A, B, C, R, O, E>,
-) => {
-  const composition = buildLaws(
-    ...liftOptions<ApplicativeTypeLambda, F, OptionTypeLambda>()(
-      'Applicative',
-      'Option<F>',
-    )<typeof options, A, B, C, R, O, E>(
-      options,
-      optionApplicative,
-      OP.getEquivalence,
-      option,
+  given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+) =>
+  pipe(
+    buildLaws('Applicative', given),
+    pipe(given, Covariant, addLawSet),
+    addLawSet(
+      buildLaws(...withOuterOption('Applicative', given, optionApplicative)),
     ),
   )
-
-  return pipe(
-    buildLaws('Applicative', options),
-    addLawSet(Covariant(options)),
-    addLawSet(composition),
-  )
-}
 
 const buildLaws = <
   F extends TypeLambda,
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   name: string,
-  options: Options<ApplicativeTypeLambda, F, A, B, C, R, O, E>,
+  given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) => {
-  const {F, equalsA, equalsB, equalsC, getEquivalence, getArbitrary, a, b, c} =
-    options
-  const fa = getArbitrary(a),
-    [equalsFa, equalsFb, equalsFc] = liftEquivalences(getEquivalence)(
-      equalsA,
-      equalsB,
-      equalsC,
-    ),
-    [ab, bc] = [unary<A>()(b), unary<B>()(c)],
-    [fab, fbc] = [ab.map(F.of), bc.map(F.of)],
+  const {F, a, fa, equalsFa, equalsFb, equalsFc, ab, bc} = unfoldGiven(given)
+
+  const [fab, fbc] = [ab.map(F.of), bc.map(F.of)],
     [ap, of, map] = [SA.ap(F), F.of, F.map]
+
+  console.log(F)
 
   return lawTests(
     name,
@@ -143,12 +129,12 @@ export interface ApplicativeTypeLambda extends TypeLambda {
   readonly type: AP.Applicative<this['Target'] & TypeLambda>
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+declare module './given.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
     Applicative: {
       lambda: ApplicativeTypeLambda
-      options: Options<ApplicativeTypeLambda, F, A, B, C, R, O, E>
-      laws: ReturnType<typeof Applicative<F, A, B, C, R, O, E>>
+      options: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>
+      laws: ReturnType<typeof Applicative<F, A, B, C, In1, Out2, Out1>>
     }
   }
 }

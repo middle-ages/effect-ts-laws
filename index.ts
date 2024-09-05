@@ -20,6 +20,7 @@ export type {
 } from './src/law.js'
 
 export {
+  arbitraryMonad,
   duration,
   either,
   fc,
@@ -39,9 +40,8 @@ export type {
   ArbitraryToEquivalence,
   EquivalenceToArbitrary,
   LiftArbitrary,
+  LiftedEquivalenceToArbitrary,
 } from './src/arbitrary.js'
-
-export {instances as arbitraryInstances} from './src/arbitrary.js'
 
 /**
  * Imports all of `effect-ts-laws/arbitrary`.
@@ -65,6 +65,7 @@ export {
   testConcreteTypeclassLaw,
   testConcreteTypeclassLaws,
   testMonoid,
+  testMonoids,
   testParameterizedTypeclassLaws,
   testTypeclassLaws,
   testTypeclassLawsFor,
@@ -72,14 +73,14 @@ export {
 
 export type {
   ApplicativeTypeLambda,
-  ConcreteOptions,
+  ConcreteGiven,
   CovariantTypeLambda,
   InvariantTypeLambda,
   MonadTypeLambda,
   Mono,
   MonoidTypeLambda,
   MonomorphicOptions,
-  Options,
+  ParameterizedGiven,
   TraversableTypeLambda,
 } from './src/laws.js'
 

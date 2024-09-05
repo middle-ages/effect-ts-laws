@@ -1,7 +1,7 @@
 import {Kind} from 'effect/HKT'
 import {Equivalence} from './Equivalence.js'
+import {ConcreteGiven, ConcreteMap} from './given.js'
 import {Monoid} from './Monoid.js'
-import {ConcreteMap, ConcreteOptions} from './options.js'
 import {Order} from './Order.js'
 import {Semigroup} from './Semigroup.js'
 
@@ -49,7 +49,7 @@ export type Concrete<A> = {
 export type ConcreteOptionsFor<
   Typeclass extends ConcreteClass,
   A,
-> = ConcreteOptions<ConcreteMap<A>[Typeclass]['lambda'], A>
+> = ConcreteGiven<ConcreteMap<A>[Typeclass]['lambda'], A>
 
 /**
  * Get the typeclass laws for the given typeclass name.

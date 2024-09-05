@@ -1,7 +1,10 @@
-import {Array as AR, Either as EI, Option as OP} from 'effect'
+import {Array as AR, Either as EI, Option as OP, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
+import {Monad as arbitraryMonad} from './instances.js'
 import {LiftArbitrary} from './types.js'
+
+const {map} = arbitraryMonad
 
 /**
  * Returns an `Either` arbitrary given a pair of arbitraries for the underlying
@@ -19,7 +22,7 @@ export const either = <A, E>(
  * @category arbitraries
  */
 export const option = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<OP.Option<A>> =>
-  fc.oneof(a.map(OP.some), fc.constant(OP.none<A>()))
+  fc.oneof(pipe(a, map(OP.some)), fc.constant(OP.none<A>()))
 
 /**
  * An integer arbitrary small enough so that we can avoid having to think about
@@ -35,7 +38,7 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
  * Given a {@link LiftArbitrary} function, and 1..n `Arbitrary`s for
  * different types `A₁, A₂, ...Aₙ`, returns the given list except every
  * arbitrary for type `Aᵢ` has been replaced by an arbitrary for type
- * `Kind<F,R,O,E,Aᵢ>`. For example:
+ * `Kind<F,In1,Out2,Out1,Aᵢ>`. For example:
  * @example
  * ```ts
  * const [arbOptionString, arbOptionNumber] = liftArbitraries<OptionTypeLambda>(
@@ -51,13 +54,13 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
  */
 export const liftArbitraries = <
   F extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
-  liftArbitrary: LiftArbitrary<F, R, O, E>,
+  liftArbitrary: LiftArbitrary<F, In1, Out2, Out1>,
 ) => {
-  type Data<T> = Kind<F, R, O, E, T>
+  type Data<T> = Kind<F, In1, Out2, Out1, T>
 
   return <const Arbs extends fc.Arbitrary<unknown>[]>(...arbs: Arbs) =>
     AR.map(arbs, (arb: fc.Arbitrary<unknown>) => liftArbitrary(arb)) as {
@@ -73,5 +76,5 @@ export const liftArbitraries = <
  * @returns Arbitrary error.
  * @category arbitraries
  */
-export const error = (message: fc.Arbitrary<string>): fc.Arbitrary<Error> =>
-  message.map(s => new Error(s))
+export const error: (message: fc.Arbitrary<string>) => fc.Arbitrary<Error> =
+  map(s => new Error(s))

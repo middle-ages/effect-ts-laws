@@ -8,9 +8,6 @@ import fc from 'fast-check'
 describe('@effect/typeclass/data/String', () => {
   testConcreteTypeclassLaws(
     {Monoid, Equivalence},
-    {
-      a: fc.string(),
-      equalsA: STR.Equivalence,
-    },
+    {a: fc.string(), equalsA: STR.Equivalence},
   )
 })

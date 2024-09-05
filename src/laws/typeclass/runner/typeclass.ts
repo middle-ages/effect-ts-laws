@@ -7,7 +7,7 @@ import {
   Parameterized,
   ParameterizedClass,
 } from '../parameterized/catalog.js'
-import {Options as ParameterizedOptions} from '../parameterized/options.js'
+import {ParameterizedGiven} from '../parameterized/given.js'
 import {testConcreteTypeclassLaws} from './concrete.js'
 import {testParameterizedTypeclassLaws} from './parameterized.js'
 
@@ -36,19 +36,22 @@ export type Typeclass = ParameterizedClass | ConcreteClass
  */
 export const testTypeclassLawsFor = <
   F extends TypeLambda,
-  Ins extends TypeclassInstances<F, A, R, O, E>,
+  Ins extends TypeclassInstances<F, A, In1, Out2, Out1>,
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   instances: Ins,
-  options: Omit<ParameterizedOptions<TypeLambda, F, A, B, C, R, O, E>, 'F'>,
+  options: Omit<
+    ParameterizedGiven<TypeLambda, F, A, B, C, In1, Out2, Out1>,
+    'F'
+  >,
   parameters?: Overrides,
 ) => {
-  type ConcreteA = Kind<F, R, O, E, A>
+  type ConcreteA = Kind<F, In1, Out2, Out1, A>
 
   type Entry = {
     [K in keyof Ins]: [K & Typeclass, Ins[K]]
@@ -87,13 +90,14 @@ export const testTypeclassLawsFor = <
  * Some subset of all typeclass instances implemented for a single data
  * type. Can include both typeclasses for _parameterized_ and _concrete_
  * types.
- *
  * @category harness
  */
 export type TypeclassInstances<
   F extends TypeLambda,
   A,
-  R = never,
-  O = unknown,
-  E = unknown,
-> = Partial<Concrete<Kind<F, R, O, E, A>> & Parameterized<F, R, O, E>>
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
+> = Partial<
+  Concrete<Kind<F, In1, Out2, Out1, A>> & Parameterized<F, In1, Out2, Out1>
+>

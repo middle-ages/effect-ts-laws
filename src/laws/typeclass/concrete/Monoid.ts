@@ -1,26 +1,17 @@
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
-import {Law, LawSet} from '../../../law.js'
-import {ConcreteOptions} from './options.js'
+import {Law} from '../../../law.js'
+import {ConcreteGiven, concreteLaws} from './given.js'
 import {Semigroup} from './Semigroup.js'
-
-declare module './options.js' {
-  interface ConcreteMap<A> {
-    Monoid: {
-      lambda: MonoidTypeLambda
-      laws: ReturnType<typeof Monoid<A>>
-    }
-  }
-}
 
 /**
  * Test typeclass laws for `Monoid` and its requirement `Semigroup` laws.
  * @category typeclass laws
  */
-export const Monoid = <A>(options: ConcreteOptions<MonoidTypeLambda, A>) => {
-  const {F, equalsA, a} = options
+export const Monoid = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
+  const {F, equalsA, a, suffix} = given
 
-  return LawSet(Semigroup(options))(
+  return concreteLaws(
     'Monoid',
     Law(
       'leftIdentity',
@@ -33,7 +24,7 @@ export const Monoid = <A>(options: ConcreteOptions<MonoidTypeLambda, A>) => {
       'a = a ⊹ ∅',
       a,
     )((a: A) => equalsA(F.combine(a, F.empty), a)),
-  )
+  )(suffix, Semigroup(given))
 }
 
 /**
@@ -42,4 +33,13 @@ export const Monoid = <A>(options: ConcreteOptions<MonoidTypeLambda, A>) => {
  */
 export interface MonoidTypeLambda extends TypeLambda {
   readonly type: MO.Monoid<this['Target']>
+}
+
+declare module './given.js' {
+  interface ConcreteMap<A> {
+    Monoid: {
+      lambda: MonoidTypeLambda
+      laws: ReturnType<typeof Monoid<A>>
+    }
+  }
 }

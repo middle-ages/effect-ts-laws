@@ -70,13 +70,13 @@ export const LawSet =
   ): LawSet<Ts, Ls> => ({name, laws, sets})
 
 /**
- * Just like {@link LawSet}, but with an empty list of requirements.
+ * Just like {@link LawSet}, but with an empty list of `LawSet`s.
  * @category constructors
  */
 export const lawTests = <Ts extends UnknownArgs[]>(
   name = '',
   ...laws: LawSet<Ts>['laws']
-): LawSet<Ts> => ({name, laws, sets: []})
+): LawSet<Ts> => ({name, laws: laws, sets: []})
 
 /**
  * Just like {@link LawSet}, but with an empty list of laws, no
@@ -84,7 +84,7 @@ export const lawTests = <Ts extends UnknownArgs[]>(
  * the same `LawSet` twice.
  * @category constructors
  */
-export const lawSetTests = <Ls extends LawSet<any, any>[]>(sets: Ls) =>
+export const lawSetTests = <Ls extends LawSet<any, any>[]>(...sets: Ls) =>
   pipe({name: '', laws: [], sets}, dedupe, TU.getFirst) as LawSet<[], Ls>
 
 /**

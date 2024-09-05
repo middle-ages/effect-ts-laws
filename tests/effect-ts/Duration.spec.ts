@@ -1,7 +1,8 @@
 /** Typeclass law tests for `Duration` datatype. */
 import {MonoidMax, MonoidMin, MonoidSum} from '@effect/typeclass/data/Duration'
-import {Duration as DU} from 'effect'
-import {duration, testConcreteTypeclassLaws, testMonoid} from 'effect-ts-laws'
+import {Duration as DU, pipe} from 'effect'
+import {duration, testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws'
+import {Equivalence, Order} from 'effect/Duration'
 
 describe('@effect/typeclass/data/Number', () => {
   const a = duration(),
@@ -9,28 +10,13 @@ describe('@effect/typeclass/data/Number', () => {
       DU.toMillis(a) === DU.toMillis(b)
 
   describe('Equivalence/order', () => {
-    testConcreteTypeclassLaws(
-      {
-        Equivalence: DU.Equivalence,
-        Order: DU.Order,
-      },
-      {a, equalsA},
-    )
+    testConcreteTypeclassLaws({Equivalence, Order}, {a, equalsA})
   })
 
   describe('Semigroup/monoid', () => {
-    const testDuration = testMonoid<DU.Duration>(a, equalsA)
-
-    describe('sum', () => {
-      testDuration(MonoidSum)
-    })
-
-    describe('min', () => {
-      testDuration(MonoidMin)
-    })
-
-    describe('max', () => {
-      testDuration(MonoidMax)
-    })
+    pipe(
+      {'+': MonoidSum, min: MonoidMin, max: MonoidMax},
+      testMonoids(a, equalsA),
+    )
   })
 })

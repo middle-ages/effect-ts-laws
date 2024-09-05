@@ -9,7 +9,7 @@ import {
   concreteLawsFor,
   ConcreteOptionsFor,
 } from '../concrete/catalog.js'
-import {ConcreteOptions} from '../concrete/options.js'
+import {ConcreteGiven} from '../concrete/given.js'
 
 /**
  * Run a single instance through the given typeclass laws.
@@ -38,36 +38,68 @@ export const testConcreteTypeclassLaw =
  */
 export const testConcreteTypeclassLaws = <A>(
   instances: Partial<Concrete<A>>,
-  options: Omit<ConcreteOptions<TypeLambda, A>, 'F'>,
+  options: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
   parameters?: Overrides,
 ) => {
   for (const key of Object.keys(instances)) {
     const typeclass = key as ConcreteClass
-    const instanceOptions = {
-      ...options,
-      F: instances[typeclass],
-    } as ConcreteOptionsFor<typeof typeclass, A>
 
-    testConcreteTypeclassLaw(typeclass)(instanceOptions, {
-      verbose: true,
-      ...parameters,
-    })
+    testConcreteTypeclassLaw(typeclass)(
+      {
+        ...options,
+        F: instances[typeclass],
+      } as ConcreteOptionsFor<typeof typeclass, A>,
+      {
+        verbose: true,
+        ...parameters,
+      },
+    )
   }
 }
+
+/**
+ * Run the given monoid/semigroup instance through their respective typeclass
+ * law tests.
+ * @param a - An arbitrary for the underlying type `A`.
+ * @param equalsA - Equivalence for the underlying type `A`.
+ * @param parameters - Optional runtime `fc-check` parameters.
+ * @category harness
+ */
+export const testMonoid =
+  <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>, parameters?: Overrides) =>
+  (
+    /**
+     * The monoid/semigroup instance under test.
+     */
+    Monoid: MO.Monoid<A>,
+    /**
+     * Optional suffix will be added to `description()` block label.
+     */
+    suffix = '',
+  ) => {
+    testConcreteTypeclassLaws(
+      {Monoid},
+      {suffix, a, equalsA},
+      {verbose: true, ...parameters},
+    )
+  }
 
 /**
  * Run the given monoid/semigroup instances through their respective typeclass
  * law tests.
  * @param a - An arbitrary for the underlying type `A`.
  * @param equalsA - Equivalence for the underlying type `A`.
+ * @param parameters - Optional runtime `fc-check` parameters.
  * @category harness
  */
-export const testMonoid =
-  <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>
-  (Monoid: MO.Monoid<A>, parameters?: Overrides) => {
-    testConcreteTypeclassLaws(
-      {Monoid},
-      {a, equalsA},
-      {verbose: true, ...parameters},
-    )
+export const testMonoids =
+  <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>, parameters?: Overrides) =>
+  /**
+   * Named list of `Monoid` instances to test in the form of an object where
+   * the keys are the instances names and the values the instances themselves.
+   */
+  (namedInstances: Record<string, MO.Monoid<A>>) => {
+    const test = testMonoid(a, equalsA, parameters)
+    for (const [suffix, Monoid] of Object.entries(namedInstances))
+      test(Monoid, suffix)
   }

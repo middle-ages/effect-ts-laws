@@ -1,4 +1,4 @@
-import {Array as AR, pipe} from 'effect'
+import {Array as AR} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {lawSetTests, Overrides, testLaws} from '../../../law.js'
 import {
@@ -6,7 +6,7 @@ import {
   ParameterizedClass,
   parameterizedLawsFor,
 } from '../parameterized/catalog.js'
-import {Options} from '../parameterized/options.js'
+import {ParameterizedGiven} from '../parameterized/given.js'
 
 /**
  * Test [parameterized type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
@@ -21,10 +21,10 @@ import {Options} from '../parameterized/options.js'
 export const testParameterizedTypeclassLaws =
   <F extends TypeLambda, A, B = A, C = A>() =>
   <
-    Ins extends Partial<Parameterized<F, R, O, E>>,
-    R = never,
-    O = unknown,
-    E = unknown,
+    Ins extends Partial<Parameterized<F, In1, Out2, Out1>>,
+    In1 = never,
+    Out2 = unknown,
+    Out1 = unknown,
   >(
     /**
      * Instances to test. Key is typeclass name and value is the
@@ -38,21 +38,21 @@ export const testParameterizedTypeclassLaws =
      * of instances being tested, but they are all either equalities, arbitraries,
      * or functions on the underlying types, that are required for testing the laws.
      */
-    options: Omit<Options<never, F, A, B, C, R, O, E>, 'F'>,
+    options: Omit<ParameterizedGiven<never, F, A, B, C, In1, Out2, Out1>, 'F'>,
 
     /**
      * Optional runtime `fc-check` parameters.
      */
     parameters?: Overrides,
   ) => {
-    const lawSets = pipe(
-      Object.entries(instances) as {
-        [K in keyof Ins]: [K & ParameterizedClass, Ins[K]]
-      }[keyof Ins][],
-      AR.map(([typeclass, F]) =>
-        parameterizedLawsFor(typeclass)({...options, F} as never),
+    const lawSets = lawSetTests(
+      ...AR.map(
+        Object.entries(instances) as {
+          [K in keyof Ins]: [K & ParameterizedClass, Ins[K]]
+        }[keyof Ins][],
+        ([typeclass, F]) =>
+          parameterizedLawsFor(typeclass)({...options, F} as never),
       ),
-      lawSetTests,
     )
 
     testLaws(lawSets, parameters)

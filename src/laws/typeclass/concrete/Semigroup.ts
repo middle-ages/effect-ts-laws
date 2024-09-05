@@ -1,15 +1,6 @@
 import {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
-import {Law, lawTests} from '../../../law.js'
-import {ConcreteOptions} from './options.js'
-
-declare module './options.js' {
-  interface ConcreteMap<A> {
-    Semigroup: {
-      lambda: SemigroupTypeLambda
-      laws: ReturnType<typeof Semigroup<A>>
-    }
-  }
-}
+import {Law} from '../../../law.js'
+import {ConcreteGiven, concreteLaws} from './given.js'
 
 /**
  * Test typeclass laws for `Semigroup`.
@@ -19,8 +10,9 @@ export const Semigroup = <A>({
   F,
   equalsA,
   a,
-}: ConcreteOptions<SemigroupTypeLambda, A>) =>
-  lawTests(
+  suffix,
+}: ConcreteGiven<SemigroupTypeLambda, A>) =>
+  concreteLaws(
     'Semigroup',
     Law(
       'associativity',
@@ -41,4 +33,13 @@ export const Semigroup = <A>({
     )((a, b, c) =>
       equalsA(F.combineMany(a, [b, c]), F.combine(a, F.combine(b, c))),
     ),
-  )
+  )(suffix)
+
+declare module './given.js' {
+  interface ConcreteMap<A> {
+    Semigroup: {
+      lambda: SemigroupTypeLambda
+      laws: ReturnType<typeof Semigroup<A>>
+    }
+  }
+}

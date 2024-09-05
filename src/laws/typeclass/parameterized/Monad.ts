@@ -1,10 +1,9 @@
 import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {unary, unaryToKind} from '../../../arbitrary.js'
-import {Law, LawSet, liftEquivalences} from '../../../law.js'
+import {Law, LawSet} from '../../../law.js'
 import {Covariant} from './Covariant.js'
-import {Options} from './options.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 
 /**
  * Test typeclass laws for `Monad`.
@@ -15,28 +14,16 @@ export const Monad = <
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
-  options: Options<MonadTypeLambda, F, A, B, C, R, O, E>,
+  given: Given<MonadTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) => {
-  const {a, b, c, F, equalsA, equalsB, equalsC, getEquivalence, getArbitrary} =
-    options
+  const {a, F, fa, equalsFa, equalsFb, equalsFc, ab, afb, bfc} =
+    unfoldGiven(given)
 
-  const fa = getArbitrary(a),
-    [equalsFa, equalsFb, equalsFc] = liftEquivalences(getEquivalence)(
-      equalsA,
-      equalsB,
-      equalsC,
-    ),
-    ab = unary<A>()(b),
-    [afb, afc] = [
-      pipe(b, unaryToKind<A>()(getArbitrary)),
-      pipe(c, unaryToKind<B>()(getArbitrary)),
-    ]
-
-  return LawSet(Covariant(options))(
+  return LawSet(Covariant(given))(
     'Monad',
     Law(
       'leftIdentity',
@@ -56,7 +43,7 @@ export const Monad = <
       'flatMap(afb) ∘ flatMap(bfc) = flatMap(afb ∘ flatMap(bfc))',
       fa,
       afb,
-      afc,
+      bfc,
     )((fa, afb, bfc) =>
       equalsFc(
         pipe(fa, F.flatMap(afb), F.flatMap(bfc)),
@@ -75,6 +62,8 @@ export const Monad = <
   )
 }
 
+//ap(fa)(fab) == bind(fab)(map(fa)(_))
+
 /**
  * Type lambda for the `Monad` typeclass.
  * @category type lambda
@@ -83,12 +72,12 @@ export interface MonadTypeLambda extends TypeLambda {
   readonly type: MD.Monad<this['Target'] & TypeLambda>
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+declare module './given.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
     Monad: {
       lambda: MonadTypeLambda
-      options: Options<MonadTypeLambda, F, A, B, C, R, O, E>
-      laws: ReturnType<typeof Monad<F, A, B, C, R, O, E>>
+      options: Given<MonadTypeLambda, F, A, B, C, In1, Out2, Out1>
+      laws: ReturnType<typeof Monad<F, A, B, C, In1, Out2, Out1>>
     }
   }
 }

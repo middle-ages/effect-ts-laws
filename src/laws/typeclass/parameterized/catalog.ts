@@ -1,9 +1,9 @@
 import {Kind, TypeLambda} from 'effect/HKT'
 import {Applicative} from './Applicative.js'
 import {Covariant} from './Covariant.js'
+import {ParameterizedMap} from './given.js'
 import {Invariant} from './Invariant.js'
 import {Monad} from './Monad.js'
-import {ParameterizedMap} from './options.js'
 import {Traversable} from './Traversable.js'
 
 /**
@@ -37,15 +37,15 @@ export type ParameterizedClass = keyof typeof parameterizedLaws
  */
 export type Parameterized<
   F extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 > = {
   [Key in ParameterizedClass]: Kind<
     ParameterizedMap<F, unknown>[Key]['lambda'],
-    R,
-    O,
-    E,
+    In1,
+    Out2,
+    Out1,
     F
   >
 }
@@ -73,9 +73,17 @@ export const parameterizedLawsFor = <
     A,
     B,
     C,
-    R = never,
-    O = unknown,
-    E = unknown,
+    In1 = never,
+    Out2 = unknown,
+    Out1 = unknown,
   >(
-    options: ParameterizedMap<F, A, B, C, R, O, E>[Typeclass]['options'],
-  ) => ParameterizedMap<F, number, string, boolean, R, O, E>[Typeclass]['laws']
+    options: ParameterizedMap<
+      F,
+      A,
+      B,
+      C,
+      In1,
+      Out2,
+      Out1
+    >[Typeclass]['options'],
+  ) => ParameterizedMap<F, A, B, C, In1, Out2, Out1>[Typeclass]['laws']

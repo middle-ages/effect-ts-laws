@@ -1,12 +1,14 @@
 import {Covariant as CO} from '@effect/typeclass'
 import {Covariant as optionCovariant} from '@effect/typeclass/data/Option'
-import {flow, identity, Option as OP, pipe} from 'effect'
+import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {OptionTypeLambda} from 'effect/Option'
-import {option, unary} from '../../../arbitrary.js'
-import {addLawSet, Law, lawTests, liftEquivalences} from '../../../law.js'
+import {addLawSet, Law, lawTests} from '../../../law.js'
 import {Invariant} from './Invariant.js'
-import {liftOptions, Options} from './options.js'
+import {
+  ParameterizedGiven as Given,
+  unfoldGiven,
+  withOuterOption,
+} from './given.js'
 
 /**
  * Test typeclass laws for `Covariant` and its requirements: `Invariant`.
@@ -17,47 +19,33 @@ export const Covariant = <
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
-  options: Options<CovariantTypeLambda, F, A, B, C, R, O, E>,
-) => {
-  const composition = buildLaws(
-    ...liftOptions<CovariantTypeLambda, F, OptionTypeLambda>()(
-      'Covariant',
-      'Option<F>',
-    )<typeof options, A, B, C, R, O, E>(
-      options,
-      optionCovariant,
-      OP.getEquivalence,
-      option,
+  given: Given<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>,
+) =>
+  pipe(
+    buildLaws('Covariant', given),
+    pipe(given, Invariant, addLawSet),
+    addLawSet(
+      buildLaws(...withOuterOption('Covariant', given, optionCovariant)),
     ),
   )
-
-  return pipe(
-    buildLaws('Covariant', options),
-    pipe(options, Invariant, addLawSet),
-    addLawSet(composition),
-  )
-}
 
 const buildLaws = <
   F extends TypeLambda,
   A,
   B = A,
   C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
 >(
   name: string,
-  options: Options<CovariantTypeLambda, F, A, B, C, R, O, E>,
+  given: Given<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) => {
-  const {F, equalsA, equalsC, getEquivalence, getArbitrary, a, b, c} = options
-  const fa = getArbitrary(a),
-    [equalsFa, equalsFc] = liftEquivalences(getEquivalence)(equalsA, equalsC),
-    [ab, bc] = [unary<A>()(b), unary<B>()(c)]
+  const {F, ab, bc, equalsFa, equalsFc, fa} = unfoldGiven(given)
 
   return lawTests(
     name,
@@ -82,12 +70,12 @@ export interface CovariantTypeLambda extends TypeLambda {
   readonly type: CO.Covariant<this['Target'] & TypeLambda>
 }
 
-declare module './options.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, R, O, E> {
+declare module './given.js' {
+  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
     Covariant: {
       lambda: CovariantTypeLambda
-      options: Options<CovariantTypeLambda, F, A, B, C, R, O, E>
-      laws: ReturnType<typeof Covariant<F, A, B, C, R, O, E>>
+      options: Given<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>
+      laws: ReturnType<typeof Covariant<F, A, B, C, In1, Out2, Out1>>
     }
   }
 }

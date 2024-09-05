@@ -1,16 +1,7 @@
 import {Boolean as BO} from 'effect'
 import {EquivalenceTypeLambda} from 'effect/Equivalence'
 import {Law, lawTests} from '../../../law.js'
-import {ConcreteOptions} from './options.js'
-
-declare module './options.js' {
-  interface ConcreteMap<A> {
-    Equivalence: {
-      lambda: EquivalenceTypeLambda
-      laws: ReturnType<typeof Equivalence<A>>
-    }
-  }
-}
+import {ConcreteGiven} from './given.js'
 
 /**
  * Test typeclass laws for `Equivalence`.
@@ -19,7 +10,7 @@ declare module './options.js' {
 export const Equivalence = <A>({
   F,
   a,
-}: ConcreteOptions<EquivalenceTypeLambda, A>) =>
+}: ConcreteGiven<EquivalenceTypeLambda, A>) =>
   lawTests(
     'Equivalence',
     Law(
@@ -39,3 +30,12 @@ export const Equivalence = <A>({
 
     Law('reflexivity', '∀a ∈ T: a=a', a)((a: A) => F(a, a)),
   )
+
+declare module './given.js' {
+  interface ConcreteMap<A> {
+    Equivalence: {
+      lambda: EquivalenceTypeLambda
+      laws: ReturnType<typeof Equivalence<A>>
+    }
+  }
+}

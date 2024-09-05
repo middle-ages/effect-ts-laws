@@ -5,10 +5,10 @@ import {
   MonoidMultiply,
   MonoidSum,
 } from '@effect/typeclass/data/Number'
-import {Number as NU} from 'effect'
+import {Number as NU, pipe} from 'effect'
 import {
   testConcreteTypeclassLaws,
-  testMonoid,
+  testMonoids,
   tinyInteger,
 } from 'effect-ts-laws'
 
@@ -27,22 +27,14 @@ describe('@effect/typeclass/data/Number', () => {
   })
 
   describe('Semigroup/monoid', () => {
-    const testNumber = testMonoid(a, equalsA)
-
-    describe('sum', () => {
-      testNumber(MonoidSum)
-    })
-
-    describe('multiply', () => {
-      testNumber(MonoidMultiply)
-    })
-
-    describe('min', () => {
-      testNumber(MonoidMin)
-    })
-
-    describe('max', () => {
-      testNumber(MonoidMax)
-    })
+    pipe(
+      {
+        '+': MonoidSum,
+        '⨯': MonoidMultiply,
+        min: MonoidMin,
+        max: MonoidMax,
+      },
+      testMonoids(a, equalsA),
+    )
   })
 })
