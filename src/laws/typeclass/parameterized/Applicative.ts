@@ -1,4 +1,8 @@
-import {Applicative as AP, SemiApplicative as SA} from '@effect/typeclass'
+import {
+  Applicative as AP,
+  Monad as MD,
+  SemiApplicative as SA,
+} from '@effect/typeclass'
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {identity, pipe} from 'effect'
 import {apply, flow} from 'effect/Function'
@@ -25,14 +29,15 @@ export const Applicative = <
   Out1 = unknown,
 >(
   given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
-) =>
-  pipe(
+) => {
+  return pipe(
     buildLaws('Applicative', given),
     pipe(given, Covariant, addLawSet),
     addLawSet(
       buildLaws(...withOuterOption('Applicative', given, optionApplicative)),
     ),
   )
+}
 
 const buildLaws = <
   F extends TypeLambda,
@@ -50,8 +55,6 @@ const buildLaws = <
 
   const [fab, fbc] = [ab.map(F.of), bc.map(F.of)],
     [ap, of, map] = [SA.ap(F), F.of, F.map]
-
-  console.log(F)
 
   return lawTests(
     name,
@@ -118,6 +121,28 @@ const buildLaws = <
         ),
       ),
     ),
+
+    // Some applicative do not have monads, for example when the
+    // applicative is composed we have no monad for this slot.
+    ...('flatMap' in F
+      ? [
+          Law(
+            'flatMapConsistency',
+            'fab ▹ ap(fa) = fab ▹ flatMap(ab ⇒ map(fa, ab))',
+            fa,
+            fab,
+          )((fa, fab) => {
+            const flatMap = F.flatMap as MD.Monad<F>['flatMap']
+            return equalsFb(
+              ap(fab, fa),
+              pipe(
+                fab,
+                flatMap(ab => map(fa, ab)),
+              ),
+            )
+          }),
+        ]
+      : []),
   )
 }
 
@@ -130,11 +155,7 @@ export interface ApplicativeTypeLambda extends TypeLambda {
 }
 
 declare module './given.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Applicative: {
-      lambda: ApplicativeTypeLambda
-      options: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Applicative<F, A, B, C, In1, Out2, Out1>>
-    }
+  interface ParameterizedLambdas {
+    Applicative: ApplicativeTypeLambda
   }
 }

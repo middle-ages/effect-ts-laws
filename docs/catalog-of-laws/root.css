@@ -1,0 +1,33 @@
+:root {
+  --unit: 16px;
+  --arrow-width: 8px;
+  --arrow-height: 14px;
+  --stroke: 1px;
+  --line-radius-one: 30px;
+  --line-width-delta: 8px;
+  --hpad: 1rem;
+  --line-radius-two: calc(var(--line-width-delta) + var(--line-radius-one));
+  --font-size: var(--unit);
+  --font-size-header: calc(5 * var(--unit) / 4);
+  --line-height: calc(3 * var(--unit) / 2);
+  --line-width: calc(3 * var(--line-height) / 2 + 1px);
+  --line-width-two: calc(var(--line-width) + var(--line-width-delta));
+  --line-width-total: calc(var(--line-width-two) + var(--line-width-delta));
+  --space-height: var(--line-height);
+  --space-height-half: calc(var(--line-height) / 2);
+  --color-highest: #bbd;
+  --color-higher: #99a;
+  --color-high: #88a;
+  --color-low: #779;
+  --color-line: #557;
+  --line: var(--stroke) solid var(--color-line);
+  --line-table: 1.5px solid var(--color-higher);
+  --line-table-high: 1.5px solid var(--color-highest);
+  --row-border: 1px dotted #aaa;
+  --line-height-quarter: calc(var(--line-height) / 4);
+  --line-height-half: calc(var(--line-height) / 2);
+  --line-height-double: calc(var(--line-height) * 2);
+  --arrow-height-half: calc(var(--arrow-height) / 2);
+  --stroke-half: calc(var(--stroke) / 2);
+  --hpad-half: calc(var(--hpad) / 2);
+}

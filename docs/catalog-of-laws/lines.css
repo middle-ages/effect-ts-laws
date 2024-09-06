@@ -1,0 +1,43 @@
+.arrow-head,
+.arrow-tail {
+  position: absolute;
+  top: calc(50% - var(--arrow-height-half));
+  left: calc(100% - var(--arrow-width) + 1.25px);
+}
+.line {
+  position: absolute;
+}
+.line-one,
+.line-two {
+  border-left: var(--line);
+}
+.line-one {
+  width: calc(var(--line-width));
+  left: calc(100% - var(--line-width) - 2px);
+}
+.line-two {
+  left: calc(var(--line-width-delta) - 2px);
+  width: var(--line-width-two);
+}
+.line-top {
+  top: calc(50% - var(--stroke-half));
+  height: calc(3 * var(--line-height) / 2 - var(--stroke-half) + 1px);
+  border-top: var(--line);
+}
+.line-bottom {
+  top: calc(-3 * var(--line-height) / 2);
+  height: calc(3 * var(--line-height) / 2 - var(--stroke-half));
+  border-bottom: var(--line);
+}
+.line-top.line-one {
+  border-top-left-radius: var(--line-radius-one);
+}
+.line-bottom.line-one {
+  border-bottom-left-radius: var(--line-radius-one);
+}
+.line-top.line-two {
+  border-top-left-radius: var(--line-radius-two);
+}
+.line-bottom.line-two {
+  border-bottom-left-radius: var(--line-radius-two);
+}

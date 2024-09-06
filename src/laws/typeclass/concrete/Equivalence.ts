@@ -32,10 +32,7 @@ export const Equivalence = <A>({
   )
 
 declare module './given.js' {
-  interface ConcreteMap<A> {
-    Equivalence: {
-      lambda: EquivalenceTypeLambda
-      laws: ReturnType<typeof Equivalence<A>>
-    }
+  interface ConcreteLambdas {
+    Equivalence: EquivalenceTypeLambda
   }
 }

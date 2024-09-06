@@ -13,11 +13,7 @@ import {
 describe('typeclass test runners', () => {
   describe('testConcreteTypeclassLaw', () => {
     testConcreteTypeclassLaw('Equivalence')(
-      {
-        a: tinyInteger,
-        equalsA: NU.Equivalence,
-        F: NU.Equivalence,
-      },
+      {a: tinyInteger, equalsA: NU.Equivalence, F: NU.Equivalence},
       {verbose: false},
     )
   })
@@ -25,19 +21,14 @@ describe('typeclass test runners', () => {
   describe('testConcreteTypeclassLaw', () => {
     testConcreteTypeclassLaws(
       {Equivalence: NU.Equivalence, Order: NU.Order},
-      {
-        a: tinyInteger,
-        equalsA: NU.Equivalence,
-      },
+      {a: tinyInteger, equalsA: NU.Equivalence},
       {verbose: false},
     )
   })
 
   describe('testParametricTypeclassLaws', () => {
     testParameterizedTypeclassLaws<IdentityTypeLambda, number>()(
-      {
-        Covariant: identityCovariant,
-      },
+      {Covariant: identityCovariant},
       {
         a: tinyInteger,
         b: tinyInteger,

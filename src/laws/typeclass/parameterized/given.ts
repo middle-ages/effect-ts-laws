@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import {Equivalence as EQ, Option as OP, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
@@ -32,96 +31,18 @@ export interface ParameterizedGiven<
   In1 = never,
   Out2 = unknown,
   Out1 = unknown,
-> {
+> extends GivenConcerns<F, A, B, C, In1, Out2, Out1> {
   /**
    * The higher-kinded type `Class<F>` is the typeclass instance under
    * test. For example when testing the `Monad` laws on an
    * `Either<number, string>`, this would be `Monad<Either>`.
    */
   F: Kind<Class, In1, Out2, Out1, F>
-
-  /** An equivalence for the underlying type `A`. */
-  equalsA: EQ.Equivalence<A>
-
-  /** An equivalence for the underlying type `B`. */
-  equalsB: EQ.Equivalence<B>
-
-  /** An equivalence for the underlying type `C`. */
-  equalsC: EQ.Equivalence<C>
-
-  /**
-   * A function that will get an equivalence for the type under test from an
-   * equivalence for the underlying type.
-   */
-  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
-
-  /**
-   * A function that will build an arbitrary for the datatype under test
-   * from an  arbitrary for the underlying type. For example, when testing
-   * the `Either` datatype for `Either<A, string>`, this would be a
-   * function of the type
-   * `<A>(a: fc.Arbitrary<A>) ⇒ fc.Arbitrary<Either<A, string>>`.
-   */
-  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
-
-  /**
-   * An arbitrary for the underlying type. For example, when testing `Option`
-   * instances, and the type parameter `A` is `number`, this type would be
-   * set at `fc.Arbitrary<number>`. The monomorphic runner set this type,
-   * and the other two underlying type arbitraries, to `readonly number[]`.
-   */
-  a: fc.Arbitrary<A>
-
-  /**
-   * An arbitrary for the second underlying type `B`. Used for generating
-   * functions in composition tests.
-   */
-  b: fc.Arbitrary<B>
-
-  /**
-   * An arbitrary for the third underlying type `C`. Used for generating
-   * functions in composition tests.
-   */
-  c: fc.Arbitrary<C>
 }
 
 /**
- * The typeclass test options in the form they are given to typeclass laws,
- * with every arbitrary value, function, or equality required by every law
- * test available as a field.
- * @category options
- */
-export interface UnfoldedGiven<
-  Class extends TypeLambda,
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> extends Given<Class, F, A, B, C, In1, Out2, Out1> {
-  equalsFa: EQ.Equivalence<Kind<F, In1, Out2, Out1, A>>
-  equalsFb: EQ.Equivalence<Kind<F, In1, Out2, Out1, B>>
-  equalsFc: EQ.Equivalence<Kind<F, In1, Out2, Out1, C>>
-
-  fa: fc.Arbitrary<Kind<F, In1, Out2, Out1, A>>
-  fb: fc.Arbitrary<Kind<F, In1, Out2, Out1, B>>
-  fc: fc.Arbitrary<Kind<F, In1, Out2, Out1, C>>
-
-  ab: fc.Arbitrary<(a: A) => B>
-  bc: fc.Arbitrary<(b: B) => C>
-
-  ba: fc.Arbitrary<(a: B) => A>
-  cb: fc.Arbitrary<(b: C) => B>
-
-  afb: fc.Arbitrary<(a: A) => Kind<F, In1, Out2, Out1, B>>
-  bfc: fc.Arbitrary<(b: B) => Kind<F, In1, Out2, Out1, C>>
-}
-
-/**
- * Unfold an {@link ParameterizedGiven} into an {@link UnfoldedGiven} so
- * that typeclass laws don't have to.
+ * Unfold a {@link ParameterizedGiven} into an equivalence and arbitrary
+ * required by typeclass tests.
  * @param given - The options to unfold.
  * @category options
  */
@@ -135,8 +56,8 @@ export const unfoldGiven = <
   Out2 = unknown,
   Out1 = unknown,
 >(
-  given: Given<Class, F, A, B, C, In1, Out2, Out1>,
-): UnfoldedGiven<Class, F, A, B, C, In1, Out2, Out1> => {
+  given: ParameterizedGiven<Class, F, A, B, C, In1, Out2, Out1>,
+) => {
   const {a, b, c, equalsA, equalsB, equalsC, getArbitrary, getEquivalence} =
       given,
     [equalsFa, equalsFb, equalsFc] = liftEquivalences(getEquivalence)(
@@ -215,7 +136,10 @@ export const unfoldGiven = <
  */
 export const liftGiven =
   <Class extends TypeLambda, F extends TypeLambda, G extends TypeLambda>() =>
-  <K extends ComposeKey, Os extends Given<Class, F>>(
+  <
+    K extends ComposeKey,
+    Os extends ParameterizedGiven<Class, F, any, any, any, any, any, any>,
+  >(
     /**
      * Type of composition requested: `Of`, `Invariant`, `Covariant`,
      * `Applicative`, or `Traversable`.
@@ -227,98 +151,16 @@ export const liftGiven =
     suffix: string,
     /**
      * Original options for testing the datatype known by the type lambda `F`,
-     * encoding type of the _inner_ value.
+     * encoding the _inner_ type of the composition.
      */
     {F, getEquivalence, getArbitrary, ...given}: Os,
   ) =>
-  (
-    /**
-     * An instance of `Class` for the _outer_ value.
-     */
-    G: Os extends Given<
-      Class,
-      F,
-      any,
-      any,
-      any,
-      infer In1,
-      infer Out2,
-      infer Out1
-    >
-      ? Kind<Class, In1, Out2, Out1, G>
-      : never,
-    /**
-     * A function that will lift equivalences into the outer value `G`.
-     */
-    getEquivalenceG: Os extends Given<
-      Class,
-      F,
-      any,
-      any,
-      any,
-      infer In1,
-      infer Out2,
-      infer Out1
-    >
-      ? LiftEquivalence<G, In1, Out2, Out1>
-      : never,
-    /**
-     * A function that will lift arbitraries into the outer value `G`.
-     */
-    getArbitraryG: Os extends Given<
-      Class,
-      F,
-      any,
-      any,
-      any,
-      infer In1,
-      infer Out2,
-      infer Out1
-    >
-      ? LiftArbitrary<G, In1, Out2, Out1>
-      : never,
-  ) => {
-    type P<A, B = any, C = any, In1 = any, Out2 = any, Out1 = any> = Given<
-      Class,
-      F,
-      A,
-      B,
-      C,
-      In1,
-      Out2,
-      Out1
-    >
+  ({G, getEquivalenceG, getArbitraryG}: FromGiven<Class, F, G, Os>) => {
+    type Composed = ComposeGiven<Class, F, G, Os>
 
-    type A = Os extends P<infer A> ? A : never
-    type B = Os extends P<A, infer B> ? B : never
-    type C = Os extends P<A, B, infer C> ? C : never
-
-    type In1 = Os extends P<A, B, C, infer In1> ? In1 : never
-    type Out2 = Os extends P<A, B, C, In1, infer Out2> ? Out2 : never
-    type Out1 = Os extends P<A, B, C, In1, Out2, infer Out1> ? Out1 : never
-
-    type FG = ComposeTypeLambda<G, F, In1, Out2, Out1>
-
-    const FG = composeMap[key](G as never, F as never) as Kind<
-      Class,
-      In1,
-      Out2,
-      Out1,
-      FG
-    >
-
-    const composedGiven: ParameterizedGiven<
-      Class,
-      FG,
-      A,
-      B,
-      C,
-      In1,
-      Out2,
-      Out1
-    > = {
+    const composedGiven: Composed['given'] = {
       ...given,
-      F: FG,
+      F: composeMap[key](G as never, F as never) as Composed['instance'],
       getEquivalence: <T>(equalA: EQ.Equivalence<T>) =>
         getEquivalenceG(getEquivalence(equalA)),
       getArbitrary: <T>(a: fc.Arbitrary<T>) => getArbitraryG(getArbitrary(a)),
@@ -330,7 +172,7 @@ export const liftGiven =
 /**
  * Return the given options transformed into options for a composed
  * typeclass test, where the outer composed datatype is an `Option`.
- * This is a version of {@link liftGen} fixed on composing with the
+ * This is a version of {@link liftGiven} fixed on composing with the
  * `Option` as outer datatype.
  * @returns Typeclass test options for the `F` datatype when it is
  * wrapped in an `Option`.
@@ -343,9 +185,7 @@ export const withOuterOption = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  E = unknown,
 >(
   /**
    * Type of composition requested: `Of`, `Invariant`, `Covariant`,
@@ -358,42 +198,155 @@ export const withOuterOption = <
    * it is _before_ composition.
    *
    */
-  given: Given<Class, F, A, B, C, In1, Out2, Out1>,
+  given: ParameterizedGiven<Class, F, A, B, C, any, any, E>,
   /**
    * The instance of `Option` for the typeclass under test.
    */
-  optionInstance: Kind<Class, In1, Out2, Out1, OptionTypeLambda>,
+  optionInstance: Kind<Class, unknown, never, never, OptionTypeLambda>,
 ) =>
-  liftGiven<Class, F, OptionTypeLambda>()(key, 'Option<F>', given)(
-    optionInstance,
-    OP.getEquivalence,
-    option,
+  pipe(
+    {
+      G: optionInstance,
+      getEquivalenceG: OP.getEquivalence,
+      getArbitraryG: option,
+    },
+    liftGiven<Class, F, OptionTypeLambda>()(key, 'Option<F>', given),
   )
 
-type Given<
+export type FromGiven<
   Class extends TypeLambda,
   F extends TypeLambda,
-  A = any,
-  B = any,
-  C = any,
-  In1 = any,
-  Out2 = any,
-  Out1 = any,
-> = ParameterizedGiven<Class, F, A, B, C, In1, Out2, Out1>
+  G extends TypeLambda,
+  Os extends ParameterizedGiven<Class, F, any, any, any, any, any, any>,
+> =
+  Os extends ParameterizedGiven<
+    Class,
+    F,
+    any,
+    any,
+    any,
+    infer In1,
+    infer Out2,
+    infer Out1
+  >
+    ? {
+        /**
+         * An instance of `Class` for the _outer_ value.
+         */
+        G: Kind<Class, In1, Out2, Out1, G>
+        /**
+         * A function that will lift equivalences into the outer value `G`.
+         */
+        getEquivalenceG: LiftEquivalence<G, In1, Out2, Out1>
+        /**
+         * A function that will lift arbitraries into the outer value `G`.
+         */
+        getArbitraryG: LiftArbitrary<G, In1, Out2, Out1>
+      }
+    : never
+
+/**
+ * The _equivalence_ concern of typeclass test options.
+ * @category model
+ */
+export interface GivenEquivalence<
+  F extends TypeLambda,
+  A,
+  B,
+  C,
+  In1,
+  Out2,
+  Out1,
+> {
+  /** An equivalence for the underlying type `A`. */
+  equalsA: EQ.Equivalence<A>
+  /** An equivalence for the underlying type `B`. */
+  equalsB: EQ.Equivalence<B>
+  /** An equivalence for the underlying type `C`. */
+  equalsC: EQ.Equivalence<C>
+  /**
+   * A function that will get an equivalence for the type under test from an
+   * equivalence for the underlying type.
+   */
+  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
+}
+
+/**
+ * The _arbitrary concern of typeclass test options.
+ * @category model
+ */
+export interface GivenArbitraries<
+  F extends TypeLambda,
+  A,
+  B,
+  C,
+  In1,
+  Out2,
+  Out1,
+> {
+  /** An equivalence for the underlying type `A`. */
+  a: fc.Arbitrary<A>
+  /** An equivalence for the underlying type `B`. */
+  b: fc.Arbitrary<B>
+  /** An equivalence for the underlying type `C`. */
+  c: fc.Arbitrary<C>
+  /**
+   * A function that will get an equivalence for the type under test from an
+   * equivalence for the underlying type.
+   */
+  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
+}
+
+/**
+ * The _equivalence_ and _arbitrary_ concerns of typeclass test options.
+ * @category model
+ */
+export interface GivenConcerns<F extends TypeLambda, A, B, C, In1, Out2, Out1>
+  extends GivenArbitraries<F, A, B, C, In1, Out2, Out1>,
+    GivenEquivalence<F, A, B, C, In1, Out2, Out1> {}
+
+export type ComposeGiven<
+  Class extends TypeLambda,
+  F extends TypeLambda,
+  G extends TypeLambda,
+  Os extends ParameterizedGiven<Class, F, any, any, any, any, any, any>,
+> =
+  Os extends ParameterizedGiven<
+    Class,
+    F,
+    infer A,
+    infer B,
+    infer C,
+    infer In1,
+    infer Out2,
+    infer Out1
+  >
+    ? {
+        instance: Kind<
+          Class,
+          In1,
+          Out2,
+          Out1,
+          ComposeTypeLambda<G, F, In1, Out2, Out1>
+        >
+        given: ParameterizedGiven<
+          Class,
+          ComposeTypeLambda<G, F, In1, Out2, Out1>,
+          A,
+          B,
+          C,
+          In1,
+          Out2,
+          Out1
+        >
+      }
+    : never
 
 /**
  * Use [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
- * to add entries here for a new typeclasses. Used to map from typeclass name to
- * its various test types.
+ * to add entries here for a new typeclasses. Used to map from typeclass
+ * name to the typeclass type lambda.
  * @internal
  * @category model
  */
-export interface ParameterizedMap<
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> {}
+export interface ParameterizedLambdas {}

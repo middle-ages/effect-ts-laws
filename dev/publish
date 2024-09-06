@@ -9,6 +9,7 @@ pnpm test-run
 
 pnpm build-docs
 cp docs/catalog-of-laws.html ../effect-ts-laws-docs
+cp -r docs/catalog-of-laws ../effect-ts-laws-docs
 cd ../effect-ts-laws-docs
 git add .
 git commit -m publish
@@ -16,11 +17,8 @@ git push
 cd ../effect-ts-laws
 
 pnpm build
-mkdir -p .dev/dist
-mv dist/* .dev/dist
 cp package.json .dev/dist
 cp .npmrc .dev/dist
 cd .dev/dist
-perl -pi -E 's/^ *"test":.*\n//mg' package.json
 pnpm install
 pnpm publish 

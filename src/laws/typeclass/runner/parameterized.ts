@@ -1,12 +1,13 @@
-import {Array as AR} from 'effect'
+import {Array as AR, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
+import {UnionToIntersection} from 'effect/Types'
 import {lawSetTests, Overrides, testLaws} from '../../../law.js'
 import {
   Parameterized,
   ParameterizedClass,
   parameterizedLawsFor,
 } from '../parameterized/catalog.js'
-import {ParameterizedGiven} from '../parameterized/given.js'
+import {GivenConcerns} from '../parameterized/given.js'
 
 /**
  * Test [parameterized type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
@@ -21,7 +22,7 @@ import {ParameterizedGiven} from '../parameterized/given.js'
 export const testParameterizedTypeclassLaws =
   <F extends TypeLambda, A, B = A, C = A>() =>
   <
-    Ins extends Partial<Parameterized<F, In1, Out2, Out1>>,
+    Ins extends Partial<Parameterized<F>>,
     In1 = never,
     Out2 = unknown,
     Out1 = unknown,
@@ -33,27 +34,27 @@ export const testParameterizedTypeclassLaws =
      */
     instances: Ins,
     /**
-     * The union of all options required for testing the instances
-     * given in the `instances` argument. The specific options depend on the list
-     * of instances being tested, but they are all either equalities, arbitraries,
-     * or functions on the underlying types, that are required for testing the laws.
+     * Parameterized typeclass test options.
      */
-    options: Omit<ParameterizedGiven<never, F, A, B, C, In1, Out2, Out1>, 'F'>,
-
+    given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
     /**
      * Optional runtime `fc-check` parameters.
      */
     parameters?: Overrides,
   ) => {
-    const lawSets = lawSetTests(
-      ...AR.map(
-        Object.entries(instances) as {
-          [K in keyof Ins]: [K & ParameterizedClass, Ins[K]]
-        }[keyof Ins][],
-        ([typeclass, F]) =>
-          parameterizedLawsFor(typeclass)({...options, F} as never),
+    const mergedInstances = Object.assign(
+      {},
+      ...Object.values(instances),
+    ) as UnionToIntersection<Ins[keyof Ins]>
+
+    const lawSets = pipe(
+      Object.keys(instances) as ParameterizedClass[],
+      AR.map(<K extends ParameterizedClass>(key: K) =>
+        parameterizedLawsFor(key)(
+          Object.assign({F: mergedInstances}, given) as never,
+        ),
       ),
     )
 
-    testLaws(lawSets, parameters)
+    testLaws(lawSetTests(...lawSets), parameters)
   }

@@ -1,7 +1,8 @@
 import {Kind, TypeLambda} from 'effect/HKT'
+import {LawSet} from '../../../law.js'
 import {Applicative} from './Applicative.js'
 import {Covariant} from './Covariant.js'
-import {ParameterizedMap} from './given.js'
+import {ParameterizedGiven, ParameterizedLambdas} from './given.js'
 import {Invariant} from './Invariant.js'
 import {Monad} from './Monad.js'
 import {Traversable} from './Traversable.js'
@@ -35,17 +36,12 @@ export type ParameterizedClass = keyof typeof parameterizedLaws
  * ```
  * @category model
  */
-export type Parameterized<
-  F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> = {
+export type Parameterized<F extends TypeLambda> = {
   [Key in ParameterizedClass]: Kind<
-    ParameterizedMap<F, unknown>[Key]['lambda'],
-    In1,
-    Out2,
-    Out1,
+    ParameterizedLambdas[Key],
+    never,
+    unknown,
+    unknown,
     F
   >
 }
@@ -71,13 +67,14 @@ export const parameterizedLawsFor = <
   parameterizedLaws[name] as <
     F extends TypeLambda,
     A,
-    B,
-    C,
+    B = A,
+    C = A,
     In1 = never,
     Out2 = unknown,
     Out1 = unknown,
   >(
-    options: ParameterizedMap<
+    given: ParameterizedGiven<
+      ParameterizedLambdas[Typeclass],
       F,
       A,
       B,
@@ -85,5 +82,5 @@ export const parameterizedLawsFor = <
       In1,
       Out2,
       Out1
-    >[Typeclass]['options'],
-  ) => ParameterizedMap<F, A, B, C, In1, Out2, Out1>[Typeclass]['laws']
+    >,
+  ) => LawSet

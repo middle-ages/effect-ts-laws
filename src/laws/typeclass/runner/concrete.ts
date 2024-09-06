@@ -1,15 +1,10 @@
 import {Monoid as MO} from '@effect/typeclass'
 import {Equivalence as EQ, pipe} from 'effect'
-import {TypeLambda} from 'effect/HKT'
+import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {LawSet, Overrides, testLaws} from '../../../law.js'
-import {
-  Concrete,
-  ConcreteClass,
-  concreteLawsFor,
-  ConcreteOptionsFor,
-} from '../concrete/catalog.js'
-import {ConcreteGiven} from '../concrete/given.js'
+import {Overrides, testLaws} from '../../../law.js'
+import {ConcreteClass, concreteLawsFor} from '../concrete/catalog.js'
+import {ConcreteGiven, ConcreteLambdas} from '../concrete/given.js'
 
 /**
  * Run a single instance through the given typeclass laws.
@@ -17,12 +12,11 @@ import {ConcreteGiven} from '../concrete/given.js'
  */
 export const testConcreteTypeclassLaw =
   <Typeclass extends ConcreteClass>(typeclass: Typeclass) =>
-  <A>(options: ConcreteOptionsFor<Typeclass, A>, parameters?: Overrides) => {
-    const laws = pipe(options, concreteLawsFor(typeclass))
-    testLaws(
-      laws as LawSet<typeof laws extends LawSet<infer Args> ? Args : never>,
-      parameters,
-    )
+  <A>(
+    options: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
+    parameters?: Overrides,
+  ) => {
+    testLaws(pipe(options, concreteLawsFor(typeclass)), parameters)
   }
 
 /**
@@ -45,14 +39,11 @@ export const testConcreteTypeclassLaws = <A>(
     const typeclass = key as ConcreteClass
 
     testConcreteTypeclassLaw(typeclass)(
-      {
-        ...options,
-        F: instances[typeclass],
-      } as ConcreteOptionsFor<typeof typeclass, A>,
-      {
-        verbose: true,
-        ...parameters,
-      },
+      {...options, F: instances[typeclass]} as ConcreteGiven<
+        ConcreteLambdas[typeof typeclass],
+        A
+      >,
+      {verbose: true, ...parameters},
     )
   }
 }
@@ -103,3 +94,17 @@ export const testMonoids =
     for (const [suffix, Monoid] of Object.entries(namedInstances))
       test(Monoid, suffix)
   }
+
+/**
+ * Maps typeclass name to its instance type. For example to get
+ * the type of `Monoid` instance for `readonly number[]`:
+ * @example
+ * ```ts
+ * type MyMonoidInstance = Instances<readonly number[]>['Monoid']
+ * // MyMonoidInstance ≡ Monoid<readonly number[]>
+ * ```
+ * @category model
+ */
+export type Concrete<A> = {
+  [Key in ConcreteClass]: Kind<ConcreteLambdas[Key], never, unknown, unknown, A>
+}

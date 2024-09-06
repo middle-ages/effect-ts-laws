@@ -10,10 +10,6 @@ import {testTypeclassLaws} from 'effect-ts-laws'
 
 describe('@effect/typeclass/data/Identity', () => {
   testTypeclassLaws<IdentityTypeLambda>({getEquivalence: id, getArbitrary: id})(
-    {
-      Applicative,
-      Monad,
-      Traversable,
-    },
+    {Applicative, Monad, Traversable},
   )
 })

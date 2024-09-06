@@ -1,14 +1,14 @@
 import {Array as AR, pipe, Tuple as TU} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {Overrides} from '../../../law.js'
-import {Concrete, ConcreteClass} from '../concrete/catalog.js'
+import {ConcreteClass} from '../concrete/catalog.js'
 import {
   isParameterizedTypeclassName,
   Parameterized,
   ParameterizedClass,
 } from '../parameterized/catalog.js'
-import {ParameterizedGiven} from '../parameterized/given.js'
-import {testConcreteTypeclassLaws} from './concrete.js'
+import {GivenConcerns} from '../parameterized/given.js'
+import {Concrete, testConcreteTypeclassLaws} from './concrete.js'
 import {testParameterizedTypeclassLaws} from './parameterized.js'
 
 /**
@@ -27,7 +27,7 @@ export type Typeclass = ParameterizedClass | ConcreteClass
  * @param instances - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Monad: Option.Monad }` will run
  * the monad typeclass laws on `Option`.
- * @param options - The union of all options required for testing the instances
+ * @param given - The union of all options required for testing the instances
  * given in the `instances` argument. The specific options depend on the list
  * of instances being tested, but they are all either equalities, arbitraries,
  * or functions on the underlying types, that are required for testing the laws.
@@ -45,10 +45,7 @@ export const testTypeclassLawsFor = <
   Out1 = unknown,
 >(
   instances: Ins,
-  options: Omit<
-    ParameterizedGiven<TypeLambda, F, A, B, C, In1, Out2, Out1>,
-    'F'
-  >,
+  given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
   parameters?: Overrides,
 ) => {
   type ConcreteA = Kind<F, In1, Out2, Out1, A>
@@ -69,7 +66,7 @@ export const testTypeclassLawsFor = <
     }),
   )
 
-  const {getEquivalence, equalsA, getArbitrary, a} = options
+  const {getEquivalence, equalsA, getArbitrary, a} = given
 
   if (Object.keys(concrete).length !== 0)
     testConcreteTypeclassLaws(
@@ -81,7 +78,7 @@ export const testTypeclassLawsFor = <
   if (Object.keys(parameterized).length !== 0)
     testParameterizedTypeclassLaws<F, A, B, C>()(
       parameterized,
-      options,
+      given,
       parameters,
     )
 }
@@ -98,6 +95,4 @@ export type TypeclassInstances<
   In1 = never,
   Out2 = unknown,
   Out1 = unknown,
-> = Partial<
-  Concrete<Kind<F, In1, Out2, Out1, A>> & Parameterized<F, In1, Out2, Out1>
->
+> = Partial<Concrete<Kind<F, In1, Out2, Out1, A>> & Parameterized<F>>

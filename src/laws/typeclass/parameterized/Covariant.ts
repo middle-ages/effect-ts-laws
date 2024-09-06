@@ -71,11 +71,7 @@ export interface CovariantTypeLambda extends TypeLambda {
 }
 
 declare module './given.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Covariant: {
-      lambda: CovariantTypeLambda
-      options: Given<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Covariant<F, A, B, C, In1, Out2, Out1>>
-    }
+  interface ParameterizedLambdas {
+    Covariant: CovariantTypeLambda
   }
 }

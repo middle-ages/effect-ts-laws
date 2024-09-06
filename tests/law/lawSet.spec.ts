@@ -15,7 +15,7 @@ import fc from 'fast-check'
 const tinyPositive = fc.integer({min: 1, max: 100})
 
 describe('lawSet', () => {
-  const setA: LawSet<[[number], [number]]> = lawTests(
+  const setA: LawSet = lawTests(
     'some unit under test',
     Law('law₁', '∀n ∈ ℕ: n = n', tinyPositive)(x => x === x),
     Law('law₂', '∀n ∈ ℕ: n ≤ n', tinyPositive)(x => x <= x),
@@ -34,7 +34,7 @@ describe('lawSet', () => {
     tinyPositive,
   )((a, b) => a + b > 0)
 
-  const setB: LawSet<[[string]]> = lawTests('parent', lawA)
+  const setB: LawSet = lawTests('parent', lawA)
 
   const failLaw = negateLaw(lawA)
 

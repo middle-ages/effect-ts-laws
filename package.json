@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -21,17 +21,18 @@
     "clean": "dev/clean",
     "lint": "eslint src index.ts tests",
     "lint-fix": "eslint --fix src index.ts tests",
-    "typecheck": "tsc --project tsconfig.build.json --noEmit",
-    "circular": "depcruise src index.ts -c .dependency-cruiser.cjs",
+    "typecheck-src": "tsc --project config/tsconfig.build.json --noEmit",
+    "typecheck-tests": "tsc --project tests/tsconfig.json --noEmit",
+    "typecheck": "pnpm typecheck-src && pnpm typecheck-tests",
+    "circular": "depcruise src index.ts -c config/dependency-cruiser.cjs",
     "graph-dependencies": "dev/graph-dependencies",
-    "test": "vitest -c vitest.conf.ts --reporter=verbose",
-    "coverage": "vitest -c vitest.conf.ts run --reporter=verbose --coverage",
-    "test-run": "vitest -c vitest.conf.ts run",
-    "build": "tsc --project tsconfig.build.json",
-    "run-tsx": "tsx --conditions test",
+    "test": "vitest -c config/vitest.conf.ts --reporter=verbose",
+    "coverage": "vitest -c config/vitest.conf.ts run --reporter=verbose --coverage",
+    "test-run": "vitest -c config/vitest.conf.ts run",
+    "build": "tsc --project config/tsconfig.build.json",
     "ls-deps": "pnpm ls --prod",
     "ls-deps-dev": "pnpm ls --dev",
-    "build-docs": "typedoc",
+    "build-docs": "typedoc --options config/typedoc.json",
     "npm": "dev/publish"
   },
   "devDependencies": {
@@ -83,35 +84,30 @@
     ".": {
       "import": {
         "types": "./index.d.ts",
-        "test": "./index.ts",
         "import": "./index.js"
       }
     },
     "./law": {
       "import": {
         "types": "./src/law.d.ts",
-        "test": "./src/law.ts",
         "import": "./src/law.js"
       }
     },
     "./arbitrary": {
       "import": {
         "types": "./src/arbitrary.d.ts",
-        "test": "./src/arbitrary.ts",
         "import": "./src/arbitrary.js"
       }
     },
     "./compose": {
       "import": {
         "types": "./src/compose.d.ts",
-        "test": "./src/compose.ts",
         "import": "./src/compose.js"
       }
     },
     "./laws": {
       "import": {
         "types": "./src/law.d.ts",
-        "test": "./src/law.ts",
         "import": "./src/law.js"
       }
     }

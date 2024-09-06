@@ -62,8 +62,6 @@ export const Monad = <
   )
 }
 
-//ap(fa)(fab) == bind(fab)(map(fa)(_))
-
 /**
  * Type lambda for the `Monad` typeclass.
  * @category type lambda
@@ -73,11 +71,7 @@ export interface MonadTypeLambda extends TypeLambda {
 }
 
 declare module './given.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Monad: {
-      lambda: MonadTypeLambda
-      options: Given<MonadTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Monad<F, A, B, C, In1, Out2, Out1>>
-    }
+  interface ParameterizedLambdas {
+    Monad: MonadTypeLambda
   }
 }

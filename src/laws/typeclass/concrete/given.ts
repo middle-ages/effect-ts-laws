@@ -46,28 +46,6 @@ export interface ConcreteGiven<F extends TypeLambda, A> {
 }
 
 /**
- * Type-level map of _typeclass name_ to _type lambda_ and _law list
- * type_ for typeclasses on concrete types on the underlying type `A`.
- * Used to map from typeclass name to its various test type. For example,
- * to get the types related to the `Monoid` laws for the `Option` instance
- * on `number`:
- * @example
- * ```ts
- * type MyMonoidTypes = ConcreteMap<number>['Monoid]
- * // MyMonoidTypes ≡ {
- * //   lambda: MonoidTypeLambda
- * //   laws: LawSet<[[a: number], [a: number]]>
- * // }
- * ```
- *
- * Use [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
- * to add entries here for a new typeclasses.
- * @category model
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unused-vars
-export interface ConcreteMap<A> {}
-
-/**
  * Build a set of laws for some typeclass on a concrete type.
  * @param typeclassName - Used as label for vitest `description()` block.
  * @param laws - list of `Law` to test.
@@ -78,7 +56,7 @@ export const concreteLaws =
     typeclassName: string,
     ...laws: {[K in keyof Ts]: Law<Ts[K]>}
   ) =>
-  <Ls extends LawSet<any, any>[]>(
+  (
     /**
      * Optional suffix to attach to `LawTest` label. Used, for example,
      * to differentiate between the different `Monoid` instances of
@@ -92,9 +70,19 @@ export const concreteLaws =
      * laws besides the `Monoid` laws themselves. They do
      * this by adding the `Semigroup` laws in this field.
      */
-    ...sets: Ls
-  ) =>
-    LawSet(...sets)<Ts>(
+    ...sets: LawSet[]
+  ): LawSet =>
+    LawSet(...sets)(
       typeclassName + (suffix === '' ? '' : `.${suffix}`),
       ...laws,
     )
+
+/**
+ * Type-level map of _typeclass name_ to _type class lambda_ typeclasses on
+ * concrete types. Use
+ * [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
+ * to add entries here for a new typeclasses.
+ * @category model
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ConcreteLambdas {}

@@ -13,16 +13,34 @@ export {
 export {testParameterizedTypeclassLaws} from './laws/typeclass/runner/parameterized.js'
 export {testTypeclassLawsFor} from './laws/typeclass/runner/typeclass.js'
 
+export {concreteLaws} from './laws/typeclass/concrete/catalog.js'
+export type {ConcreteClass} from './laws/typeclass/concrete/catalog.js'
 export type {
   ConcreteGiven,
-  ConcreteMap,
+  ConcreteLambdas,
 } from './laws/typeclass/concrete/given.js'
 export type {ApplicativeTypeLambda} from './laws/typeclass/parameterized/Applicative.js'
+export {parameterizedLaws} from './laws/typeclass/parameterized/catalog.js'
 export type {
+  Parameterized,
+  ParameterizedClass,
+} from './laws/typeclass/parameterized/catalog.js'
+export {
+  liftGiven as liftParameterizedGiven,
+  unfoldGiven as unfoldParameterizedGiven,
+  withOuterOption,
+} from './laws/typeclass/parameterized/given.js'
+export type {
+  ComposeGiven,
+  FromGiven as FromParameterizedGiven,
+  GivenArbitraries,
+  GivenConcerns,
+  GivenEquivalence,
   ParameterizedGiven,
-  ParameterizedMap,
+  ParameterizedLambdas,
 } from './laws/typeclass/parameterized/given.js'
 export type {MonadTypeLambda} from './laws/typeclass/parameterized/Monad.js'
+export type {Concrete} from './laws/typeclass/runner/concrete.js'
 export type {
   Mono,
   MonomorphicOptions,

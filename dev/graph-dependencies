@@ -2,7 +2,7 @@
 
 path="${1:-src}"
 output="${2:-dot}"
-config="--config .dependency-cruiser.cjs"
+config="--config config/dependency-cruiser.cjs"
 out=".dev/dependency-graph.svg"
 
 EXE='./node_modules/.bin/depcruise'

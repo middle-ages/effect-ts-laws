@@ -1,4 +1,11 @@
-export {either, liftArbitraries, option, tinyInteger} from './arbitrary/data.js'
+export {
+  either,
+  error,
+  liftArbitraries,
+  option,
+  stringKeyRecord,
+  tinyInteger,
+} from './arbitrary/data.js'
 export {
   predicate,
   unary,
@@ -19,7 +26,7 @@ export {Monad as arbitraryMonad} from './arbitrary/instances.js'
 export type {ArbitraryTypeLambda} from './arbitrary/instances.js'
 
 import fastCheck from 'fast-check'
-import {either, option, tinyInteger} from './arbitrary/data.js'
+import {either, option, stringKeyRecord, tinyInteger} from './arbitrary/data.js'
 import {predicate, unary, unaryToKind} from './arbitrary/function.js'
 import {Monad} from './arbitrary/instances.js'
 import {duration, offsetTimezone, utc, zoned} from './arbitrary/time.js'
@@ -41,5 +48,6 @@ export const fc = {
   offsetTimezone,
   utc,
   zoned,
+  stringKeyRecord,
   Monad,
 }

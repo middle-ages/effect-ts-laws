@@ -21,7 +21,7 @@ export default tseslint.config(
   recommended,
 
   {
-    ignores: ['dist/*', 'node_modules/*', '.dependency-cruiser.mjs'],
+    ignores: ['dist/*', 'node_modules/*', 'config/dependency-cruiser.cjs'],
   },
 
   {

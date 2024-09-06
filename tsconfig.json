@@ -1,15 +1,12 @@
 {
-  "extends": ["./tsconfig.base.json"],
+  "extends": ["./config/tsconfig.base.json"],
   "compilerOptions": {
     "noEmit": true
   },
   "references": [
     {
       "path": "./tests/tsconfig.json"
-    },
-    {
-      "path": "./tsconfig.src.json"
     }
   ],
-  "exclude": ["dist", "tests", "src", "index.ts"]
+  "exclude": ["tests"]
 }

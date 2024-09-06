@@ -10,479 +10,307 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet" />
-    <link
       media="screen"
       rel="stylesheet"
       type="text/css"
-      href="css/index.css" />
+      href="catalog-of-laws/index.css" />
   </head>
-  <style>
-    :root {
-      --fs: 12pt;
-      --lh: calc(1.5 * var(--fs));
-      --lw: 2rem;
-      --headerLh: 27pt;
-      --line-color: #667;
-      --line: 1px solid var(--line-color);
-      --pad: 1.5rem;
-      --rowBorder: 1px dotted #aaa;
-      --line-one-radius: var(--lw);
-      --line-two-radius: calc(var(--line-one-radius) + 0.3rem);
-    }
-    body,
-    div {
-      margin: 0;
-      font-family: 'Inter', system-ui;
-      font-optical-sizing: auto;
-      font-weight: 400;
-      font-style: normal;
-      font-size: var(--fs);
-      line-height: var(--lh);
-    }
-    a {
-      text-decoration: none;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-    h1,
-    header {
-      line-height: var(--headerLh);
-      height: var(--headerLh);
-      text-overflow: ellipsis;
-    }
-    h1 {
-      font-size: 18pt;
-      text-align: center;
-      font-weight: 500;
-      color: #556;
-      padding-bottom: 0.5rem;
-      margin: 0;
-      padding-right: 0.5rem;
-    }
-    header {
-      position: absolute;
-      top: 2pt;
-      left: 0;
-      text-wrap: nowrap;
-      padding-left: 0.5rem;
-      text-overflow: ellipsis;
-    }
-    .panel {
-      display: flex;
-      justify-content: center;
-    }
-    .table,
-    .header {
-      padding-left: 0.5rem;
-      display: grid;
-    }
-    .table,
-    .header {
-      padding-left: 0.5rem;
-      display: grid;
-    }
-    .table {
-      min-width: 400px;
-      grid-template-columns: repeat(6, min-content);
-      .header {
-        grid-template-columns: subgrid;
-        grid-column: 1/8;
-        & > * {
-          text-align: center;
-          color: #667;
-        }
-      }
-      .twoLaws,
-      .threeLaws,
-      .fourLaws,
-      .sixLaws {
-        display: grid;
-        grid-template-columns: subgrid;
-        grid-column: 1/7;
-        padding-top: calc(var(--pad) / 2);
-        padding-bottom: calc(var(--pad) / 2);
-        text-wrap: nowrap;
-        border-top: var(--rowBorder);
-        box-sizing: border-box;
-        & > *:first-child {
-          width: calc(3 * var(--lw));
-          padding: 0;
-          padding-right: 0.5rem;
-        }
-        & > *:nth-child(2) {
-          font-weight: 500;
-          margin-top: auto;
-          margin-bottom: auto;
-          padding-left: 0;
-          padding-right: 0.5rem;
-          color: #778;
-        }
-        & > *:nth-child(4n + 4) {
-          text-align: right;
-          padding-right: 0;
-          padding-left: 0.5rem;
-          font-family: monospace;
-        }
-        & > *:nth-child(4n + 5) {
-          text-align: center;
-          padding: 0;
-          font-family: serif;
-        }
-        & > *:nth-child(4n + 6) {
-          padding-left: 0;
-          padding-right: 0.5rem;
-          font-family: monospace;
-        }
-      }
-      .sixLaws {
-        & > *:first-child,
-        & > *:nth-child(2) {
-          grid-row: 1/7;
-        }
-      }
-      .fourLaws {
-        & > * {
-          height: var(--lh);
-        }
-        & > *:first-child,
-        & > *:nth-child(2) {
-          grid-row: 1/5;
-        }
-      }
-      .threeLaws {
-        & > *:first-child,
-        & > *:nth-child(2) {
-          grid-row: 1/4;
-        }
-      }
-      .twoLaws {
-        & > *:first-child,
-        & > *:nth-child(2) {
-          grid-row: 1/3;
-        }
-      }
-    }
-    .line-one,
-    .line-two {
-      position: relative;
-      border-left: var(--line);
-    }
-    .line-one {
-      width: var(--lw);
-      left: calc(100% - var(--lw));
-    }
-    .line-two {
-      width: calc(var(--lw) + 0.5rem);
-      left: calc(100% - var(--lw) - 0.5rem);
-      border-top: var(--line);
-      border-top-left-radius: var(--line-two-radius);
-      border-bottom-left-radius: var(--line-two-radius);
-    }
-    .line-top {
-      top: var(--lh);
-      height: calc(1.5 * var(--lh));
-      border-top: var(--line);
-      border-top-left-radius: var(--line-one-radius);
-    }
-    .line-bottom {
-      top: calc(-1 * var(--lh) / 2);
-      height: calc(1.5 * var(--lh));
-      border-bottom: var(--line);
-      border-bottom-left-radius: var(--line-one-radius);
-    }
-    .arrow-out {
-      position: absolute;
-      top: calc(1 * var(--lh) / 2);
-      left: 100%;
-      width: 0.2rem;
-      height: 0.2rem;
-      transform: translate(-0.5rem, 0.7rem) rotate(45deg);
-      clip-path: polygon(0% 0%, 25% 25%, 100% 100%, 0% 100%);
-      background: var(--line-color);
-    }
-    .arrow-in {
-      position: absolute;
-      height: 0.5rem;
-      top: calc(1 * var(--lh) / 2 + 0.54rem);
-      left: calc(100% - 0.35rem);
-      transform: translateX(-100%);
-    }
-  </style>
+
   <body>
-    <h1>Typeclass Laws</h1>
     <header class="homeLink">
       <a href="https://github.com/middle-ages/effect-ts-laws"
         >⚖ effect-ts-laws</a
       >
     </header>
-    <div class="panel">
+    <h1>Typeclass Laws</h1>
+    <article>
       <div class="table">
-        <div class="header">
-          <div></div>
-          <div title="Typeclass name in “effect-ts” source.">Typeclass</div>
-          <div title="Law name.">Name</div>
-          <div style="grid-column: 4/7" title="Law predicate.">Predicate</div>
+        <clr style="grid-row: 2/3"></clr>
+        <div class="header" style="grid-row-start: 1">
+          <d title="Typeclass “extends” relation.">Is a</d>
+          <d title="Typeclass name in “effect-ts” source.">Typeclass</d>
+          <d title="Law name.">Name</d>
+          <d style="grid-column: 4/7" title="Law predicate.">Predicate</d>
         </div>
 
-        <div class="threeLaws">
-          <div></div>
-          <div>Equivalence</div>
+        <bg class="threeLaws" style="grid-row-start: 2"></bg>
+        <div class="threeLaws" style="grid-row-start: 2">
+          <d></d>
+          <e><f>Equivalence</f></e>
 
-          <div>transitivity</div>
-          <div>a=b ∧ b=c</div>
-          <div>⇒</div>
-          <div>a=c</div>
+          <d>transitivity</d>
+          <d>a=b ∧ b=c</d>
+          <d>⇒</d>
+          <d>a=c</d>
 
-          <div>symmetry</div>
-          <div>a=b</div>
-          <div>⇔</div>
-          <div>b=a</div>
+          <d>symmetry</d>
+          <d>a=b</d>
+          <d>⇔</d>
+          <d>b=a</d>
 
-          <div>reflexivity</div>
-          <div>a</div>
-          <div>=</div>
-          <div>a</div>
+          <d>reflexivity</d>
+          <d>a</d>
+          <d>=</d>
+          <d>a</d>
         </div>
 
-        <div class="threeLaws">
-          <div></div>
-          <div>Order</div>
+        <div class="separator"></div>
+        <clr style="grid-row: 4/5"></clr>
+        <bg class="threeLaws" style="grid-row-start: 4"></bg>
+        <div class="threeLaws" style="grid-row-start: 4">
+          <d></d>
+          <e><f>Order</f></e>
 
-          <div>transitivity</div>
-          <div>a≤b ∧ b≤c</div>
-          <div>⇒</div>
-          <div>a≤c</div>
+          <d>transitivity</d>
+          <d>a≤b ∧ b≤c</d>
+          <d>⇒</d>
+          <d>a≤c</d>
 
-          <div>reflexivity</div>
-          <div>a</div>
-          <div>≤</div>
-          <div>a</div>
+          <d>reflexivity</d>
+          <d>a</d>
+          <d>≤</d>
+          <d>a</d>
 
-          <div>connectivity</div>
-          <div>a≤b</div>
-          <div>∨</div>
-          <div>b≤a</div>
+          <d>connectivity</d>
+          <d>a≤b</d>
+          <d>∨</d>
+          <d>b≤a</d>
         </div>
 
-        <div class="twoLaws">
-          <div style="position: relative">
+        <div class="separator"></div>
+        <clr style="grid-row: 6/7"></clr>
+        <bg class="twoLaws" style="grid-row-start: 6"></bg>
+        <div class="twoLaws" style="grid-row-start: 6">
+          <div>
             <div class="line line-one line-top"></div>
-            <svg
-              class="arrow-in"
-              width="6"
-              height="11"
-              viewBox="0 0 6 11"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:svg="http://www.w3.org/2000/svg">
-              <path
-                fill="#667"
-                d="M 6,5.5 C 6,5.4 5.91,5.32 5.73,5.24 5.59,5.2 5.44,5.15 5.3,5.11 3.83,4.56 2.7,3.64 1.87,2.38 1.67,2.07 1.36,1.34 0.95,0.2 0.93,0.15 0.9,0.1 0.86,0.07 0.79,0.02 0.69,0 0.54,0 0.18,0 0,0.1 0,0.29 0,0.31 0.03,0.44 0.09,0.66 0.63,2.55 1.73,4.02 3.41,5.08 L 4.03,5.5 3.41,5.92 C 2.23,6.67 1.32,7.65 0.66,8.87 0.22,9.68 0,10.3 0,10.71 0,10.9 0.12,11 0.37,11 h 0.17 c 0.08,-0.01 0.14,-0.01 0.17,-0.01 0.11,0 0.18,-0.07 0.23,-0.19 C 1.05,10.43 1.26,9.86 1.57,9.12 2.38,7.61 3.61,6.56 5.23,5.94 L 5.69,5.79 C 5.88,5.71 5.98,5.61 5.98,5.5 Z"
-                style="stroke-width: 1.5" />
-            </svg>
+            <img class="arrow-head" src="catalog-of-laws/arrow-head.svg" />
           </div>
-          <div>Semigroup</div>
+          <e><f>Semigroup</f></e>
 
-          <div>associativity</div>
-          <div>(a ⊹ b) ⊹ c</div>
-          <div>=</div>
-          <div>a ⊹ (b ⊹ c)</div>
+          <d>associativity</d>
+          <d>(a ⊹ b) ⊹ c</d>
+          <d>=</d>
+          <d>a ⊹ (b ⊹ c)</d>
 
-          <div>combineMany associativity</div>
-          <div>combineMany(a, [b, c])</div>
-          <div>=</div>
-          <div>combine(a, combine(b, c))</div>
+          <d>combineMany associativity</d>
+          <d>combineMany(a, [b, c])</d>
+          <d>=</d>
+          <d>combine(a, combine(b, c))</d>
         </div>
 
-        <div class="twoLaws">
-          <div style="position: relative">
+        <div class="separator"></div>
+        <clr style="grid-row: 8/9"></clr>
+        <bg class="twoLaws" style="grid-row-start: 8"></bg>
+        <div class="twoLaws" style="grid-row-start: 8">
+          <div>
             <div class="line line-one line-bottom"></div>
-            <div class="arrow-out"></div>
+            <img class="arrow-tail" src="catalog-of-laws/arrow-tail.svg" />
           </div>
-          <div>Monoid</div>
+          <e><f>Monoid</f></e>
 
-          <div>left identity</div>
-          <div>∅ ⊹ a</div>
-          <div>=</div>
-          <div>a</div>
+          <d>left identity</d>
+          <d>∅ ⊹ a</d>
+          <d>=</d>
+          <d>a</d>
 
-          <div>right identity</div>
-          <div>a</div>
-          <div>=</div>
-          <div>a ⊹ ∅</div>
+          <d>right identity</d>
+          <d>a</d>
+          <d>=</d>
+          <d>a ⊹ ∅</d>
         </div>
 
-        <div class="twoLaws">
-          <div style="position: relative">
+        <div class="separator"></div>
+        <clr style="grid-row: 10/11"></clr>
+        <bg class="twoLaws" style="grid-row-start: 10"></bg>
+        <div class="twoLaws" style="grid-row-start: 10">
+          <div>
             <div class="line line-one line-top"></div>
-            <svg
-              class="arrow-in"
-              width="6"
-              height="11"
-              viewBox="0 0 6 11"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:svg="http://www.w3.org/2000/svg">
-              <path
-                fill="#667"
-                d="M 6,5.5 C 6,5.4 5.91,5.32 5.73,5.24 5.59,5.2 5.44,5.15 5.3,5.11 3.83,4.56 2.7,3.64 1.87,2.38 1.67,2.07 1.36,1.34 0.95,0.2 0.93,0.15 0.9,0.1 0.86,0.07 0.79,0.02 0.69,0 0.54,0 0.18,0 0,0.1 0,0.29 0,0.31 0.03,0.44 0.09,0.66 0.63,2.55 1.73,4.02 3.41,5.08 L 4.03,5.5 3.41,5.92 C 2.23,6.67 1.32,7.65 0.66,8.87 0.22,9.68 0,10.3 0,10.71 0,10.9 0.12,11 0.37,11 h 0.17 c 0.08,-0.01 0.14,-0.01 0.17,-0.01 0.11,0 0.18,-0.07 0.23,-0.19 C 1.05,10.43 1.26,9.86 1.57,9.12 2.38,7.61 3.61,6.56 5.23,5.94 L 5.69,5.79 C 5.88,5.71 5.98,5.61 5.98,5.5 Z"
-                style="stroke-width: 1.5" />
-            </svg>
+            <img class="arrow-head" src="catalog-of-laws/arrow-head.svg" />
           </div>
-          <div>Invariant</div>
+          <e><f>Invariant</f></e>
 
-          <div>identity</div>
-          <div>imap(id, id)</div>
-          <div>=</div>
-          <div>id</div>
+          <d>identity</d>
+          <d>imap(id, id)</d>
+          <d>=</d>
+          <d>id</d>
 
-          <div>composition</div>
-          <div>imap(ab, ba) ▹ imap(bc, cb)</div>
-          <div>=</div>
-          <div>imap(ab ∘ bc, cb ∘ ba)</div>
+          <d>composition</d>
+          <d>imap(ab, ba) ▹ imap(bc, cb)</d>
+          <d>=</d>
+          <d>imap(ab ∘ bc, cb ∘ ba)</d>
         </div>
 
-        <div class="twoLaws">
-          <div style="position: relative; height: 3rem">
-            <div class="arrow-out" style="top: 0.5rem"></div>
-            <svg
-              class="arrow-in"
-              style="top: 1.35rem"
-              width="4"
-              height="11"
-              viewBox="0 0 6 11"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:svg="http://www.w3.org/2000/svg">
-              <path
-                fill="#667"
-                d="M 6,5.5 C 6,5.4 5.91,5.32 5.73,5.24 5.59,5.2 5.44,5.15 5.3,5.11 3.83,4.56 2.7,3.64 1.87,2.38 1.67,2.07 1.36,1.34 0.95,0.2 0.93,0.15 0.9,0.1 0.86,0.07 0.79,0.02 0.69,0 0.54,0 0.18,0 0,0.1 0,0.29 0,0.31 0.03,0.44 0.09,0.66 0.63,2.55 1.73,4.02 3.41,5.08 L 4.03,5.5 3.41,5.92 C 2.23,6.67 1.32,7.65 0.66,8.87 0.22,9.68 0,10.3 0,10.71 0,10.9 0.12,11 0.37,11 h 0.17 c 0.08,-0.01 0.14,-0.01 0.17,-0.01 0.11,0 0.18,-0.07 0.23,-0.19 C 1.05,10.43 1.26,9.86 1.57,9.12 2.38,7.61 3.61,6.56 5.23,5.94 L 5.69,5.79 C 5.88,5.71 5.98,5.61 5.98,5.5 Z"
-                style="stroke-width: 1.5" />
-            </svg>
-            <svg
-              class="arrow-in"
-              style="top: 1.77rem"
-              width="4"
-              height="11"
-              viewBox="0 0 6 11"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:svg="http://www.w3.org/2000/svg">
-              <path
-                fill="#667"
-                d="M 6,5.5 C 6,5.4 5.91,5.32 5.73,5.24 5.59,5.2 5.44,5.15 5.3,5.11 3.83,4.56 2.7,3.64 1.87,2.38 1.67,2.07 1.36,1.34 0.95,0.2 0.93,0.15 0.9,0.1 0.86,0.07 0.79,0.02 0.69,0 0.54,0 0.18,0 0,0.1 0,0.29 0,0.31 0.03,0.44 0.09,0.66 0.63,2.55 1.73,4.02 3.41,5.08 L 4.03,5.5 3.41,5.92 C 2.23,6.67 1.32,7.65 0.66,8.87 0.22,9.68 0,10.3 0,10.71 0,10.9 0.12,11 0.37,11 h 0.17 c 0.08,-0.01 0.14,-0.01 0.17,-0.01 0.11,0 0.18,-0.07 0.23,-0.19 C 1.05,10.43 1.26,9.86 1.57,9.12 2.38,7.61 3.61,6.56 5.23,5.94 L 5.69,5.79 C 5.88,5.71 5.98,5.61 5.98,5.5 Z"
-                style="stroke-width: 1.5" />
-            </svg>
+        <div class="separator"></div>
+        <clr style="grid-row: 12/13"></clr>
+        <bg class="twoLaws" style="grid-row-start: 12"></bg>
+        <div class="twoLaws" style="grid-row-start: 12">
+          <div>
+            <img
+              class="arrow-tail"
+              style="
+                top: calc(
+                  -1 * var(--line-height) / 3 - var(--arrow-height-half) + var(
+                      --stroke-half
+                    ) + 0.5px
+                );
+              "
+              src="catalog-of-laws/arrow-tail.svg" />
             <div
               class="line line-one line-bottom"
-              style="top: -1rem; height: calc(3 * var(--lh) / 2)"></div>
+              style="
+                top: calc(
+                  -3 * var(--line-height) / 2 - var(--arrow-height-half) - var(--stroke-half)
+                );
+                height: calc(3 * var(--line-height) / 2);
+              "></div>
+
+            <img
+              class="arrow-head"
+              style="top: calc(50% - var(--arrow-height-half))"
+              src="catalog-of-laws/arrow-head.svg" />
+            <div
+              class="line line-two line-top"
+              style="height: calc(2 * var(--line-height))"></div>
+
+            <img
+              class="arrow-head"
+              style="
+                top: calc(
+                  1 * var(--line-height) / 3 - var(--arrow-height-half)
+                );
+              "
+              src="catalog-of-laws/arrow-head.svg" />
             <div
               class="line line-one line-top"
-              style="top: -0.3rem; height: calc(var(--lh) + 0.3rem)"></div>
+              style="
+                top: calc(1 * var(--line-height) / 3 - var(--stroke-half));
+              "></div>
           </div>
-          <div>Covariant</div>
+          <e><f>Covariant</f></e>
 
-          <div>identity</div>
-          <div>map(id)</div>
-          <div>=</div>
-          <div>id</div>
+          <d>identity</d>
+          <d>map(id)</d>
+          <d>=</d>
+          <d>id</d>
 
-          <div>composition</div>
-          <div>map(ab ∘ bc)</div>
-          <div>=</div>
-          <div>map(ab) ∘ map(bc)</div>
+          <d>composition</d>
+          <d>map(ab ∘ bc)</d>
+          <d>=</d>
+          <d>map(ab) ∘ map(bc)</d>
         </div>
 
-        <div class="sixLaws">
-          <div style="position: relative">
+        <div class="separator"></div>
+        <clr style="grid-row: 14/15"></clr>
+        <bg class="sevenLaws" style="grid-row-start: 14"></bg>
+        <div class="sevenLaws" style="grid-row-start: 14">
+          <div>
             <div
               class="line line-one line-bottom"
-              style="height: calc(3.5 * var(--lh)); top: -0.75rem"></div>
-            <div
-              class="arrow-out"
-              style="top: calc(1.75 * var(--lw) + 0.25rem)"></div>
+              style="
+                top: calc(-4 * var(--line-height));
+                height: calc(4 * var(--line-height) - var(--stroke-half));
+              "></div>
+            <img class="arrow-tail" src="catalog-of-laws/arrow-tail.svg" />
           </div>
-          <div>Applicative</div>
+          <e><f>Applicative</f></e>
 
-          <div>identity</div>
-          <div>id ▹ of ▹ ap(a)</div>
-          <div>=</div>
-          <div>a</div>
+          <d>identity</d>
+          <d>id ▹ of ▹ ap(a)</d>
+          <d>=</d>
+          <d>a</d>
 
-          <div>homomorphism</div>
-          <div>ab ▹ of ▹ (a ▹ of ▹ ap)</div>
-          <div>=</div>
-          <div>a ▹ ab ▹ of</div>
+          <d>homomorphism</d>
+          <d>ab ▹ of ▹ (a ▹ of ▹ ap)</d>
+          <d>=</d>
+          <d>a ▹ ab ▹ of</d>
 
-          <div>associative composition</div>
-          <div>fbc ▹ map(compose) ▹ ap(fab) ▹ ap(fa)</div>
-          <div>=</div>
-          <div>fbc ▹ ap(fab ▹ ap(fa))</div>
+          <d>associative composition</d>
+          <d>fbc ▹ map(compose) ▹ ap(fab) ▹ ap(fa)</d>
+          <d>=</d>
+          <d>fbc ▹ ap(fab ▹ ap(fa))</d>
 
-          <div>interchange</div>
-          <div>fab ▹ ap(of(a))</div>
-          <div>=</div>
-          <div>a ▹ apply ▹ of ▹ ap(fab)</div>
+          <d>interchange</d>
+          <d>fab ▹ ap(of(a))</d>
+          <d>=</d>
+          <d>a ▹ apply ▹ of ▹ ap(fab)</d>
 
-          <div>map consistency</div>
-          <div>fa ▹ map(ab)</div>
-          <div>=</div>
-          <div>ab ▹ of ▹ ap(fa)</div>
+          <d>map consistency</d>
+          <d>fa ▹ map(ab)</d>
+          <d>=</d>
+          <d>ab ▹ of ▹ ap(fa)</d>
 
-          <div>product consistency</div>
-          <div>fab ▹ ap(fa)</div>
-          <div>=</div>
-          <div>product(fab, fa) ▹ map(([ab, a]) ⇒ ab(a))</div>
+          <d>product consistency</d>
+          <d>fab ▹ ap(fa)</d>
+          <d>=</d>
+          <d>product(fab, fa) ▹ map(([ab, a]) ⇒ ab(a))</d>
+
+          <d>flatMap consistency</d>
+          <d>fab ▹ ap(fa)</d>
+          <d>=</d>
+          <d>fab ▹ flatMap(ab ⇒ map(fa, ab))</d>
         </div>
 
-        <div class="fourLaws">
-          <div style="position: relative">
+        <div class="separator"></div>
+        <clr style="grid-row: 16/17"></clr>
+        <bg class="fourLaws" style="grid-row-start: 16"></bg>
+        <div class="fourLaws" style="grid-row-start: 16">
+          <div>
             <div
               class="line line-two line-bottom"
-              style="top: -13.518rem; height: 16.55rem"></div>
-            <div class="arrow-out" style="top: calc(var(--lw) + 0.3rem)"></div>
+              style="
+                top: calc(-10 * var(--line-height));
+                height: calc(10 * var(--line-height) - var(--stroke-half));
+              "></div>
+            <img class="arrow-tail" src="catalog-of-laws/arrow-tail.svg" />
           </div>
-          <div>Monad</div>
+          <e><f>Monad</f></e>
 
-          <div>left identity</div>
-          <div>of ∘ flatMap(f)</div>
-          <div>=</div>
-          <div>afb</div>
+          <d>left identity</d>
+          <d>of ∘ flatMap(f)</d>
+          <d>=</d>
+          <d>afb</d>
 
-          <div>right identity</div>
-          <div>flatMap(of)</div>
-          <div>=</div>
-          <div>id</div>
+          <d>right identity</d>
+          <d>flatMap(of)</d>
+          <d>=</d>
+          <d>id</d>
 
-          <div>associativity</div>
-          <div>flatMap(afb) ∘ flatMap(bfc)</div>
-          <div>=</div>
-          <div>flatMap(afb ∘ flatMap(bfc))</div>
+          <d>associativity</d>
+          <d>flatMap(afb) ∘ flatMap(bfc)</d>
+          <d>=</d>
+          <d>flatMap(afb ∘ flatMap(bfc))</d>
 
-          <div>map consistency</div>
-          <div>map(ab)</div>
-          <div>=</div>
-          <div>flatMap(ab ∘ of)</div>
+          <d>map consistency</d>
+          <d>map(ab)</d>
+          <d>=</d>
+          <d>flatMap(ab ∘ of)</d>
         </div>
 
-        <div class="twoLaws">
-          <div></div>
-          <div>Traversable</div>
+        <div class="separator"></div>
+        <clr style="grid-row: 18/19"></clr>
+        <bg class="twoLaws" style="grid-row-start: 18"></bg>
+        <div class="twoLaws" style="grid-row-start: 18">
+          <d></d>
+          <e><f>Traversable</f></e>
 
-          <div>identity</div>
-          <div>traverse(id)</div>
-          <div>=</div>
-          <div>id</div>
+          <d>identity</d>
+          <d>traverse(id)</d>
+          <d>=</d>
+          <d>id</d>
 
-          <div>composition</div>
-          <div>F.traverse(G)(agb) ∘ G.map(F.traverse(H)(bhc))</div>
-          <div>=</div>
-          <div>traverse(GH)(agb ∘ mapG(bhc))</div>
+          <d>composition</d>
+          <d>F.traverse(G)(agb) ∘ G.map(F.traverse(H)(bhc))</d>
+          <d>=</d>
+          <d>traverse(GH)(agb ∘ mapG(bhc))</d>
         </div>
+        <div
+          class="separator"
+          style="
+            height: calc(var(--line-height) / 4);
+            border-bottom: var(--line-table-high);
+          "></div>
       </div>
-    </div>
+    </article>
+    <div style="padding-left: 0.5rem; font-size: 6px">2024</div>
   </body>
 </html>

@@ -1,10 +1,17 @@
-import {Array as AR, Either as EI, Option as OP, pipe} from 'effect'
+import {
+  Array as AR,
+  Either as EI,
+  flow,
+  Option as OP,
+  pipe,
+  String as STR,
+} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
 import {Monad as arbitraryMonad} from './instances.js'
 import {LiftArbitrary} from './types.js'
 
-const {map} = arbitraryMonad
+const {map, flatMap} = arbitraryMonad
 
 /**
  * Returns an `Either` arbitrary given a pair of arbitraries for the underlying
@@ -78,3 +85,34 @@ export const liftArbitraries = <
  */
 export const error: (message: fc.Arbitrary<string>) => fc.Arbitrary<Error> =
   map(s => new Error(s))
+
+/**
+ * Build an arbitrary record with arbitrary string keys and
+ * values built from the given arbitrary.
+ * @param value Arbitrary for the record values.
+ * @returns Arbitrary record.
+ * @category arbitraries
+ */
+export const stringKeyRecord = <T>(value: fc.Arbitrary<T>) =>
+  pipe(
+    uniqueStrings,
+    flatMap(
+      flow(
+        AR.map(key => [key, value] as const),
+        Object.fromEntries,
+        fc.record,
+      ),
+    ),
+  ) as fc.Arbitrary<Record<string, T>>
+
+const uniqueStrings = fc.uniqueArray(
+  fc.string({
+    minLength: 1,
+    maxLength: 5,
+  }),
+  {
+    minLength: 1,
+    maxLength: 5,
+    comparator: STR.Equivalence,
+  },
+)

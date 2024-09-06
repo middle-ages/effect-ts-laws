@@ -45,10 +45,6 @@ export const Traversable = <
     ),
   )
 
-/**
- * Test typeclass laws for `Traversable`.
- * @category typeclass laws
- */
 const buildLaws = <
   F extends TypeLambda,
   A,
@@ -139,11 +135,7 @@ export interface TraversableTypeLambda extends TypeLambda {
 }
 
 declare module './given.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Traversable: {
-      lambda: TraversableTypeLambda
-      options: Given<TraversableTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Traversable<F, A, B, C, In1, Out2, Out1>>
-    }
+  interface ParameterizedLambdas {
+    Traversable: TraversableTypeLambda
   }
 }

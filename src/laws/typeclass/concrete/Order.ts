@@ -64,10 +64,7 @@ export const buildLaws =
     )(suffix)
 
 declare module './given.js' {
-  interface ConcreteMap<A> {
-    Order: {
-      lambda: OrderTypeLambda
-      laws: ReturnType<typeof Order<A>>
-    }
+  interface ConcreteLambdas {
+    Order: OrderTypeLambda
   }
 }

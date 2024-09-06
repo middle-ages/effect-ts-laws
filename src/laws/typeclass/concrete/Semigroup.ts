@@ -36,10 +36,7 @@ export const Semigroup = <A>({
   )(suffix)
 
 declare module './given.js' {
-  interface ConcreteMap<A> {
-    Semigroup: {
-      lambda: SemigroupTypeLambda
-      laws: ReturnType<typeof Semigroup<A>>
-    }
+  interface ConcreteLambdas {
+    Semigroup: SemigroupTypeLambda
   }
 }

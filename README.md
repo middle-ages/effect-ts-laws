@@ -149,8 +149,7 @@ _datatype tests_ implementation status.
 | [Option](./tests/effect-ts/Option.spec.ts)     | ✅          |     | ✅                                                           | ✅                                               | ✅                                                       | ✅                                                 | ✅                                                            | ✅                                                            | ✅                                                                | ✅                                                    | ✅                                                                | ❌        |
 | [Either](./tests/effect-ts/Either.spec.ts)     | ✅          |     | ✅                                                           | ☐                                               | ☐                                                       | ☐                                                 | ✅                                                            | ✅                                                            | ✅                                                                | ✅                                                    | ✅                                                                | ❌        |
 | [Array](./tests/effect-ts/Array.spec.ts)       | ✅          |     | ✅                                                           | ✅                                               | ✅                                                       | ✅                                                 | ✅                                                            | ✅                                                            | ✅                                                                | ✅                                                    | ✅                                                                | ❌        |
-| Struct                                         | ❌          |     | ❌                                                           | ❌                                               | ❌                                                       | ❌                                                 | ❌                                                            | ❌                                                            | ❌                                                                | ❌                                                    | ❌                                                                | ❌        |
-| Record                                         | ❌          |     | ❌                                                           | ❌                                               | ❌                                                       | ❌                                                 | ❌                                                            | ❌                                                            | ❌                                                                | ❌                                                    | ❌                                                                | ❌        |
+| [Record](./tests/effect-ts/Record.spec.ts)     | ✅          |     | ✅                                                           | ☐                                               | ☐                                                       | ☐                                                 | ✅                                                            | ✅                                                            | ☐                                                                | ☐                                                    | ✅                                                                | ❌        |
 | Effect                                         | ❌          |     | ❌                                                           | ❌                                               | ❌                                                       | ❌                                                 | ❌                                                            | ❌                                                            | ❌                                                                | ❌                                                    | ❌                                                                | ❌        |
 
 ### More Information
@@ -166,6 +165,8 @@ _datatype tests_ implementation status.
 1. Rename to zio-style names? E.g.: `traverse` laws become `foreach` laws?
 2. Match the typeclass graph of effect-ts more accurately? E.g.: split
    `Product` laws out of `Applicative`.
+3. What is the role of _typeclass laws_ in `effect-ts` where _typeclasses_
+   are deemphasized?
 
 ### Roadmap
 
@@ -174,9 +175,9 @@ _datatype tests_ implementation status.
   * [ ] Order laws should check opposite of `orderConsistency`: `≠ ⇒ ≥ ≠ ≤`.
   
 * Harness
-  * [ ] Make it easier to test datatypes with multiple instances for same
-        typeclass, for example `Option` and all its `Monoid`s.
-  * [ ] Typeclass tests should not be all building the same helpers. They
+  * [x] Make it easier to test datatypes with multiple instances for same
+        typeclass, for example `Boolean` and all its `Monoid`s.
+  * [x] Typeclass tests should not be all building the same helpers. They
         should be provided by the harness.
 * Composition
   * [ ] Test composition flipped.
@@ -191,6 +192,7 @@ _datatype tests_ implementation status.
 1. [fast-check](https://github.com/dubzzz/fast-check)
 2. [effect-ts](https://github.com/Effect-ts/effect)
 3. [zio-prelude](https://github.com/zio/zio-prelude/tree/series/2.x/laws/shared/src/main/scala/zio/prelude/laws) laws
+4. On the [importance of typeclass laws](https://degoes.net/articles/principled-typeclasses#laws)
 
 ### Based On
 

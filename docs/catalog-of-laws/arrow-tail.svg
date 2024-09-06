@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="8"
+   height="14"
+   viewBox="-3 -6.75 11 28"
+   version="1.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <path
+     fill="#557"
+     d="m0 7c0 .12.16.28.42.37l.61.19c3.35.78 6.97 3.98 6.97 6.44v-14c0 3.15-3.89 5.7-7.07 6.5-.18.06-.38.12-.57.17-.24.08-.36.2-.36.33z"
+     style="stroke-width:1.5"/>
+</svg>

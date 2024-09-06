@@ -18,10 +18,7 @@ describe('@effect/typeclass/data/Number', () => {
 
   describe('Equivalence/order', () => {
     testConcreteTypeclassLaws(
-      {
-        Equivalence: NU.Equivalence,
-        Order: NU.Order,
-      },
+      {Equivalence: NU.Equivalence, Order: NU.Order},
       {a, equalsA},
     )
   })

@@ -7,7 +7,7 @@
     "incremental": true,
     "composite": false,
     "noEmit": false,
-    "outDir": "dist"
+    "outDir": "../.dev/dist"
   },
-  "include": ["src", "index.ts"]
+  "include": ["../src", "../index.ts"]
 }

@@ -1,7 +1,7 @@
 import {Array as AR, Option as OP, pipe, Tuple as TU} from 'effect'
 import fc from 'fast-check'
 import {describe} from 'vitest'
-import {checkLaw, Law, testLaw, UnknownArgs} from './law.js'
+import {checkLaw, Law, testLaw} from './law.js'
 
 /**
  * A `LawSet` is a recursive data structure with an array of {@link Law}s
@@ -12,16 +12,9 @@ import {checkLaw, Law, testLaw, UnknownArgs} from './law.js'
  * appear in the test results as a list of tests grouped inside a
  * `describe()` block, if it has a name, or as a flat list
  * of test blocks if it does not.
- * @typeParam T - Tuple whose elements are the predicate arguments
- * of every law in the set.
- * @typeParam U - Tuple whose elements are the `LawSet` arguments
- * of every set of laws in the requirements.
  * @category model
  */
-export interface LawSet<
-  Ts extends UnknownArgs[],
-  Ls extends LawSet<any, any>[] = [],
-> {
+export interface LawSet {
   /**
    * Optional name of unit under test. Runner uses this for `describe()`
    * block name. If missing, no `describe()` block is wrapped around
@@ -33,12 +26,12 @@ export interface LawSet<
    * Possibly empty list of `LawSet`s that must pass before we run the laws
    * in this set.
    */
-  sets: Ls
+  sets: LawSet[]
 
   /**
    * Possibly empty list laws that must pass for the law set to pass.
    */
-  laws: {[K in keyof Ts]: Law<Ts[K]>}
+  laws: Law<any>[]
 }
 
 /**
@@ -47,7 +40,7 @@ export interface LawSet<
  * @example
  * ```ts
  * // A pair of laws with no law sets.
- * const setA: LawSet<[[number], [number]]> = LawSet()(
+ * const setA: LawSet = LawSet()(
  *   'some unit under test',
  *   Law('law₁', '∀n ∈ ℕ: n = n', tinyPositive)(x => x === x),
  *   Law('law₂', '∀n ∈ ℕ: n ≤ n', tinyPositive)(x => x <= x),
@@ -57,8 +50,8 @@ export interface LawSet<
  * @category constructors
  */
 export const LawSet =
-  <Ls extends LawSet<any, any>[]>(...sets: Ls) =>
-  <Ts extends UnknownArgs[]>(
+  (...sets: LawSet[]) =>
+  (
     /**
      * Test suite name.
      */
@@ -66,17 +59,18 @@ export const LawSet =
     /**
      * List of {@link Law}s that must pass for this `LawSet` to pass.
      */
-    ...laws: {[K in keyof Ts]: Law<Ts[K]>}
-  ): LawSet<Ts, Ls> => ({name, laws, sets})
+    ...laws: Law<any>[]
+  ): LawSet => ({name, laws, sets})
 
 /**
  * Just like {@link LawSet}, but with an empty list of `LawSet`s.
  * @category constructors
  */
-export const lawTests = <Ts extends UnknownArgs[]>(
-  name = '',
-  ...laws: LawSet<Ts>['laws']
-): LawSet<Ts> => ({name, laws: laws, sets: []})
+export const lawTests = (name = '', ...laws: Law<any>[]): LawSet => ({
+  name,
+  laws: laws,
+  sets: [],
+})
 
 /**
  * Just like {@link LawSet}, but with an empty list of laws, no
@@ -84,19 +78,16 @@ export const lawTests = <Ts extends UnknownArgs[]>(
  * the same `LawSet` twice.
  * @category constructors
  */
-export const lawSetTests = <Ls extends LawSet<any, any>[]>(...sets: Ls) =>
-  pipe({name: '', laws: [], sets}, dedupe, TU.getFirst) as LawSet<[], Ls>
+export const lawSetTests = (...sets: LawSet[]): LawSet =>
+  pipe({name: '', laws: [], sets}, dedupe, TU.getFirst)
 
 /**
  * Adds a list of laws to the law set.
  * @category combinators
  */
 export const addLaws =
-  <Us extends UnknownArgs[]>(...add: {[K in keyof Us]: Law<Us[K]>}) =>
-  <Ts extends UnknownArgs[], Ls extends LawSet<any, any>[]>({
-    laws,
-    ...rest
-  }: LawSet<Ts, Ls>): LawSet<[...Ts, ...Us], Ls> => ({
+  (...add: Law<any>[]) =>
+  ({laws, ...rest}: LawSet): LawSet => ({
     ...rest,
     laws: [...laws, ...add],
   })
@@ -106,11 +97,8 @@ export const addLaws =
  * @category combinators
  */
 export const addLawSet =
-  <L extends LawSet<any, any>>(add: L) =>
-  <Ts extends UnknownArgs[], Ls extends LawSet<any, any>[]>({
-    sets,
-    ...rest
-  }: LawSet<Ts, Ls>) => ({
+  (add: LawSet) =>
+  ({sets, ...rest}: LawSet) => ({
     ...rest,
     sets: [...sets, add],
   })
@@ -133,11 +121,8 @@ export const addLawSet =
  * all `LawSet` names tested in _this_ call will be added.
  * @category harness
  */
-export const testLaws = <
-  Ts extends UnknownArgs[],
-  Ls extends LawSet<any, any>[],
->(
-  {name = '', sets, laws}: LawSet<Ts, Ls>,
+export const testLaws = (
+  {name = '', sets, laws}: LawSet,
   parameters: Overrides = {},
 ): void => {
   if (laws.length === 0 && sets.length === 0) return
@@ -158,16 +143,11 @@ export const testLaws = <
  * @returns Possibly empty array of failure messages.
  * @category harness
  */
-export const checkLaws = <
-  Ts extends UnknownArgs[],
-  Ls extends LawSet<any, any>[],
->(
-  {sets, laws}: LawSet<Ts, Ls>,
+export const checkLaws = (
+  {sets, laws}: LawSet,
   parameters: Overrides = {},
 ): string[] => {
-  const ownOptions: OP.Option<string>[] = AR.map(laws, law =>
-    checkLaw(law as Law<Ts[number]>),
-  )
+  const ownOptions: OP.Option<string>[] = AR.map(laws, law => checkLaw(law))
 
   return [
     ...AR.flatMap(sets, lawSet => checkLaws(lawSet, parameters)),
@@ -188,15 +168,15 @@ export type Overrides = Omit<
 >
 
 // Rebuilds the tree filtering out LawSets so that LawSet.name is unique
-const dedupe = <L extends LawSet<any, any>>(
-  {name, sets: lawSets, ...rest}: L,
+const dedupe = (
+  {name = '', sets: lawSets, laws = []}: LawSet,
   argNames = new Set<string>(),
-): [L, Set<string>] => {
+): [LawSet, Set<string>] => {
   let names = argNames
 
   const sets = []
   for (const lawSet of lawSets) {
-    const {name = '', ...rest} = lawSet as LawSet<any, any>
+    const {name = '', ...rest} = lawSet
     if (name === '') {
       sets.push(lawSet)
     } else {
@@ -207,5 +187,5 @@ const dedupe = <L extends LawSet<any, any>>(
     }
   }
 
-  return [{name, sets, ...rest} as L, names]
+  return [{name, sets, laws}, names]
 }

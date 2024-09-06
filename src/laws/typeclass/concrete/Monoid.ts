@@ -36,10 +36,7 @@ export interface MonoidTypeLambda extends TypeLambda {
 }
 
 declare module './given.js' {
-  interface ConcreteMap<A> {
-    Monoid: {
-      lambda: MonoidTypeLambda
-      laws: ReturnType<typeof Monoid<A>>
-    }
+  interface ConcreteLambdas {
+    Monoid: MonoidTypeLambda
   }
 }

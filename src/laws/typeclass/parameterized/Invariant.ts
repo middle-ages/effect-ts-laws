@@ -80,11 +80,7 @@ export interface InvariantTypeLambda extends TypeLambda {
 }
 
 declare module './given.js' {
-  interface ParameterizedMap<F extends TypeLambda, A, B, C, In1, Out2, Out1> {
-    Invariant: {
-      lambda: InvariantTypeLambda
-      options: Given<InvariantTypeLambda, F, A, B, C, In1, Out2, Out1>
-      laws: ReturnType<typeof Invariant<F, A, B, C, In1, Out2, Out1>>
-    }
+  interface ParameterizedLambdas {
+    Invariant: InvariantTypeLambda
   }
 }
