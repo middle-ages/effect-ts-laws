@@ -6,6 +6,7 @@
     "Canti",
     "combinators",
     "Combinators",
+    "contramap",
     "Covariants",
     "datatypes",
     "deduped",
@@ -36,6 +37,7 @@
     "Typeclass",
     "typeclasses",
     "Typeclassopedia",
+    "vpad",
     "webfont"
   ],
   "js/ts.implicitProjectConfig.module": "NodeNext",
@@ -51,5 +53,8 @@
     "MD013": false,
     "MD033": false,
     "MD041": false
+  },
+  "eslint.options": {
+    "overrideConfigFile": "./config/eslint.config.js"
   }
 }

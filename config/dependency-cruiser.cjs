@@ -195,13 +195,13 @@ module.exports = {
     /* Which modules not to follow further when encountered */
     doNotFollow: {
       /* path: an array of regular expressions in strings to match against */
-      path: ['node_modules', 'index.ts', 'law.ts', 'laws.ts', 'arbitrary.ts'],
+      path: ['node_modules'],
     },
 
     /* Which modules to exclude */
     exclude: {
       /* path: an array of regular expressions in strings to match against */
-      path: ['node_modules', 'index.ts', 'law.ts', 'laws.ts', 'arbitrary.ts'],
+      path: ['node_modules'],
     },
 
     /* Which modules to exclusively include (array of regular expressions in strings)
@@ -257,7 +257,7 @@ module.exports = {
        defaults to './tsconfig.json'.
      */
     tsConfig: {
-      fileName: 'tsconfig.build.json',
+      fileName: 'tsconfig.json',
     },
 
     /* Webpack configuration to use to get resolve options from.

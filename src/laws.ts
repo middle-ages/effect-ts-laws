@@ -5,10 +5,15 @@ export {
   testMonoids,
 } from './laws/typeclass/runner/concrete.js'
 export {
+  getMonoUnaryEquivalence,
+  monoArbitrary,
   monoEquivalence,
   monoOrder,
   monoSemigroup,
+  testContravariantLaws,
   testTypeclassLaws,
+  unfoldContravariantGiven,
+  unfoldMonomorphicGiven,
 } from './laws/typeclass/runner/monomorphic.js'
 export {testParameterizedTypeclassLaws} from './laws/typeclass/runner/parameterized.js'
 export {testTypeclassLawsFor} from './laws/typeclass/runner/typeclass.js'
@@ -42,8 +47,9 @@ export type {
 export type {MonadTypeLambda} from './laws/typeclass/parameterized/Monad.js'
 export type {Concrete} from './laws/typeclass/runner/concrete.js'
 export type {
+  ContravariantGiven,
   Mono,
-  MonomorphicOptions,
+  MonomorphicGiven,
 } from './laws/typeclass/runner/monomorphic.js'
 export type {
   Typeclass,
@@ -61,12 +67,14 @@ export {Monoid} from './laws/typeclass/concrete/Monoid.js'
 export {Order} from './laws/typeclass/concrete/Order.js'
 export {Semigroup} from './laws/typeclass/concrete/Semigroup.js'
 export {Applicative} from './laws/typeclass/parameterized/Applicative.js'
+export {Contravariant} from './laws/typeclass/parameterized/Contravariant.js'
 export {Covariant} from './laws/typeclass/parameterized/Covariant.js'
 export {Invariant} from './laws/typeclass/parameterized/Invariant.js'
 export {Monad} from './laws/typeclass/parameterized/Monad.js'
 export {Traversable} from './laws/typeclass/parameterized/Traversable.js'
 
 export type {MonoidTypeLambda} from './laws/typeclass/concrete/Monoid.js'
+export type {ContravariantTypeLambda} from './laws/typeclass/parameterized/Contravariant.js'
 export type {CovariantTypeLambda} from './laws/typeclass/parameterized/Covariant.js'
 export type {InvariantTypeLambda} from './laws/typeclass/parameterized/Invariant.js'
 export type {TraversableTypeLambda} from './laws/typeclass/parameterized/Traversable.js'

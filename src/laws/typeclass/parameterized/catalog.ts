@@ -2,6 +2,7 @@ import {Kind, TypeLambda} from 'effect/HKT'
 import {LawSet} from '../../../law.js'
 import {Applicative} from './Applicative.js'
 import {Covariant} from './Covariant.js'
+import {Contravariant} from './Contravariant.js'
 import {ParameterizedGiven, ParameterizedLambdas} from './given.js'
 import {Invariant} from './Invariant.js'
 import {Monad} from './Monad.js'
@@ -14,6 +15,7 @@ import {Traversable} from './Traversable.js'
  */
 export const parameterizedLaws = {
   Invariant,
+  Contravariant,
   Covariant,
   Monad,
   Applicative,

@@ -1,6 +1,8 @@
 import {Boolean as BO, Equivalence as EQ} from 'effect'
 import {
+  greaterThan,
   greaterThanOrEqualTo,
+  lessThan,
   lessThanOrEqualTo,
   OrderTypeLambda,
 } from 'effect/Order'
@@ -19,25 +21,37 @@ export const Order = <A>({
   suffix,
 }: ConcreteGiven<OrderTypeLambda, A>) => {
   const build = buildLaws(a, equalsA),
-    [lte, gte] = [lessThanOrEqualTo(F), greaterThanOrEqualTo(F)]
+    [lt, gt, lte, gte] = [
+      lessThan(F),
+      greaterThan(F),
+      lessThanOrEqualTo(F),
+      greaterThanOrEqualTo(F),
+    ]
 
   const consistencyLaw = Law(
-    'orderConsistency',
+    'orderEqualsConsistency',
     `∀a,b ∈ T: a≤b ∧ b≥a ⇒ a=c`,
     a,
     a,
   )((a, b) => BO.implies(lte(a, b) && gte(a, b), equalsA(a, b)))
 
-  const operatorLaws = [build('lte', '≤', lte), build('gte', '≥', gte)]
-
-  return concreteLaws('Order', consistencyLaw)(suffix, ...operatorLaws)
+  return concreteLaws('Order', consistencyLaw)(
+    suffix,
+    build('lte', '≤', lte, gt),
+    build('gte', '≥', gte, lt),
+  )
 }
 
 export const buildLaws =
   <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>
-  (suffix: string, sym: string, op: (a: A, b: A) => boolean) =>
+  (
+    suffix: string,
+    sym: string,
+    op: (a: A, b: A) => boolean,
+    complement: (a: A, b: A) => boolean,
+  ) =>
     concreteLaws(
-      `Order`,
+      'Order',
       Law(
         'transitivity',
         `∀a,b,c ∈ T: a${sym}b ∧ b${sym}c ⇒ a${sym}c`,
@@ -61,6 +75,13 @@ export const buildLaws =
         a,
         a,
       )((a, b) => op(a, b) || op(b, a)),
+
+      Law(
+        'complementConsistency',
+        `∀a,b ∈ T: a${sym}b ⇒ a${sym === '≤' ? '≯' : '≮'}b`,
+        a,
+        a,
+      )((a, b) => BO.implies(op(a, b), !complement(a, b))),
     )(suffix)
 
 declare module './given.js' {

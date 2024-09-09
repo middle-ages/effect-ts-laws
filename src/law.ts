@@ -8,6 +8,7 @@ export {
   lawSetTests,
   lawTests,
   testLaws,
+  verboseLaws,
 } from './law/lawSet.js'
 
 export type {LiftEquivalence, LiftedEquivalences} from './law/equivalence.js'

@@ -1,13 +1,58 @@
 @import "fonts.css";
 @import "root.css";
 @import "table.css";
+@import "arrows.css";
 @import "lines.css";
+html * {
+  transition: all 0.15s linear;
+}
 body {
-  margin: 0rem 0 0 0;
+  margin: 0 4px 0 4px;
+  padding: 0;
+  & > *:first-child {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+img {
+  width: var(--arrow-width);
+  height: var(--arrow-height);
+}
+header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100ex;
+  z-index: 10;
+  display: flex;
+  line-height: var(--line-height-header);
+  text-wrap: nowrap;
+  align-items: baseline;
+  justify-content: space-between;
+  background: var(--color-bg);
+  & > *:first-child {
+    flex: 1;
+  }
+  & > *:nth-child(2) {
+    right: var(--hpad-half);
+    display: block;
+    background: var(--color-bg);
+    padding-right: var(--hpad-half);
+  }
+}
+h1 {
+  text-align: center;
+  font-size: var(--font-size-header);
+  color: var(--color-low);
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
 }
 a {
   text-decoration: none;
-  outline-offset: 4px;
+  outline-offset: 2px;
   outline-width: 2px;
   outline-style: dotted;
   border-radius: 4px;
@@ -16,29 +61,9 @@ a {
     text-decoration: underline;
   }
   &:focus {
-    outline-color: #dbe;
+    outline-color: var(--color-outline);
   }
 }
-h1 {
-  font-size: var(--font-size-header);
-  color: var(--color-low);
-  text-align: center;
-  font-weight: 500;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-header {
-  position: absolute;
-  top: calc(1rem / 3);
-  right: 0.5rem;
-  background: white;
-}
-h1, header {
-  line-height: calc(7 * var(--font-size-header) / 4);
-  text-wrap: nowrap;
-}
-article {
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
+d {
+  display: block;
 }

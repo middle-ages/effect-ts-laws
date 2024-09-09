@@ -117,8 +117,6 @@ export const addLawSet =
  * found in the laws.
  * @param lawSet - Laws to test.
  * @param parameters - Optional runtime `fast-check` parameters.
- * @returns The same optional `Set<string>` given in `previous`, except
- * all `LawSet` names tested in _this_ call will be added.
  * @category harness
  */
 export const testLaws = (
@@ -135,6 +133,20 @@ export const testLaws = (
 
   if (name === '') run()
   else describe(name, run)
+}
+
+/**
+ * Just like {@link testLaws} but in _verbose_ mode.
+ * @category harness
+ * @param lawSet - Laws to test.
+ * @param parameters - Optional runtime `fast-check` parameters.
+ * @category harness
+ */
+export const verboseLaws = (
+  lawSet: LawSet,
+  parameters: Overrides = {},
+): void => {
+  testLaws(lawSet, {verbose: true, ...parameters})
 }
 
 /**

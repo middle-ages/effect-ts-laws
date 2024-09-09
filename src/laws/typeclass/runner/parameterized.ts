@@ -38,7 +38,7 @@ export const testParameterizedTypeclassLaws =
      */
     given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
     /**
-     * Optional runtime `fc-check` parameters.
+     * Optional runtime `fast-check` parameters.
      */
     parameters?: Overrides,
   ) => {

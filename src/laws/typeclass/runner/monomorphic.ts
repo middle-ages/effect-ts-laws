@@ -1,86 +1,54 @@
-import {Semigroup as SG} from '@effect/typeclass'
-import {getSemigroup as arraySemigroup} from '@effect/typeclass/data/Array'
-import {Array as AR, Equivalence as EQ, Number as NU, Order as OD} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import fc from 'fast-check'
-import {LiftArbitrary, tinyInteger} from '../../../arbitrary.js'
-import {LiftEquivalence, Overrides} from '../../../law.js'
+import {Overrides} from '../../../law.js'
+import {
+  ContravariantGiven,
+  unfoldContravariantGiven,
+} from './monomorphic/contravariant.js'
+import {Mono} from './monomorphic/helpers.js'
+import {
+  MonomorphicGiven,
+  unfoldMonomorphicGiven,
+} from './monomorphic/invariant.js'
 import {testTypeclassLawsFor, TypeclassInstances} from './typeclass.js'
 
-/**
- * The underlying type used for monomorphic typeclass law tests.
- * This means that, for example, if we are testing the `Option`
- * datatype, the actual type used in the tests will be
- * `Option<Mono> ≡ Option<readonly number[]>`.
- * @category monomorphic
- */
-export type Mono = readonly number[]
+export {unfoldContravariantGiven} from './monomorphic/contravariant.js'
+export type {ContravariantGiven} from './monomorphic/contravariant.js'
+export {
+  getMonoUnaryEquivalence,
+  monoArbitrary,
+  monoEquivalence,
+  monoOrder,
+  monoSemigroup,
+} from './monomorphic/helpers.js'
+export type {Mono} from './monomorphic/helpers.js'
+export {unfoldMonomorphicGiven} from './monomorphic/invariant.js'
+export type {MonomorphicGiven} from './monomorphic/invariant.js'
 
 /**
- * The equivalence used for {@link testTypeclassLaws}.
- * @category monomorphic
- */
-export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
-  NU.Equivalence,
-)
-
-/**
- * The order used to {@link testTypeclassLaws}.
- * @category monomorphic
- */
-export const monoOrder: OD.Order<Mono> = AR.getOrder(NU.Order)
-
-/**
- * The semigroup used to {@link testTypeclassLaws}.
- * @category monomorphic
- */
-export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()
-
-/**
- * Options for the monomorphic typeclass test runner.
- * @category monomorphic
- */
-export interface MonomorphicOptions<
-  F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> {
-  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
-  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
-}
-
-/**
- * Test typeclass laws for the given instances of some datatype. This
- * is just like {@link testTypeclassLawsFor}, but with all functions
- * monomorphic on an underlying type of `readonly number[]`.
+ * Test typeclass laws for the given instances of some datatype.
+ * This is just like {@link testTypeclassLawsFor}, but with all
+ * functions monomorphic on an underlying type of `readonly number[]`.
+ * At the `contravariant` key of this function, you will find the
+ * version of this function for contravariant datatypes.
  * @example
  * ```ts
- * // Test Traversable typeclass laws on `Identity` datatype.
- * import { Applicative, IdentityTypeLambda, Monad, Traversable } from '@effect/typeclass/data/Identity'
+ * // Test “Traversable” typeclass laws on “Identity” datatype.
+ * import {
+ *   IdentityTypeLambda,
+ *   Traversable
+ * } from '@effect/typeclass/data/Identity'
  * import {identity as id} from 'effect'
- * import {testTypeclassLaws} from 'effect-ts-laws'
+ * import {testTypeclassLaws, predicate} from 'effect-ts-laws'
  * testTypeclassLaws<IdentityTypeLambda>({
  *   getEquivalence: identity,
  *   getArbitrary: identity,
- * })({
- *   Applicative,
- *   Monad,
- *   Traversable,
- * })
+ * })({ Traversable })
  * ```
- * @param options - Type-specific test options. An object with _two fields
- * which you must fill with the values specific to the datatype under test:
- * 1. `getEquivalence` - A function that will build an `Equivalence` for your
- * datatype from an `Equivalence` for the underlying type.
- * 2. `getArbitrary` - A function that will build an `Arbitrary` for your
- * datatype from an `Arbitrary` for the underlying type.
+ * @param given - Test options for the datatype under test.
  * @category harness
  */
 export const testTypeclassLaws =
-  <F extends TypeLambda>(
-    options: MonomorphicOptions<F, never, unknown, string>,
-  ) =>
+  <F extends TypeLambda>(given: MonomorphicGiven<F>) =>
   <Ins extends TypeclassInstances<F, Mono, never, unknown, string>>(
     /**
      * Instances to test. Key is typeclass name and value is the
@@ -89,26 +57,47 @@ export const testTypeclassLaws =
      */
     instances: Ins,
     /**
-     * Optional runtime `fc-check` parameters.
+     * Optional runtime `fast-check` parameters.
      */
     parameters?: Overrides,
   ) => {
-    const {getEquivalence, getArbitrary} = options,
-      a = fc.array(tinyInteger, {maxLength: 4}),
-      equalsA = AR.getEquivalence(NU.Equivalence)
-
     testTypeclassLawsFor<F, Ins, Mono, Mono, Mono, never, unknown, string>(
       instances,
-      {
-        a,
-        b: a,
-        c: a,
-        equalsA,
-        equalsB: equalsA,
-        equalsC: equalsA,
-        getEquivalence,
-        getArbitrary,
-      },
+      unfoldMonomorphicGiven(given),
       {verbose: true, ...parameters},
     )
   }
+
+/**
+ * Test typeclass laws for the given instances of some _contravariant_
+ * datatype: a higher-kinded datatype where the constructor type
+ * parameter appears in the contravariant position, for example
+ * `Predicate`. The underlying types used will all be
+ * `readonly number[]`. This is a version of {@link testTypeclassLaws}
+ * for contravariant datatypes.
+ * @param given - Contravariant test options for the datatype under
+ * test.
+ * @category harness
+ */
+export const testContravariantLaws =
+  <F extends TypeLambda>(given: ContravariantGiven<F>) =>
+  <Ins extends TypeclassInstances<F, Mono, never, unknown, string>>(
+    /**
+     * Instances to test. Key is typeclass name and value is the
+     * instance under test. For example, `{ Invariant: Predicate.Invariant }`
+     * will run the Invariant typeclass laws on the datatype `Predicate`.
+     */
+    instances: Ins,
+    /**
+     * Optional runtime `fast-check` parameters.
+     */
+    parameters?: Overrides,
+  ) => {
+    testTypeclassLawsFor<F, Ins, Mono, Mono, Mono, never, unknown, string>(
+      instances,
+      unfoldContravariantGiven(given),
+      {verbose: true, ...parameters},
+    )
+  }
+
+testTypeclassLaws.contravariant = testContravariantLaws

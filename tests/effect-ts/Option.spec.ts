@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Option` datatype. */
+/** Typeclass law tests for the `Option` datatype. */
 import {
   Applicative,
   getOptionalMonoid,

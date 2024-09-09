@@ -6,19 +6,12 @@ pnpm clean
 pnpm circular
 pnpm lint
 pnpm test-run
-
-pnpm build-docs
-cp docs/catalog-of-laws.html ../effect-ts-laws-docs
-cp -r docs/catalog-of-laws ../effect-ts-laws-docs
-cd ../effect-ts-laws-docs
-git add .
-git commit -m publish
-git push
-cd ../effect-ts-laws
-
 pnpm build
-cp package.json .dev/dist
-cp .npmrc .dev/dist
+
+cp package.json README.md .dev/dist
+cp -r docs/ .dev/dist
+cp ~/.npmrc .dev/dist
+
 cd .dev/dist
 pnpm install
 pnpm publish 

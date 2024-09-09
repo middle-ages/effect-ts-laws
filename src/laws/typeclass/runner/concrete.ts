@@ -27,7 +27,7 @@ export const testConcreteTypeclassLaw =
  * the instance through the `Equivalence` typeclass laws.
  * @param options - The common concrete options: equivalence and an arbitrary
  * for the underlying type of the test.
- * @param parameters - Optional runtime `fc-check` parameters.
+ * @param parameters - Optional runtime `fast-check` parameters.
  * @category harness
  */
 export const testConcreteTypeclassLaws = <A>(
@@ -53,7 +53,7 @@ export const testConcreteTypeclassLaws = <A>(
  * law tests.
  * @param a - An arbitrary for the underlying type `A`.
  * @param equalsA - Equivalence for the underlying type `A`.
- * @param parameters - Optional runtime `fc-check` parameters.
+ * @param parameters - Optional runtime `fast-check` parameters.
  * @category harness
  */
 export const testMonoid =
@@ -80,7 +80,7 @@ export const testMonoid =
  * law tests.
  * @param a - An arbitrary for the underlying type `A`.
  * @param equalsA - Equivalence for the underlying type `A`.
- * @param parameters - Optional runtime `fc-check` parameters.
+ * @param parameters - Optional runtime `fast-check` parameters.
  * @category harness
  */
 export const testMonoids =

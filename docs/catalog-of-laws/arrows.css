@@ -1,0 +1,20 @@
+:root {
+  --third-stroke: calc(var(--line-height-third) - var(--stroke-half));
+}
+.arrow-head,
+.arrow-tail {
+  position: absolute;
+  right: -0.5px;
+}
+.arrow-head.single,
+.arrow-tail.single {
+  top: calc(50% - var(--arrow-height-half));
+}
+.arrow-head.third-top,
+.arrow-tail.third-top {
+  top: calc(50% - 3 * var(--arrow-height-half));
+}
+.arrow-head.third-bottom,
+.arrow-tail.third-bottom {
+  bottom: calc(50% - 3 * var(--arrow-height-half));
+}

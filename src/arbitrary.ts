@@ -8,6 +8,8 @@ export {
 } from './arbitrary/data.js'
 export {
   predicate,
+  sampleUnaryEquivalence,
+  testUnaryEquivalence,
   unary,
   unaryFromKind,
   unaryInKind,

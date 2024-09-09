@@ -31,7 +31,7 @@ export type Typeclass = ParameterizedClass | ConcreteClass
  * given in the `instances` argument. The specific options depend on the list
  * of instances being tested, but they are all either equalities, arbitraries,
  * or functions on the underlying types, that are required for testing the laws.
- * @param parameters - Optional runtime `fc-check` parameters.
+ * @param parameters - Optional runtime `fast-check` parameters.
  * @category harness
  */
 export const testTypeclassLawsFor = <

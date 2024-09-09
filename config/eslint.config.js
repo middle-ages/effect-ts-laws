@@ -1,5 +1,4 @@
 // @ts-check
-
 import eslint from '@eslint/js'
 import allRecommended from 'eslint-plugin-prettier/recommended'
 import tseslint from 'typescript-eslint'
@@ -21,7 +20,7 @@ export default tseslint.config(
   recommended,
 
   {
-    ignores: ['dist/*', 'node_modules/*', 'config/dependency-cruiser.cjs'],
+    ignores: ['../node_modules/*', './dependency-cruiser.cjs', '../.dev'],
   },
 
   {

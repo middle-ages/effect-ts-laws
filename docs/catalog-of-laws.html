@@ -17,26 +17,27 @@
   </head>
 
   <body>
-    <header class="homeLink">
-      <a href="https://github.com/middle-ages/effect-ts-laws"
-        >⚖ effect-ts-laws</a
-      >
-    </header>
-    <h1>Typeclass Laws</h1>
-    <article>
-      <div class="table">
-        <clr style="grid-row: 2/3"></clr>
-        <div class="header" style="grid-row-start: 1">
+    <div>
+      <header>
+        <h1>Typeclass Laws</h1>
+        <a href="https://github.com/middle-ages/effect-ts-laws"
+          >⚖ effect-ts-laws</a
+        >
+      </header>
+      <article>
+        <div class="header">
           <d title="Typeclass “extends” relation.">Is a</d>
           <d title="Typeclass name in “effect-ts” source.">Typeclass</d>
-          <d title="Law name.">Name</d>
-          <d style="grid-column: 4/7" title="Law predicate.">Predicate</d>
+          <d title="Law name.">Law</d>
+          <d style="grid-column: 4/-1" title="Law predicate.">Predicate</d>
         </div>
-
-        <bg class="threeLaws" style="grid-row-start: 2"></bg>
-        <div class="threeLaws" style="grid-row-start: 2">
+        <div class="scroll"></div>
+        <div class="scroll"></div>
+        <div
+          class="laws laws-3"
+          style="grid-row-start: 2; margin-top: calc(var(--vpad))">
           <d></d>
-          <e><f>Equivalence</f></e>
+          <e>Equivalence</e>
 
           <d>transitivity</d>
           <d>a=b ∧ b=c</d>
@@ -55,11 +56,9 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 4/5"></clr>
-        <bg class="threeLaws" style="grid-row-start: 4"></bg>
-        <div class="threeLaws" style="grid-row-start: 4">
+        <div class="laws laws-4" style="grid-row-start: 4">
           <d></d>
-          <e><f>Order</f></e>
+          <e>Order</e>
 
           <d>transitivity</d>
           <d>a≤b ∧ b≤c</d>
@@ -75,17 +74,22 @@
           <d>a≤b</d>
           <d>∨</d>
           <d>b≤a</d>
+
+          <d>complement consistency</d>
+          <d>a≤b</d>
+          <d>⇒</d>
+          <d>a≯b</d>
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 6/7"></clr>
-        <bg class="twoLaws" style="grid-row-start: 6"></bg>
-        <div class="twoLaws" style="grid-row-start: 6">
+        <div class="laws laws-2">
           <div>
-            <div class="line line-one line-top"></div>
-            <img class="arrow-head" src="catalog-of-laws/arrow-head.svg" />
+            <div class="line line-top"></div>
+            <img
+              class="arrow-head single"
+              src="catalog-of-laws/arrow-head.svg" />
           </div>
-          <e><f>Semigroup</f></e>
+          <e>Semigroup</e>
 
           <d>associativity</d>
           <d>(a ⊹ b) ⊹ c</d>
@@ -99,14 +103,14 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 8/9"></clr>
-        <bg class="twoLaws" style="grid-row-start: 8"></bg>
-        <div class="twoLaws" style="grid-row-start: 8">
+        <div class="laws laws-2">
           <div>
-            <div class="line line-one line-bottom"></div>
-            <img class="arrow-tail" src="catalog-of-laws/arrow-tail.svg" />
+            <div class="line line-bottom"></div>
+            <img
+              class="arrow-tail single"
+              src="catalog-of-laws/arrow-tail.svg" />
           </div>
-          <e><f>Monoid</f></e>
+          <e>Monoid</e>
 
           <d>left identity</d>
           <d>∅ ⊹ a</d>
@@ -120,14 +124,14 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 10/11"></clr>
-        <bg class="twoLaws" style="grid-row-start: 10"></bg>
-        <div class="twoLaws" style="grid-row-start: 10">
+        <div class="laws laws-2">
           <div>
-            <div class="line line-one line-top"></div>
-            <img class="arrow-head" src="catalog-of-laws/arrow-head.svg" />
+            <div class="line line-top"></div>
+            <img
+              class="arrow-head single"
+              src="catalog-of-laws/arrow-head.svg" />
           </div>
-          <e><f>Invariant</f></e>
+          <e>Invariant</e>
 
           <d>identity</d>
           <d>imap(id, id)</d>
@@ -141,52 +145,46 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 12/13"></clr>
-        <bg class="twoLaws" style="grid-row-start: 12"></bg>
-        <div class="twoLaws" style="grid-row-start: 12">
+        <div class="laws laws-2">
+          <div>
+            <div class="line line-bottom"></div>
+            <img
+              class="arrow-tail single"
+              src="catalog-of-laws/arrow-tail.svg" />
+          </div>
+          <e>Contravariant</e>
+
+          <d>identity</d>
+          <d>contramap(id)</d>
+          <d>=</d>
+          <d>id</d>
+
+          <d>composition</d>
+          <d>fa ▹ contramap(ba) ▹ contramap(cb)</d>
+          <d>=</d>
+          <d>fa ▹ contramap(cb ∘ ba)</d>
+        </div>
+
+        <div class="separator"></div>
+        <div class="laws laws-2">
           <div>
             <img
-              class="arrow-tail"
-              style="
-                top: calc(
-                  -1 * var(--line-height) / 3 - var(--arrow-height-half) + var(
-                      --stroke-half
-                    ) + 0.5px
-                );
-              "
+              class="arrow-tail third-top"
               src="catalog-of-laws/arrow-tail.svg" />
             <div
-              class="line line-one line-bottom"
+              class="line line-bottom triple-top"
               style="
-                top: calc(
-                  -3 * var(--line-height) / 2 - var(--arrow-height-half) - var(--stroke-half)
+                height: calc(
+                  var(--relation-height) + 4 * var(--line-height-half)
                 );
-                height: calc(3 * var(--line-height) / 2);
               "></div>
 
             <img
-              class="arrow-head"
-              style="top: calc(50% - var(--arrow-height-half))"
+              class="arrow-head third-bottom"
               src="catalog-of-laws/arrow-head.svg" />
-            <div
-              class="line line-two line-top"
-              style="height: calc(2 * var(--line-height))"></div>
-
-            <img
-              class="arrow-head"
-              style="
-                top: calc(
-                  1 * var(--line-height) / 3 - var(--arrow-height-half)
-                );
-              "
-              src="catalog-of-laws/arrow-head.svg" />
-            <div
-              class="line line-one line-top"
-              style="
-                top: calc(1 * var(--line-height) / 3 - var(--stroke-half));
-              "></div>
+            <div class="line line-top triple-bottom"></div>
           </div>
-          <e><f>Covariant</f></e>
+          <e>Covariant</e>
 
           <d>identity</d>
           <d>map(id)</d>
@@ -200,19 +198,20 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 14/15"></clr>
-        <bg class="sevenLaws" style="grid-row-start: 14"></bg>
-        <div class="sevenLaws" style="grid-row-start: 14">
+        <div class="laws laws-7">
           <div>
             <div
-              class="line line-one line-bottom"
+              class="line line-bottom"
               style="
-                top: calc(-4 * var(--line-height));
-                height: calc(4 * var(--line-height) - var(--stroke-half));
+                height: calc(
+                  var(--relation-height) + 5 * var(--line-height-half)
+                );
               "></div>
-            <img class="arrow-tail" src="catalog-of-laws/arrow-tail.svg" />
+            <img
+              class="arrow-tail single"
+              src="catalog-of-laws/arrow-tail.svg" />
           </div>
-          <e><f>Applicative</f></e>
+          <e>Applicative</e>
 
           <d>identity</d>
           <d>id ▹ of ▹ ap(a)</d>
@@ -251,19 +250,21 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 16/17"></clr>
-        <bg class="fourLaws" style="grid-row-start: 16"></bg>
-        <div class="fourLaws" style="grid-row-start: 16">
+        <div class="laws laws-4">
           <div>
             <div
-              class="line line-two line-bottom"
+              class="line line-bottom"
               style="
-                top: calc(-10 * var(--line-height));
-                height: calc(10 * var(--line-height) - var(--stroke-half));
+                height: calc(
+                  var(--relation-height) + var(--gap-height-2) + 8 *
+                    var(--line-height)
+                );
               "></div>
-            <img class="arrow-tail" src="catalog-of-laws/arrow-tail.svg" />
+            <img
+              class="arrow-tail single"
+              src="catalog-of-laws/arrow-tail.svg" />
           </div>
-          <e><f>Monad</f></e>
+          <e>Monad</e>
 
           <d>left identity</d>
           <d>of ∘ flatMap(f)</d>
@@ -287,11 +288,11 @@
         </div>
 
         <div class="separator"></div>
-        <clr style="grid-row: 18/19"></clr>
-        <bg class="twoLaws" style="grid-row-start: 18"></bg>
-        <div class="twoLaws" style="grid-row-start: 18">
+        <div
+          class="laws laws-2"
+          style="padding-bottom: var(--vpad); border-bottom: var(--line-table)">
           <d></d>
-          <e><f>Traversable</f></e>
+          <e>Traversable</e>
 
           <d>identity</d>
           <d>traverse(id)</d>
@@ -303,14 +304,7 @@
           <d>=</d>
           <d>traverse(GH)(agb ∘ mapG(bhc))</d>
         </div>
-        <div
-          class="separator"
-          style="
-            height: calc(var(--line-height) / 4);
-            border-bottom: var(--line-table-high);
-          "></div>
-      </div>
-    </article>
-    <div style="padding-left: 0.5rem; font-size: 6px">2024</div>
+      </article>
+    </div>
   </body>
 </html>

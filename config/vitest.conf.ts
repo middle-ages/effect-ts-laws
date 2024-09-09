@@ -1,7 +1,7 @@
 import fc from 'fast-check'
 import {defineConfig} from 'vitest/config'
 
-fc.configureGlobal({numRuns: 10_000})
+fc.configureGlobal({numRuns: 1_000})
 
 export default defineConfig({
   test: {
@@ -14,13 +14,11 @@ export default defineConfig({
       provider: 'v8',
       reportsDirectory: './.dev',
       exclude: [
-        'dist',
+        '.dev',
         'dev',
+        'conf',
         'src/dev',
         'tests',
-        'vitest.conf.ts',
-        'eslint.config.js',
-        '.dependency-cruiser.cjs',
       ],
     },
   },

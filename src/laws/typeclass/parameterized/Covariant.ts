@@ -11,7 +11,7 @@ import {
 } from './given.js'
 
 /**
- * Test typeclass laws for `Covariant` and its requirements: `Invariant`.
+ * Test typeclass laws for `Covariant` and its requirement: `Invariant`.
  * @category typeclass laws
  */
 export const Covariant = <
