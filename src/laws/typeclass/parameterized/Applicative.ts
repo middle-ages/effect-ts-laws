@@ -5,7 +5,7 @@ import {
 } from '@effect/typeclass'
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {identity, pipe} from 'effect'
-import {apply, flow} from 'effect/Function'
+import {apply, compose} from 'effect/Function'
 import {TypeLambda} from 'effect/HKT'
 import {addLawSet, Law, lawTests} from '../../../law.js'
 import {Covariant} from './Covariant.js'
@@ -82,9 +82,12 @@ const buildLaws = <
       fab,
       fbc,
     )((fa, fab, fbc) => {
-      const compose = (bc: (b: B) => C) => (ab: (a: A) => B) => flow(ab, bc)
-
-      const left = pipe(fbc, map(compose), ap(fab), ap(fa))
+      const left = pipe(
+        fbc,
+        map(bc => compose(bc)<A>),
+        ap(fab),
+        ap(fa),
+      )
       const right = pipe(fbc, ap(pipe(fab, ap(fa))))
 
       return equalsFc(left, right)
@@ -147,7 +150,7 @@ const buildLaws = <
 }
 
 /**
- * Type lambda for the applicative type class.
+ * Type lambda for the `Applicative` type class.
  * @category type lambda
  */
 export interface ApplicativeTypeLambda extends TypeLambda {

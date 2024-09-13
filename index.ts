@@ -56,6 +56,7 @@ export * as Arbitrary from './src/arbitrary.js'
 
 export {
   Applicative,
+  Bicovariant,
   Covariant,
   Equivalence,
   Invariant,
@@ -89,6 +90,7 @@ export {
 
 export type {
   ApplicativeTypeLambda,
+  BicovariantTypeLambda,
   ComposeGiven,
   ConcreteClass,
   ConcreteGiven,

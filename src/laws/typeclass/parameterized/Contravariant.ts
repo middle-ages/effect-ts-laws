@@ -59,7 +59,7 @@ const buildLaws = <
 }
 
 /**
- * Type lambda for the `Covariant` typeclass.
+ * Type lambda for the `Contravariant` typeclass.
  * @category type lambda
  */
 export interface ContravariantTypeLambda extends TypeLambda {

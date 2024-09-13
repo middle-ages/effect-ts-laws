@@ -31,8 +31,6 @@
           <d title="Law name.">Law</d>
           <d style="grid-column: 4/-1" title="Law predicate.">Predicate</d>
         </div>
-        <div class="scroll"></div>
-        <div class="scroll"></div>
         <div
           class="laws laws-3"
           style="grid-row-start: 2; margin-top: calc(var(--vpad))">
@@ -84,10 +82,8 @@
         <div class="separator"></div>
         <div class="laws laws-2">
           <div>
-            <div class="line line-top"></div>
-            <img
-              class="arrow-head single"
-              src="catalog-of-laws/arrow-head.svg" />
+            <div class="line middle-top down"></div>
+            <arrow-head class="middle"></arrow-head>
           </div>
           <e>Semigroup</e>
 
@@ -105,10 +101,8 @@
         <div class="separator"></div>
         <div class="laws laws-2">
           <div>
-            <div class="line line-bottom"></div>
-            <img
-              class="arrow-tail single"
-              src="catalog-of-laws/arrow-tail.svg" />
+            <div class="line middle-bottom up"></div>
+            <arrow-tail class="middle"></arrow-tail>
           </div>
           <e>Monoid</e>
 
@@ -126,10 +120,10 @@
         <div class="separator"></div>
         <div class="laws laws-2">
           <div>
-            <div class="line line-top"></div>
-            <img
-              class="arrow-head single"
-              src="catalog-of-laws/arrow-head.svg" />
+            <div class="line half-top down line-2"></div>
+            <div class="line half-bottom down"></div>
+            <arrow-head class="top-2"></arrow-head>
+            <arrow-head class="bottom-2"></arrow-head>
           </div>
           <e>Invariant</e>
 
@@ -147,10 +141,8 @@
         <div class="separator"></div>
         <div class="laws laws-2">
           <div>
-            <div class="line line-bottom"></div>
-            <img
-              class="arrow-tail single"
-              src="catalog-of-laws/arrow-tail.svg" />
+            <div class="line middle-bottom up"></div>
+            <arrow-tail class="middle"></arrow-tail>
           </div>
           <e>Contravariant</e>
 
@@ -168,21 +160,19 @@
         <div class="separator"></div>
         <div class="laws laws-2">
           <div>
-            <img
-              class="arrow-tail third-top"
-              src="catalog-of-laws/arrow-tail.svg" />
+            <arrow-tail class="top-3"></arrow-tail>
+            <arrow-head class="middle"></arrow-head>
+            <arrow-head class="bottom-3"></arrow-head>
             <div
-              class="line line-bottom triple-top"
+              class="line third-top up line-2"
               style="
                 height: calc(
-                  var(--relation-height) + 4 * var(--line-height-half)
+                  var(--line-half) + 2 * var(--line-height) + var(--gap-height) +
+                    var(--arrow-height)
                 );
               "></div>
-
-            <img
-              class="arrow-head third-bottom"
-              src="catalog-of-laws/arrow-head.svg" />
-            <div class="line line-top triple-bottom"></div>
+            <div class="line middle-top down line-2"></div>
+            <div class="line third-bottom down"></div>
           </div>
           <e>Covariant</e>
 
@@ -201,15 +191,14 @@
         <div class="laws laws-7">
           <div>
             <div
-              class="line line-bottom"
+              class="line middle-bottom up"
               style="
                 height: calc(
-                  var(--relation-height) + 5 * var(--line-height-half)
+                  3 * var(--line-height) + var(--arrow-height) -
+                    var(--vpad-laws) + var(--stroke)
                 );
               "></div>
-            <img
-              class="arrow-tail single"
-              src="catalog-of-laws/arrow-tail.svg" />
+            <arrow-tail class="middle"></arrow-tail>
           </div>
           <e>Applicative</e>
 
@@ -253,16 +242,14 @@
         <div class="laws laws-4">
           <div>
             <div
-              class="line line-bottom"
+              class="line middle-bottom up line-2"
               style="
                 height: calc(
-                  var(--relation-height) + var(--gap-height-2) + 8 *
-                    var(--line-height)
+                  var(--relation-height) + 8 * var(--line-height) +
+                    var(--gap-height) + var(--line-height-half) - var(--stroke)
                 );
               "></div>
-            <img
-              class="arrow-tail single"
-              src="catalog-of-laws/arrow-tail.svg" />
+            <arrow-tail class="middle"></arrow-tail>
           </div>
           <e>Monad</e>
 

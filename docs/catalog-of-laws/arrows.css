@@ -1,20 +1,42 @@
 :root {
-  --third-stroke: calc(var(--line-height-third) - var(--stroke-half));
+  --arrow-width: 6px;
+  --arrow-height: 12px;
+  --arrow-height-half: calc(var(--arrow-height) / 2);
+  --middle: calc(50% - var(--arrow-height-half));
+  --top-2: calc(var(--middle) - var(--arrow-height-half));
+  --top-3: calc(var(--top-2) - var(--arrow-height-half));
 }
-.arrow-head,
-.arrow-tail {
+arrow-head.middle,
+arrow-tail.middle {
+  top: var(--middle);
+}
+arrow-head.top-2,
+arrow-tail.top-2 {
+  top: var(--top-2);
+}
+arrow-head.bottom-2,
+arrow-tail.bottom-2 {
+  bottom: var(--top-2);
+}
+arrow-head.top-3,
+arrow-tail.top-3 {
+  top: var(--top-3);
+}
+arrow-head.bottom-3,
+arrow-tail.bottom-3 {
+  bottom: var(--top-3);
+}
+arrow-head,
+arrow-tail {
+  display: block;
+  width: var(--arrow-width);
+  height: var(--arrow-height);
   position: absolute;
-  right: -0.5px;
+  right: 0px;
 }
-.arrow-head.single,
-.arrow-tail.single {
-  top: calc(50% - var(--arrow-height-half));
+arrow-head {
+  background-image: url("arrow-head.svg");
 }
-.arrow-head.third-top,
-.arrow-tail.third-top {
-  top: calc(50% - 3 * var(--arrow-height-half));
-}
-.arrow-head.third-bottom,
-.arrow-tail.third-bottom {
-  bottom: calc(50% - 3 * var(--arrow-height-half));
+arrow-tail {
+  background-image: url("arrow-tail.svg");
 }

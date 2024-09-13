@@ -1,5 +1,10 @@
 /** Typeclass law tests for `Either` datatype. */
-import {Applicative, Monad, Traversable} from '@effect/typeclass/data/Either'
+import {
+  Applicative,
+  Bicovariant,
+  Monad,
+  Traversable,
+} from '@effect/typeclass/data/Either'
 import {Either as EI, String as STR} from 'effect'
 import {
   either,
@@ -31,5 +36,6 @@ describe('@effect/typeclass/data/Either', () => {
     Applicative,
     Monad,
     Traversable,
+    Bicovariant,
   })
 })

@@ -12,6 +12,19 @@ article {
   position: relative;
   top: var(--line-height-header);
   grid-template-columns: repeat(var(--column-count), min-content);
+  --p1: calc(var(--line-height) + var(--line-height-header) + var(--stroke));
+  --p2: calc(var(--p1) + 2px);
+  --p3: calc(var(--p2) + 3px);
+  --p4: calc(var(--p3) + 6px);
+  background:
+    linear-gradient(#ffff 0,
+      #ffff calc(var(--line-height)), #fffe calc(var(--line-height) + 6px), #fff0 calc(var(--line-height) + 12px)),
+    linear-gradient(#0000 0, #0000 var(--p1),
+      #0009 var(--p1),
+      #0005 var(--p2),
+      #0001 var(--p3),
+      #0000 var(--p4));
+  background-attachment: scroll, fixed;
   .separator {
     height: var(--separator-height);
   }
@@ -27,6 +40,7 @@ article {
     grid-row: 1/2;
     z-index: 10;
     position: sticky;
+    height: var(--line-height);
     background: var(--color-bg);
     & > * {
       text-align: center;
@@ -35,17 +49,17 @@ article {
   }
   .laws {
     text-wrap: nowrap;
-    & > *:nth-child(-n + 6) {
+    & > *:nth-child(n + 2):nth-child(-n + 6) {
       padding-top: var(--vpad-laws);
     }
-    & > *:first-child,
     & > *:nth-child(2),
-    & > *:nth-last-child(-n + 4) {
+    & > *:nth-last-child(-n + 4):nth-last-child(-n + 6) {
       padding-bottom: var(--vpad-laws);
     }
     & > *:first-child {
       position: relative;
       width: var(--line-width-total);
+      height: 100%;
     }
     & > *:nth-child(2) {
       padding-left: var(--hpad);
@@ -166,25 +180,4 @@ article {
   position: sticky;
   top: 0;
   left: 0;
-}
-.scroll {
-  grid-row: 2/3;
-  grid-column: 1/-1;
-  width: 100%;
-  z-index: 5;
-  padding-top: 8px;
-}
-article {
-  & > *:nth-child(2) {
-    position: sticky;
-    top: calc(var(--line-height-header) + var(--line-height));
-    height: calc(3 * var(--vpad) / 4);
-    background: linear-gradient(#0006 0%, #0001 20%, #0000 100%);
-  }
-  & > *:nth-child(3) {
-    background: linear-gradient(#ffff 0%, #fffe 10%, #fff0 100%);
-    top: 0;
-    height: calc(3 * var(--vpad) / 2);
-    position: relative;
-  }
 }

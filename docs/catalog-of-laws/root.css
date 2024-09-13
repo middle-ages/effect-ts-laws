@@ -5,15 +5,13 @@
    */
   --column-count: 6;
   --unit: 16px;
-  --arrow-width: 6px;
-  --arrow-height: 10px;
   --hpad: 1rem;
   --vpad: 8px;
-  --vpad-laws: 8px;
+  --vpad-laws: 6px;
   --stroke: 1.2px;
   --font-size-factor: 1;
   --font-size-header-factor: 1.25;
-  --line-height-factor: 1.3;
+  --line-height-factor: 1.35;
   --separator-height-factor: .3;
   --hide-right: 1px;
   /** Computed */
@@ -32,9 +30,9 @@
   --line-height-third: calc(var(--line-height) / 3);
   --line-height-half: calc(var(--line-height) / 2);
   --separator-height-half: calc(var(--separator-height) / 2);
-  --arrow-height-half: calc(var(--arrow-height) / 2);
   --stroke-half: calc(var(--stroke) / 2);
   --hpad-half: calc(var(--hpad) / 2);
+  --vpad-half: calc(var(--vpad) / 2);
   --separator-height-2: calc(2 * var(--separator-height));
   --line-height-2: calc(var(--line-height) * 2);
   /** Colors */
@@ -45,6 +43,6 @@
   --color-lower: #336;
   --color-line: #555;
   --color-outline: #dbe;
-  --color-law-bg: #f4f4f7;
+  --color-law-bg: #f0f0f3;
   --color-bg: #fff;
 }

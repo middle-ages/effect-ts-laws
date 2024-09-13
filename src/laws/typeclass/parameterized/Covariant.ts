@@ -24,9 +24,10 @@ export const Covariant = <
   Out1 = unknown,
 >(
   given: Given<CovariantTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  suffix?: string,
 ) =>
   pipe(
-    buildLaws('Covariant', given),
+    buildLaws(`Covariant${suffix ?? ''}`, given),
     pipe(given, Invariant, addLawSet),
     addLawSet(
       buildLaws(...withOuterOption('Covariant', given, optionCovariant)),
