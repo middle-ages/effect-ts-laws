@@ -6,14 +6,16 @@
   --column-count: 6;
   --unit: 16px;
   --hpad: 1rem;
-  --vpad: 8px;
-  --vpad-laws: 6px;
-  --stroke: 1.2px;
+  --vpad: 10px;
+  --vpad-laws: 4px;
+  --stroke: 1px;
   --font-size-factor: 1;
-  --font-size-header-factor: 1.25;
-  --line-height-factor: 1.35;
-  --separator-height-factor: .3;
+  --font-size-header-factor: 1.5;
+  --line-height-factor: 1.5;
+  --separator-height-factor: 0.4;
   --hide-right: 1px;
+  --arrow-width: 6px;
+  --arrow-height: 10px;
   /** Computed */
   --line-2-width: calc(var(--line-width) + var(--arrow-height));
   --font-size: calc(var(--font-size-factor) * var(--unit));
@@ -23,8 +25,8 @@
   --line-width: calc(3 * var(--line-height) / 2);
   --line-width-total: calc(var(--line-2-width) + var(--arrow-height));
   --line: var(--stroke) solid var(--color-line);
-  --line-table: 1.5px solid var(--color-higher);
-  --line-table-high: 1.5px solid var(--color-highest);
+  --line-table: 1.5px solid var(--color-table-line);
+  --line-table-high: 1px solid var(--color-table-line-high);
   --line-height-header: calc(7 * var(--font-size-header) / 4);
   /** Multiples */
   --line-height-third: calc(var(--line-height) / 3);
@@ -36,13 +38,14 @@
   --separator-height-2: calc(2 * var(--separator-height));
   --line-height-2: calc(var(--line-height) * 2);
   /** Colors */
-  --color-highest: #cce;
-  --color-higher: #bbd;
-  --color-high: #99a;
+  --color-table-line-high: #cce;
+  --color-table-line: #bbd;
+  --color-op: #aac;
+  --color-header: #88a;
   --color-low: #779;
-  --color-lower: #336;
-  --color-line: #555;
+  --color-lower: #446;
+  --color-line: #000;
   --color-outline: #dbe;
-  --color-law-bg: #f0f0f3;
+  --color-law-bg: #f7f3f0;
   --color-bg: #fff;
 }

@@ -56,7 +56,7 @@ const buildLaws = <F extends TypeLambda, A, B, C, In1, Out2, Out1>(
 
     Law(
       'composition',
-      'a ▹ imap(ab, ba) ▹ imap(bc, cb) = a ▹ imap(ab ∘ bc, cb ∘ ba)',
+      'a ▹ imap(ab, ba) ▹ imap(bc, cb) = a ▹ imap(bc ∘ ab, ba ∘ cb)',
       fa,
       ab,
       bc,

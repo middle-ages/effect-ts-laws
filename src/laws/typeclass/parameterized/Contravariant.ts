@@ -45,7 +45,7 @@ const buildLaws = <
 
     Law(
       'composition',
-      'fa ▹ contramap(ba) ▹ contramap(cb) = fa ▹ contramap(cb ∘ ba)',
+      'fa ▹ contramap(ba) ▹ contramap(cb) = fa ▹ contramap(ba ∘ cb)',
       fa,
       ba,
       cb,

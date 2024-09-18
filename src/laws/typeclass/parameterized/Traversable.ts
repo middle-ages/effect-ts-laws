@@ -1,4 +1,4 @@
-import {Traversable as TA} from '@effect/typeclass'
+import {Covariant as CO, Traversable as TA} from '@effect/typeclass'
 import {Applicative as arrayApplicative} from '@effect/typeclass/data/Array'
 import {Applicative as identityApplicative} from '@effect/typeclass/data/Identity'
 import {
@@ -18,7 +18,7 @@ import {ReadonlyArrayTypeLambda} from 'effect/Array'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
-import {option, unaryToKind} from '../../../arbitrary.js'
+import {option, unary, unaryToKind} from '../../../arbitrary.js'
 import {composeApplicative} from '../../../compose.js'
 import {addLawSet, Law, lawTests} from '../../../law.js'
 import {ParameterizedGiven as Given, withOuterOption} from './given.js'
@@ -58,6 +58,7 @@ const buildLaws = <
   {
     F,
     equalsA,
+    equalsB,
     equalsC,
     getEquivalence,
     getArbitrary,
@@ -76,7 +77,11 @@ const buildLaws = <
   type DataH<T> = Data<H, T>
 
   const fa = getArbitrary(a),
-    [equalsFa, equalsFc] = [getEquivalence(equalsA), getEquivalence(equalsC)],
+    [equalsFa, equalsFb, equalsFc] = [
+      getEquivalence(equalsA),
+      getEquivalence(equalsB),
+      getEquivalence(equalsC),
+    ],
     [traverseIdentity, traverseG, traverseH, traverseGH] = [
       F.traverse(identityApplicative),
       F.traverse(optionApplicative),
@@ -84,10 +89,12 @@ const buildLaws = <
       F.traverse(composeApplicative(optionApplicative, arrayApplicative)),
     ],
     mapG = optionCovariant.map,
-    [agb, bhc]: [
+    [ab, agb, bhc]: [
+      fc.Arbitrary<(a: A) => B>,
       fc.Arbitrary<(a: A) => DataG<B>>,
       fc.Arbitrary<(a: B) => DataH<C>>,
     ] = [
+      unary<A>()(b),
       pipe(b, unaryToKind<A>()<OptionTypeLambda, In1, Out2, Out1>(option)),
       pipe(
         c,
@@ -106,14 +113,14 @@ const buildLaws = <
 
     Law(
       'identity',
-      'traverse(id) = id',
+      'Id.traverse(id) = id',
       fa,
     )(fa => equalsFa(pipe(fa, traverseIdentity(identity)), fa)),
 
     Law(
       'composition',
-      'F.traverse(G)(agb) ∘ G.map(F.traverse(H)(bhc))' +
-        ' = traverse(GH)(agb ∘ mapG(bhc))',
+      'G.map(H.traverse(bhc)) ∘ G.traverse(agb)' +
+        ' = GH.traverse(G.map(bhc) ∘ agb)',
       fa,
       agb,
       bhc,
@@ -123,6 +130,20 @@ const buildLaws = <
 
       return equalsGHFc(left, right)
     }),
+
+    ...('map' in F
+      ? [
+          Law(
+            'map consistency',
+            'fa ▹ F.map(ab) = fa ▹ Id.traverse(ab)',
+            fa,
+            ab,
+          )((fa, ab) => {
+            const map = F.map as CO.Covariant<F>['map']
+            return equalsFb(pipe(fa, map(ab)), pipe(fa, traverseIdentity(ab)))
+          }),
+        ]
+      : []),
   )
 }
 

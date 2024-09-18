@@ -1,20 +1,23 @@
 :root {
   --gap-height: calc(var(--separator-height-half) + var(--vpad-laws));
+  --gap-line-height: calc(var(--gap-height) + var(--line-height));
   --gap-height-2: calc(2 * var(--gap-height));
   --gap-height-half: calc(var(--gap-height) / 2);
-  --single-vertical: 50%;
-  --triple-vertical: calc(var(--single-vertical) + var(--arrow-height));
+  --triple-vertical: calc(50% + var(--arrow-height));
   --triple-height: calc(var(--relation-height) - var(--arrow-height));
   --relation-height: calc(var(--line-height) + var(--gap-height));
   --line-middle: calc(50% - var(--stroke-half));
   --line-half: calc(var(--line-middle) - var(--arrow-height-half));
   --line-third: calc(var(--line-middle) + var(--arrow-height));
+  --radius-1: calc(var(--gap-line-height) - var(--arrow-height));
+  --radius-2: calc(var(--radius-1) + var(--arrow-height));
+  --quad-height: calc(var(--relation-height) - var(--arrow-height) + 2 * var(--gap-height) + 2 * (var(--line-height)));
 }
 .line {
   position: absolute;
-  right: 1px;
+  right: 2px;
   height: var(--relation-height);
-  width: calc(var(--line-width));
+  width: var(--line-width);
   border-left: var(--line);
 }
 .line-2 {
@@ -28,30 +31,30 @@
 }
 .half-top {
   top: var(--line-half);
+  height: calc(var(--relation-height) + var(--arrow-height-half));
 }
 .half-bottom {
   top: calc(var(--line-half) + var(--arrow-height));
+  height: calc(var(--relation-height) - var(--arrow-height-half));
 }
 .third-top {
   bottom: var(--line-third);
 }
 .third-bottom {
   top: var(--line-third);
-}
-.up {
-  border-bottom-left-radius: var(--arrow-height);
+  height: var(--radius-1);
 }
 .up {
   border-bottom: var(--line);
-  border-bottom-left-radius: var(--line-height);
+  border-bottom-left-radius: var(--radius-1);
 }
 .down {
   border-top: var(--line);
-  border-top-left-radius: var(--line-height);
+  border-top-left-radius: var(--radius-1);
 }
 .line-2.up {
-  border-bottom-left-radius: calc(var(--line-height) + var(--arrow-height));
+  border-bottom-left-radius: var(--radius-2);
 }
 .line-2.down {
-  border-top-left-radius: calc(var(--line-height) + var(--arrow-height));
+  border-top-left-radius: var(--radius-2);
 }

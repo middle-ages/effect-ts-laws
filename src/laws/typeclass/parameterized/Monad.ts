@@ -40,7 +40,7 @@ export const Monad = <
 
     Law(
       'associativity',
-      'flatMap(afb) ∘ flatMap(bfc) = flatMap(afb ∘ flatMap(bfc))',
+      'fa ▹ flatMap(afb) ▹ flatMap(bfc) = fa ▹ flatMap(flatMap(bfc) ∘ afb)',
       fa,
       afb,
       bfc,
@@ -53,7 +53,7 @@ export const Monad = <
 
     Law(
       'mapConsistency',
-      'map(ab) = flatMap(ab ∘ of)',
+      'map(ab) = flatMap(of ∘ ab)',
       fa,
       ab,
     )((fa, ab) =>

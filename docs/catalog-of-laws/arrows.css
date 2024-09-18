@@ -1,6 +1,4 @@
 :root {
-  --arrow-width: 6px;
-  --arrow-height: 12px;
   --arrow-height-half: calc(var(--arrow-height) / 2);
   --middle: calc(50% - var(--arrow-height-half));
   --top-2: calc(var(--middle) - var(--arrow-height-half));
@@ -32,7 +30,9 @@ arrow-tail {
   width: var(--arrow-width);
   height: var(--arrow-height);
   position: absolute;
-  right: 0px;
+  right: -1px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 arrow-head {
   background-image: url("arrow-head.svg");

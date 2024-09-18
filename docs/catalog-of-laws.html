@@ -37,20 +37,11 @@
           <d></d>
           <e>Equivalence</e>
 
-          <d>transitivity</d>
-          <d>a=b ∧ b=c</d>
-          <d>⇒</d>
-          <d>a=c</d>
+          <d>transitivity</d><d>a=b ∧ b=c</d><d>⇒</d><d>a=c</d>
 
-          <d>symmetry</d>
-          <d>a=b</d>
-          <d>⇔</d>
-          <d>b=a</d>
+          <d>symmetry</d><d>a=b</d><d>⇔</d><d>b=a</d>
 
-          <d>reflexivity</d>
-          <d>a</d>
-          <d>=</d>
-          <d>a</d>
+          <d>reflexivity</d><d>a</d><d>=</d><d>a</d>
         </div>
 
         <div class="separator"></div>
@@ -58,25 +49,13 @@
           <d></d>
           <e>Order</e>
 
-          <d>transitivity</d>
-          <d>a≤b ∧ b≤c</d>
-          <d>⇒</d>
-          <d>a≤c</d>
+          <d>transitivity</d><d>a≤b ∧ b≤c</d><d>⇒</d><d>a≤c</d>
 
-          <d>reflexivity</d>
-          <d>a</d>
-          <d>≤</d>
-          <d>a</d>
+          <d>reflexivity</d><d>a</d><d>≤</d><d>a</d>
 
-          <d>connectivity</d>
-          <d>a≤b</d>
-          <d>∨</d>
-          <d>b≤a</d>
+          <d>connectivity</d><d>a≤b</d><d>∨</d><d>b≤a</d>
 
-          <d>complement consistency</d>
-          <d>a≤b</d>
-          <d>⇒</d>
-          <d>a≯b</d>
+          <d>complement consistency</d><d>a≤b</d><d>⇒</d><d>a≯b</d>
         </div>
 
         <div class="separator"></div>
@@ -87,10 +66,7 @@
           </div>
           <e>Semigroup</e>
 
-          <d>associativity</d>
-          <d>(a ⊹ b) ⊹ c</d>
-          <d>=</d>
-          <d>a ⊹ (b ⊹ c)</d>
+          <d>associativity</d><d>(a ⊹ b) ⊹ c</d><d>=</d><d>a ⊹ (b ⊹ c)</d>
 
           <d>combineMany associativity</d>
           <d>combineMany(a, [b, c])</d>
@@ -106,15 +82,9 @@
           </div>
           <e>Monoid</e>
 
-          <d>left identity</d>
-          <d>∅ ⊹ a</d>
-          <d>=</d>
-          <d>a</d>
+          <d>left identity</d><d>∅ ⊹ a</d><d>=</d><d>a</d>
 
-          <d>right identity</d>
-          <d>a</d>
-          <d>=</d>
-          <d>a ⊹ ∅</d>
+          <d>right identity</d><d>a</d><d>=</d><d>a ⊹ ∅</d>
         </div>
 
         <div class="separator"></div>
@@ -127,15 +97,12 @@
           </div>
           <e>Invariant</e>
 
-          <d>identity</d>
-          <d>imap(id, id)</d>
-          <d>=</d>
-          <d>id</d>
+          <d>identity</d><d>imap(id, id)</d><d>=</d> <d>id</d>
 
           <d>composition</d>
-          <d>imap(ab, ba) ▹ imap(bc, cb)</d>
+          <d>a ▹ imap(ab, ba) ▹ imap(bc, cb)</d>
           <d>=</d>
-          <d>imap(ab ∘ bc, cb ∘ ba)</d>
+          <d>a ▹ imap(bc ∘ ab, ba ∘ cb)</d>
         </div>
 
         <div class="separator"></div>
@@ -146,15 +113,12 @@
           </div>
           <e>Contravariant</e>
 
-          <d>identity</d>
-          <d>contramap(id)</d>
-          <d>=</d>
-          <d>id</d>
+          <d>identity</d><d>contramap(id)</d><d>=</d><d>id</d>
 
           <d>composition</d>
           <d>fa ▹ contramap(ba) ▹ contramap(cb)</d>
           <d>=</d>
-          <d>fa ▹ contramap(cb ∘ ba)</d>
+          <d>fa ▹ contramap(ba ∘ cb)</d>
         </div>
 
         <div class="separator"></div>
@@ -165,26 +129,17 @@
             <arrow-head class="bottom-3"></arrow-head>
             <div
               class="line third-top up line-2"
-              style="
-                height: calc(
-                  var(--line-half) + 2 * var(--line-height) + var(--gap-height) +
-                    var(--arrow-height)
-                );
-              "></div>
+              style="height: var(--quad-height)"></div>
             <div class="line middle-top down line-2"></div>
             <div class="line third-bottom down"></div>
           </div>
           <e>Covariant</e>
 
-          <d>identity</d>
-          <d>map(id)</d>
-          <d>=</d>
-          <d>id</d>
+          <d>identity</d><d>map(id)</d><d>=</d><d>id</d>
 
           <d>composition</d>
-          <d>map(ab ∘ bc)</d>
-          <d>=</d>
-          <d>map(ab) ∘ map(bc)</d>
+          <d>a ▹ map(bc ∘ ab)</d>
+          <d>=</d><d>a ▹ map(ab) ▹ map(bc)</d>
         </div>
 
         <div class="separator"></div>
@@ -194,18 +149,14 @@
               class="line middle-bottom up"
               style="
                 height: calc(
-                  3 * var(--line-height) + var(--arrow-height) -
-                    var(--vpad-laws) + var(--stroke)
+                  var(--relation-height) + 5 * var(--line-height-half)
                 );
               "></div>
             <arrow-tail class="middle"></arrow-tail>
           </div>
           <e>Applicative</e>
 
-          <d>identity</d>
-          <d>id ▹ of ▹ ap(a)</d>
-          <d>=</d>
-          <d>a</d>
+          <d>identity</d><d>id ▹ of ▹ ap(a)</d><d>=</d><d>a</d>
 
           <d>homomorphism</d>
           <d>ab ▹ of ▹ (a ▹ of ▹ ap)</d>
@@ -245,51 +196,47 @@
               class="line middle-bottom up line-2"
               style="
                 height: calc(
-                  var(--relation-height) + 8 * var(--line-height) +
-                    var(--gap-height) + var(--line-height-half) - var(--stroke)
+                  2 * var(--relation-height) + 14 * var(--line-height-half) +
+                    var(--gap-height)
                 );
               "></div>
             <arrow-tail class="middle"></arrow-tail>
           </div>
           <e>Monad</e>
 
-          <d>left identity</d>
-          <d>of ∘ flatMap(f)</d>
-          <d>=</d>
-          <d>afb</d>
+          <d>left identity</d><d>of ∘ flatMap(f)</d><d>=</d><d>afb</d>
 
-          <d>right identity</d>
-          <d>flatMap(of)</d>
-          <d>=</d>
-          <d>id</d>
+          <d>right identity</d><d>flatMap(of)</d><d>=</d><d>id</d>
 
           <d>associativity</d>
-          <d>flatMap(afb) ∘ flatMap(bfc)</d>
+          <d>fa ▹ flatMap(afb) ▹ flatMap(bfc)</d>
           <d>=</d>
-          <d>flatMap(afb ∘ flatMap(bfc))</d>
+          <d>fa ▹ flatMap(flatMap(bfc) ∘ afb)</d>
 
           <d>map consistency</d>
           <d>map(ab)</d>
           <d>=</d>
-          <d>flatMap(ab ∘ of)</d>
+          <d>flatMap(of ∘ ab)</d>
         </div>
 
         <div class="separator"></div>
         <div
-          class="laws laws-2"
+          class="laws laws-3"
           style="padding-bottom: var(--vpad); border-bottom: var(--line-table)">
           <d></d>
           <e>Traversable</e>
 
-          <d>identity</d>
-          <d>traverse(id)</d>
-          <d>=</d>
-          <d>id</d>
+          <d>identity</d><d>Id.traverse(id)</d><d>=</d><d>id</d>
 
           <d>composition</d>
-          <d>F.traverse(G)(agb) ∘ G.map(F.traverse(H)(bhc))</d>
+          <d>G.map(H.traverse(bhc)) ∘ G.traverse(agb)</d>
           <d>=</d>
-          <d>traverse(GH)(agb ∘ mapG(bhc))</d>
+          <d>GH.traverse(G.map(bhc) ∘ agb)</d>
+
+          <d>map consistency</d>
+          <d>F.map(ab)</d>
+          <d>=</d>
+          <d>Id.traverse(ab)</d>
         </div>
       </article>
     </div>
