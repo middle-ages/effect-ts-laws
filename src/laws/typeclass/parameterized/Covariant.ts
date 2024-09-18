@@ -50,7 +50,9 @@ const buildLaws = <
 
   return lawTests(
     name,
+
     Law('identity', 'map(id) = id', fa)(a => equalsFa(F.map(a, identity), a)),
+
     Law(
       'composition',
       'a ▹ map(bc ∘ ab) = a ▹ map(ab) ▹ map(bc)',

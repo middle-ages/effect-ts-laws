@@ -2,9 +2,12 @@ export {
   either,
   error,
   liftArbitraries,
+  list,
   option,
   stringKeyRecord,
+  tinyArray,
   tinyInteger,
+  tinyIntegerArray,
 } from './arbitrary/data.js'
 export {
   predicate,

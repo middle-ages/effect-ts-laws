@@ -2,6 +2,7 @@ import {
   Array as AR,
   Either as EI,
   flow,
+  List as LI,
   Option as OP,
   pipe,
   String as STR,
@@ -40,6 +41,19 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
   min: -100,
   max: 100,
 })
+
+/**
+ * An array of tiny integers with max size fixed at 4.
+ * @category arbitraries
+ */
+export const tinyArray = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<A[]> =>
+  fc.array(a, {maxLength: 4})
+
+/**
+ * An array of tiny integers with max size fixed at 4.
+ * @category arbitraries
+ */
+export const tinyIntegerArray: fc.Arbitrary<number[]> = tinyArray(tinyInteger)
 
 /**
  * Given a {@link LiftArbitrary} function, and 1..n `Arbitrary`s for
@@ -116,3 +130,11 @@ const uniqueStrings = fc.uniqueArray(
     comparator: STR.Equivalence,
   },
 )
+
+/**
+ * Lift an arbitrary into an arbitrary for the effect-ts linked-list `List`
+ * type.
+ * @category arbitraries
+ */
+export const list = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<LI.List<A>> =>
+  tinyArray(a).map(LI.fromIterable)
