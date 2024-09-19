@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+pnpm clean
+pnpm circular
+pnpm lint
+pnpm test-run
+
+mkdir -p .dev/dist
+cp -r src .dev/dist
+cp -r tests .dev/dist
+rm .dev/dist/tests/tsconfig.json
+
+cp config/tsconfig.stryker.json .dev/dist/tsconfig.json
+cp config/vitest.stryker.config.js .dev/dist/vitest.config.js
+cp index.ts package.json config/stryker.config.json .dev/dist
+
+cd .dev/dist
+pnpm install
+pnpm tsc
+pnpm vitest run
+

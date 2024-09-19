@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Record` datatype. */
+/** Typeclass law tests for the `Record` datatype. */
 import {Covariant, Traversable} from '@effect/typeclass/data/Record'
 import {Record as RC} from 'effect'
 import {

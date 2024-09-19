@@ -1,8 +1,13 @@
 {
   "extends": ["../config/tsconfig.base.json"],
   "compilerOptions": {
-    "types": ["vitest/globals"],
+    "baseUrl": "..",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "incremental": true,
     "composite": true,
-    "outDir": "../.dev/dist/tests"
+    "outDir": "../.dev/dist/tests",
+    "types": ["vitest/globals"]
   }
 }

@@ -11,14 +11,14 @@ import {
   monoEquivalence,
   monoOrder,
   testTypeclassLaws,
+  tinyArray,
 } from 'effect-ts-laws'
 import {ReadonlyArrayTypeLambda} from 'effect/Array'
-import fc from 'fast-check'
 
 describe('@effect/typeclass/data/Array', () => {
   testTypeclassLaws<ReadonlyArrayTypeLambda>({
     getEquivalence: AR.getEquivalence,
-    getArbitrary: arb => fc.array(arb, {maxLength: 4}),
+    getArbitrary: tinyArray,
   })({
     Equivalence: AR.getEquivalence(monoEquivalence),
     Order: AR.getOrder(monoOrder),

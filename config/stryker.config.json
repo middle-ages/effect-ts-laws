@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "pnpm",
+  "buildCommand": "pnpm tsc",
+  "plugins": [
+    "@stryker-mutator/vitest-runner"
+  ],
+  "testRunner": "vitest",
+  "testRunner_comment": { "command": "pnpm vitest run" },
+  "plugin_comment": "@stryker-mutator/typescript-checker"
+}
