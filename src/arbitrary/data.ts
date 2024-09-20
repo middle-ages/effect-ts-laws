@@ -1,5 +1,6 @@
 import {
   Array as AR,
+  Cause as CA,
   Either as EI,
   flow,
   List as LI,
@@ -138,3 +139,40 @@ const uniqueStrings = fc.uniqueArray(
  */
 export const list = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<LI.List<A>> =>
   tinyArray(a).map(LI.fromIterable)
+
+/**
+ * Arbitrary [Cause](https://effect-ts.github.io/effect/effect/Cause.ts.html).
+ * @category arbitraries
+ */
+export const cause = <A>(
+  a: fc.Arbitrary<A>,
+  defect: fc.Arbitrary<unknown> = tinyInteger,
+): fc.Arbitrary<CA.Cause<A>> => {
+  const depthIdentifier = fc.createDepthIdentifier()
+  return fc.letrec<{
+    atomic: CA.Cause<A>
+    composed: CA.Cause<A>
+    cause: CA.Cause<A>
+  }>(tie => ({
+    cause: fc.oneof(
+      {maxDepth: 3, depthIdentifier},
+      tie('atomic'),
+      tie('composed'),
+    ),
+    composed: map(
+      fc.tuple(
+        fc.oneof(
+          fc.constant('sequential' as const),
+          fc.constant('parallel' as const),
+        ),
+        fc.tuple(tie('cause'), tie('cause')),
+      ),
+      ([op, pair]) => CA[op](...pair),
+    ),
+    atomic: fc.oneof(
+      fc.constant(CA.empty),
+      map(defect, CA.die),
+      map(a, CA.fail),
+    ),
+  })).cause
+}

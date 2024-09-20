@@ -110,7 +110,8 @@ export const addLawSet =
  * `describe()` block, but _not_ inside a `test()` or `it()` block.
  *
  * Test results will be shown grouped under the given `LawSet.name`.
- * `sets` test results will be shown under their own names as children.
+ * Laws found in the `sets` field will be shown under their own names as
+ * children.
  *
  * Entries in the optional configuration will override any `fast-check`
  * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html)
@@ -136,6 +137,23 @@ export const testLaws = (
 }
 
 /**
+ * Test a list of `LawSet`s. This is exactly like `testLaws` but accepts
+ * a list of `LawSet`s rather than a single one.
+ * @param parameters - Optional runtime `fast-check` parameters.
+ * @category harness
+ */
+export const testLawSets =
+  (parameters: Overrides = {}) =>
+  (
+    /**
+     * The law sets to test.
+     */
+    ...sets: LawSet[]
+  ): void => {
+    testLaws(lawSetTests(...sets), parameters)
+  }
+
+/**
  * Just like {@link testLaws} but in _verbose_ mode.
  * @category harness
  * @param lawSet - Laws to test.
@@ -159,13 +177,30 @@ export const checkLaws = (
   {sets, laws}: LawSet,
   parameters: Overrides = {},
 ): string[] => {
-  const ownOptions: OP.Option<string>[] = AR.map(laws, law => checkLaw(law))
+  const ownOptions: OP.Option<string>[] = AR.map(laws, law =>
+    checkLaw(law, parameters),
+  )
 
   return [
     ...AR.flatMap(sets, lawSet => checkLaws(lawSet, parameters)),
     ...AR.getSomes(ownOptions),
   ]
 }
+
+/**
+ * Check a list of `LawSet`s.
+ * @returns Possibly empty array of failure messages.
+ * @category harness
+ */
+export const checkLawSets =
+  (parameters: Overrides = {}) =>
+  (
+    /**
+     * The law sets to test.
+     */
+    ...sets: LawSet[]
+  ): string[] =>
+    checkLaws(lawSetTests(...sets), parameters)
 
 /**
  * `fast-check` runtime

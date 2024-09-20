@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Either` datatype. */
+/** Typeclass law tests for the `Either` datatype. */
 import {
   Applicative,
   Bicovariant,

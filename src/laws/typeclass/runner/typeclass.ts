@@ -1,6 +1,6 @@
 import {Array as AR, pipe, Tuple as TU} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {Overrides} from '../../../law.js'
+import {LawSet, Overrides, testLaws} from '../../../law.js'
 import {ConcreteClass} from '../concrete/catalog.js'
 import {
   isParameterizedTypeclassName,
@@ -8,8 +8,8 @@ import {
   ParameterizedClass,
 } from '../parameterized/catalog.js'
 import {GivenConcerns} from '../parameterized/given.js'
-import {Concrete, testConcreteTypeclassLaws} from './concrete.js'
-import {testParameterizedTypeclassLaws} from './parameterized.js'
+import {buildConcreteTypeclassLaws, Concrete} from './concrete.js'
+import {buildParameterizedTypeclassLaws} from './parameterized.js'
 
 /**
  * Union of all typeclass names.
@@ -48,6 +48,31 @@ export const testTypeclassLawsFor = <
   given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
   parameters?: Overrides,
 ) => {
+  for (const lawSet of buildTypeclassLawsFor<F, Ins, A, B, C, In1, Out2, Out1>(
+    instances,
+    given,
+  )) {
+    testLaws(lawSet, parameters)
+  }
+}
+
+/**
+ * Build typeclass laws for the given instances of some datatype.
+ * @category harness
+ */
+export const buildTypeclassLawsFor = <
+  F extends TypeLambda,
+  Ins extends TypeclassInstances<F, A, In1, Out2, Out1>,
+  A,
+  B = A,
+  C = A,
+  In1 = never,
+  Out2 = unknown,
+  Out1 = unknown,
+>(
+  instances: Ins,
+  given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
+): LawSet[] => {
   type ConcreteA = Kind<F, In1, Out2, Out1, A>
 
   type Entry = {
@@ -68,19 +93,17 @@ export const testTypeclassLawsFor = <
 
   const {getEquivalence, equalsA, getArbitrary, a} = given
 
-  if (Object.keys(concrete).length !== 0)
-    testConcreteTypeclassLaws(
-      concrete,
-      {a: getArbitrary(a), equalsA: getEquivalence(equalsA)},
-      parameters,
-    )
-
-  if (Object.keys(parameterized).length !== 0)
-    testParameterizedTypeclassLaws<F, A, B, C>()(
-      parameterized,
-      given,
-      parameters,
-    )
+  return [
+    ...(Object.keys(concrete).length !== 0
+      ? buildConcreteTypeclassLaws(concrete, {
+          a: getArbitrary(a),
+          equalsA: getEquivalence(equalsA),
+        })
+      : []),
+    ...(Object.keys(parameterized).length !== 0
+      ? buildParameterizedTypeclassLaws<F, A, B, C>()(parameterized, given)
+      : []),
+  ]
 }
 
 /**

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
+import {Monoid as MO} from '@effect/typeclass'
 import {Equivalence as EQ, Option as OP, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'
@@ -153,7 +154,7 @@ export const liftGiven =
      * Original options for testing the datatype known by the type lambda `F`,
      * encoding the _inner_ type of the composition.
      */
-    {F, getEquivalence, getArbitrary, ...given}: Os,
+    {F, getEquivalence, getArbitrary, Monoid: _, ...given}: Os,
   ) =>
   ({G, getEquivalenceG, getArbitraryG}: FromGiven<Class, F, G, Os>) => {
     type Composed = ComposeGiven<Class, F, G, Os>
@@ -298,12 +299,20 @@ export interface GivenArbitraries<
 }
 
 /**
- * The _equivalence_ and _arbitrary_ concerns of typeclass test options.
+ * The _equivalence_ and _arbitrary_ concerns of typeclass test options, and an
+ * optional `Monoid` for the underlying type `A`. Everything required to build
+ * laws for a typeclass except the instances under test.
  * @category model
  */
 export interface GivenConcerns<F extends TypeLambda, A, B, C, In1, Out2, Out1>
   extends GivenArbitraries<F, A, B, C, In1, Out2, Out1>,
-    GivenEquivalence<F, A, B, C, In1, Out2, Out1> {}
+    GivenEquivalence<F, A, B, C, In1, Out2, Out1> {
+  /**
+   * Optional `Monoid` for the underlying type `A`, useful for typeclasses
+   * like `Applicative` that can build their own `Monoid` instance from it.
+   */
+  Monoid?: MO.Monoid<A>
+}
 
 export type ComposeGiven<
   Class extends TypeLambda,

@@ -1,3 +1,4 @@
+import {getMonoid} from '@effect/typeclass/data/Array'
 import {TypeLambda} from 'effect/HKT'
 import {LiftArbitrary} from '../../../../arbitrary.js'
 import {LiftEquivalence} from '../../../../law.js'
@@ -5,8 +6,7 @@ import {GivenConcerns} from '../../parameterized/given.js'
 import {Mono, monoArbitrary, monoEquivalence} from './helpers.js'
 
 /**
- * Options for the monomorphic typeclass test runner. Not to be confused with
- * the Invariant _typeclass_ tests.
+ * Options for the monomorphic typeclass test runner.
  * @category monomorphic
  */
 export interface MonomorphicGiven<
@@ -47,4 +47,5 @@ export const unfoldMonomorphicGiven = <
   equalsA: monoEquivalence,
   equalsB: monoEquivalence,
   equalsC: monoEquivalence,
+  Monoid: getMonoid<number>(),
 })

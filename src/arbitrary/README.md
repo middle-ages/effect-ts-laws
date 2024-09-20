@@ -4,12 +4,16 @@
 
 ## [Data](./data.ts)
 
-|             |                                      |                                           |                           |
-| ----------- | ------------------------------------ | ----------------------------------------- | ------------------------- |
-| tinyInteger |                                      |                                           | `Arbitrary<number>`       |
-| option      | `(a: Arbitrary<A>)`                  | <span style='font-family: serif'>⇒</span> | `Arbitrary<Option<A>>`    |
-| either      | `(e: Arbitrary<E>, a: Arbitrary<A>)` | <span style='font-family: serif'>⇒</span> | `Arbitrary<Either<A, E>>` |
-| error       | `(m: Arbitrary<string>)`             | <span style='font-family: serif'>⇒</span> | `Arbitrary<Error>`        |
+| Name             | Signature                                           |                                           |                           |
+| ---------------- | --------------------------------------------------- | ----------------------------------------- | ------------------------- |
+| tinyInteger      |                                                     |                                           | `Arbitrary<number>`       |
+| tinyArray        | `<A>(a: Arbitrary<A>)`                              | <span style='font-family: serif'>⇒</span> | `Arbitrary<A[]>`          |
+| tinyIntegerArray |                                                     |                                           | `Arbitrary<number[]>`     |
+| option           | `<A>(a: Arbitrary<A>)`                              | <span style='font-family: serif'>⇒</span> | `Arbitrary<Option<A>>`    |
+| either           | `<A, E>(e: Arbitrary<E>, a: Arbitrary<A>)`          | <span style='font-family: serif'>⇒</span> | `Arbitrary<Either<A, E>>` |
+| error            | `(m: Arbitrary<string>)`                            | <span style='font-family: serif'>⇒</span> | `Arbitrary<Error>`        |
+| list             | `<A>(a: Arbitrary<A>)`                              | <span style='font-family: serif'>⇒</span> | `Arbitrary<List<A>>`      |
+| cause            | `<E>(e: Arbitrary<E>, defect?: Arbitrary<unknown>)` | <span style='font-family: serif'>⇒</span> | `Arbitrary<Cause<E>>`     |
 
 ## [Time](./time.ts)
 

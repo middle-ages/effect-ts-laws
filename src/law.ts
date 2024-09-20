@@ -4,9 +4,11 @@ export {
   LawSet,
   addLawSet,
   addLaws,
+  checkLawSets,
   checkLaws,
   lawSetTests,
   lawTests,
+  testLawSets,
   testLaws,
   verboseLaws,
 } from './law/lawSet.js'

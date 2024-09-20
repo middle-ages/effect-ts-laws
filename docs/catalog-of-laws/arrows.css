@@ -4,6 +4,8 @@
   --top-2: calc(var(--middle) - var(--arrow-height-half));
   --top-3: calc(var(--top-2) - var(--arrow-height-half));
 }
+arrow-head-middle,
+arrow-tail-middle,
 arrow-head.middle,
 arrow-tail.middle {
   top: var(--middle);
@@ -25,7 +27,9 @@ arrow-tail.bottom-3 {
   bottom: var(--top-3);
 }
 arrow-head,
-arrow-tail {
+arrow-tail,
+arrow-head-middle,
+arrow-tail-middle {
   display: block;
   width: var(--arrow-width);
   height: var(--arrow-height);
@@ -34,9 +38,11 @@ arrow-tail {
   background-repeat: no-repeat;
   background-size: contain;
 }
+arrow-head-middle,
 arrow-head {
   background-image: url("arrow-head.svg");
 }
+arrow-tail-middle,
 arrow-tail {
   background-image: url("arrow-tail.svg");
 }

@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Boolean` datatype. */
+/** Typeclass law tests for the `Boolean` datatype. */
 import {
   MonoidEqv,
   MonoidEvery,

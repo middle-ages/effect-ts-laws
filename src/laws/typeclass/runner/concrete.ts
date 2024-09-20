@@ -2,7 +2,7 @@ import {Monoid as MO} from '@effect/typeclass'
 import {Equivalence as EQ, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {Overrides, testLaws} from '../../../law.js'
+import {LawSet, Overrides, testLaws, testLawSets} from '../../../law.js'
 import {ConcreteClass, concreteLawsFor} from '../concrete/catalog.js'
 import {ConcreteGiven, ConcreteLambdas} from '../concrete/given.js'
 
@@ -16,8 +16,20 @@ export const testConcreteTypeclassLaw =
     options: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
     parameters?: Overrides,
   ) => {
-    testLaws(pipe(options, concreteLawsFor(typeclass)), parameters)
+    testLaws(
+      buildConcreteTypeclassLaw<Typeclass>(typeclass)(options),
+      parameters,
+    )
   }
+
+/**
+ * Build a `LawSet` for the given concrete typeclass instance.
+ * @category harness
+ */
+export const buildConcreteTypeclassLaw =
+  <Typeclass extends ConcreteClass>(typeclass: Typeclass) =>
+  <A>(options: ConcreteGiven<ConcreteLambdas[Typeclass], A>): LawSet =>
+    pipe(options, concreteLawsFor(typeclass))
 
 /**
  * Test [concrete type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)
@@ -35,17 +47,37 @@ export const testConcreteTypeclassLaws = <A>(
   options: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
   parameters?: Overrides,
 ) => {
+  testLawSets(parameters)(...buildConcreteTypeclassLaws(instances, options))
+}
+
+/**
+ * Build [concrete type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)
+ * typeclass laws for the given instances of some datatype.
+ * @param instances - Instances to test. Key is typeclass name and value is the
+ * instance under test. For example, `{ Equivalence: Number.Equivalence }` will run
+ * the instance through the `Equivalence` typeclass laws.
+ * @param options - The common concrete options: equivalence and an arbitrary
+ * for the underlying type of the test.
+ * @param parameters - Optional runtime `fast-check` parameters.
+ * @category harness
+ */
+export const buildConcreteTypeclassLaws = <A>(
+  instances: Partial<Concrete<A>>,
+  options: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
+): LawSet[] => {
+  const results: LawSet[] = []
   for (const key of Object.keys(instances)) {
     const typeclass = key as ConcreteClass
 
-    testConcreteTypeclassLaw(typeclass)(
-      {...options, F: instances[typeclass]} as ConcreteGiven<
-        ConcreteLambdas[typeof typeclass],
-        A
-      >,
-      {verbose: true, ...parameters},
+    results.push(
+      buildConcreteTypeclassLaw(typeclass)({
+        ...options,
+        F: instances[typeclass],
+      } as ConcreteGiven<ConcreteLambdas[typeof typeclass], A>),
     )
   }
+
+  return results
 }
 
 /**

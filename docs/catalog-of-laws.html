@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en" data-theme="light">
   <head>
     <title>Book of Laws</title>
@@ -17,7 +16,7 @@
   </head>
 
   <body>
-    <div>
+    <diagram>
       <header>
         <h1>Typeclass Laws</h1>
         <a href="https://github.com/middle-ages/effect-ts-laws"
@@ -31,9 +30,8 @@
           <d title="Law name.">Law</d>
           <d style="grid-column: 4/-1" title="Law predicate.">Predicate</d>
         </div>
-        <div
-          class="laws laws-3"
-          style="grid-row-start: 2; margin-top: calc(var(--vpad))">
+        <laws
+          style="grid-row-start: 2; margin-top: calc(var(--vpad)); --laws: 3">
           <d></d>
           <e>Equivalence</e>
 
@@ -42,10 +40,10 @@
           <d>symmetry</d><d>a=b</d><d>⇔</d><d>b=a</d>
 
           <d>reflexivity</d><d>a</d><d>=</d><d>a</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-4" style="grid-row-start: 4">
+        <separator></separator>
+        <laws class="laws-5" style="grid-row-start: 4; --laws: 5">
           <d></d>
           <e>Order</e>
 
@@ -56,42 +54,44 @@
           <d>connectivity</d><d>a≤b</d><d>∨</d><d>b≤a</d>
 
           <d>complement consistency</d><d>a≤b</d><d>⇒</d><d>¬a>b</d>
-        </div>
 
-        <div class="separator"></div>
-        <div class="laws laws-2">
+          <d>equivalence consistency</d><d>a≤b ∧ b≥a</d><d>⇒</d><d>a=b</d>
+        </laws>
+
+        <separator></separator>
+        <laws style="--laws: 2">
           <div>
-            <div class="line middle-top down"></div>
-            <arrow-head class="middle"></arrow-head>
+            <line-middle-top></line-middle-top>
+            <arrow-head-middle></arrow-head-middle>
           </div>
           <e>Semigroup</e>
 
-          <d>associativity</d><d>(a ⊹ b) ⊹ c</d><d>=</d><d>a ⊹ (b ⊹ c)</d>
+          <d>associativity</d><d>(a ⊕ b) ⊕ c</d><d>=</d><d>a ⊕ (b ⊕ c)</d>
 
           <d>combineMany associativity</d>
           <d>combineMany(a, [b, c])</d>
           <d>=</d>
           <d>combine(a, combine(b, c))</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-2">
+        <separator></separator>
+        <laws style="--laws: 2">
           <div>
-            <div class="line middle-bottom up"></div>
-            <arrow-tail class="middle"></arrow-tail>
+            <line-middle-bottom></line-middle-bottom>
+            <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Monoid</e>
 
-          <d>left identity</d><d>∅ ⊹ a</d><d>=</d><d>a</d>
+          <d>left identity</d><d>∅ ⊕ a</d><d>=</d><d>a</d>
 
-          <d>right identity</d><d>a</d><d>=</d><d>a ⊹ ∅</d>
-        </div>
+          <d>right identity</d><d>a</d><d>=</d><d>a ⊕ ∅</d>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-2">
+        <separator></separator>
+        <laws style="--laws: 2">
           <div>
-            <div class="line half-top down line-2"></div>
-            <div class="line half-bottom down"></div>
+            <line-double-top-down class="half-top"></line-double-top-down>
+            <line class="half-bottom down"></line>
             <arrow-head class="top-2"></arrow-head>
             <arrow-head class="bottom-2"></arrow-head>
           </div>
@@ -103,13 +103,13 @@
           <d>a ▹ imap(ab, ba) ▹ imap(bc, cb)</d>
           <d>=</d>
           <d>a ▹ imap(bc ∘ ab, ba ∘ cb)</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-2">
+        <separator></separator>
+        <laws style="--laws: 2">
           <div>
-            <div class="line middle-bottom up"></div>
-            <arrow-tail class="middle"></arrow-tail>
+            <line-middle-bottom></line-middle-bottom>
+            <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Contravariant</e>
 
@@ -119,19 +119,17 @@
           <d>fa ▹ contramap(ba) ▹ contramap(cb)</d>
           <d>=</d>
           <d>fa ▹ contramap(ba ∘ cb)</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-2">
+        <separator></separator>
+        <laws style="--laws: 2">
           <div>
             <arrow-tail class="top-3"></arrow-tail>
-            <arrow-head class="middle"></arrow-head>
+            <arrow-head-middle></arrow-head-middle>
             <arrow-head class="bottom-3"></arrow-head>
-            <div
-              class="line third-top up line-2"
-              style="height: var(--quad-height)"></div>
-            <div class="line middle-top down line-2"></div>
-            <div class="line third-bottom down"></div>
+            <line class="third-top up line-2"></line>
+            <line-double-top-down></line-double-top-down>
+            <line class="third-bottom down"></line>
           </div>
           <e>Covariant</e>
 
@@ -140,19 +138,19 @@
           <d>composition</d>
           <d>a ▹ map(bc ∘ ab)</d>
           <d>=</d><d>a ▹ map(ab) ▹ map(bc)</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-7">
+        <separator></separator>
+        <laws class="laws-7" style="--laws: 7">
           <div>
-            <div
-              class="line middle-bottom up"
+            <line
+              class="middle-bottom up"
               style="
                 height: calc(
-                  var(--relation-height) + 5 * var(--line-height-half)
+                  var(--gap-line-height) + 5 * var(--line-height-half)
                 );
-              "></div>
-            <arrow-tail class="middle"></arrow-tail>
+              "></line>
+            <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Applicative</e>
 
@@ -187,20 +185,20 @@
           <d>fab ▹ ap(fa)</d>
           <d>=</d>
           <d>fab ▹ flatMap(ab ⇒ map(fa, ab))</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div class="laws laws-4">
+        <separator></separator>
+        <laws class="laws-4" style="--laws: 4">
           <div>
-            <div
-              class="line middle-bottom up line-2"
+            <line
+              class="middle-bottom up line-2"
               style="
                 height: calc(
-                  2 * var(--relation-height) + 14 * var(--line-height-half) +
+                  2 * var(--gap-line-height) + 14 * var(--line-height-half) +
                     var(--gap-height)
                 );
-              "></div>
-            <arrow-tail class="middle"></arrow-tail>
+              "></line>
+            <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Monad</e>
 
@@ -217,12 +215,15 @@
           <d>map(ab)</d>
           <d>=</d>
           <d>flatMap(of ∘ ab)</d>
-        </div>
+        </laws>
 
-        <div class="separator"></div>
-        <div
-          class="laws laws-3"
-          style="padding-bottom: var(--vpad); border-bottom: var(--line-table)">
+        <separator></separator>
+        <laws
+          style="
+            padding-bottom: var(--vpad);
+            border-bottom: var(--line-table);
+            --laws: 3;
+          ">
           <d></d>
           <e>Traversable</e>
 
@@ -237,8 +238,8 @@
           <d>F.map(ab)</d>
           <d>=</d>
           <d>Id.traverse(ab)</d>
-        </div>
+        </laws>
       </article>
-    </div>
+    </diagram>
   </body>
 </html>

@@ -1,4 +1,4 @@
-/** Typeclass law tests for `Duration` datatype. */
+/** Typeclass law tests for the `Duration` datatype. */
 import {MonoidMax, MonoidMin, MonoidSum} from '@effect/typeclass/data/Duration'
 import {Duration as DU, pipe} from 'effect'
 import {duration, testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws'

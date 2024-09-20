@@ -1,7 +1,8 @@
 import {Option as OP, Predicate as PR} from 'effect'
-import {LazyArg, tupled} from 'effect/Function'
+import {tupled} from 'effect/Function'
 import fc from 'fast-check'
 import {assert, test} from 'vitest'
+import {Overrides} from './lawSet.js'
 
 /**
  * A paper-thin wrapper over a fast-check property and its runtime
@@ -160,11 +161,12 @@ export const testLaw = <Ts extends UnknownArgs>(law: Law<Ts>): void => {
  */
 export const checkLaw = <Ts extends UnknownArgs>(
   law: Law<Ts>,
+  parameters: Overrides = {},
 ): OP.Option<string> => {
   let failMessage: string | undefined = undefined
 
   try {
-    asAssert(law)()
+    asAssert(law)(parameters)
   } catch (e) {
     /* v8 ignore next 2 */
     if (!(e instanceof Error)) throw new Error(e as string)
@@ -181,14 +183,14 @@ const asAssert =
     predicate,
     arbitrary,
     parameters,
-  }: Law<Ts>): LazyArg<void> =>
-  () => {
+  }: Law<Ts>) =>
+  (overrides: Overrides = {}): void => {
     fc.assert(
       fc.property<[Ts]>(arbitrary, (args: Ts) => {
         if (predicate(args)) return true
         assert.fail(`${name}: ${note}`)
       }),
-      parameters,
+      {...parameters, ...overrides},
     )
   }
 

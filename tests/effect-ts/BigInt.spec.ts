@@ -1,4 +1,4 @@
-/** Typeclass law tests for `BigInt` datatype. */
+/** Typeclass law tests for the `BigInt` datatype. */
 import {MonoidMultiply, MonoidSum} from '@effect/typeclass/data/BigInt'
 import {pipe} from 'effect'
 import {testMonoids} from 'effect-ts-laws'

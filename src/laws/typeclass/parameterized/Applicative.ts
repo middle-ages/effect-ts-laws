@@ -1,13 +1,15 @@
 import {
   Applicative as AP,
   Monad as MD,
+  Monoid as MO,
   SemiApplicative as SA,
 } from '@effect/typeclass'
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
-import {identity, pipe} from 'effect'
+import {Equivalence as EQ, identity, pipe} from 'effect'
 import {apply, compose} from 'effect/Function'
-import {TypeLambda} from 'effect/HKT'
+import {Kind, TypeLambda} from 'effect/HKT'
 import {addLawSet, Law, lawTests} from '../../../law.js'
+import {Monoid} from '../concrete/Monoid.js'
 import {Covariant} from './Covariant.js'
 import {
   ParameterizedGiven as Given,
@@ -30,9 +32,31 @@ export const Applicative = <
 >(
   given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) => {
+  const {Monoid: monoid, F, fa, equalsA, getEquivalence} = unfoldGiven(given)
+
+  // If A is a monoid we can test Monoid laws on the applicative getMonoid()
+  const addMonoidLaws =
+    monoid !== undefined
+      ? pipe(
+          {
+            suffix: 'Applicative.getMonoid()',
+            a: fa,
+            F: AP.getMonoid(F)(monoid) as MO.Monoid<
+              Kind<F, In1, Out2, Out1, A>
+            >,
+            equalsA: getEquivalence(equalsA) as EQ.Equivalence<
+              Kind<F, In1, Out2, Out1, A>
+            >,
+          },
+          Monoid,
+          addLawSet,
+        )
+      : identity
+
   return pipe(
     buildLaws('Applicative', given),
     pipe(given, Covariant, addLawSet),
+    addMonoidLaws,
     addLawSet(
       buildLaws(...withOuterOption('Applicative', given, optionApplicative)),
     ),

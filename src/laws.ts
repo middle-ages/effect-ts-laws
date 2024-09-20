@@ -1,10 +1,14 @@
 export {
+  buildConcreteTypeclassLaw,
+  buildConcreteTypeclassLaws,
   testConcreteTypeclassLaw,
   testConcreteTypeclassLaws,
   testMonoid,
   testMonoids,
 } from './laws/typeclass/runner/concrete.js'
 export {
+  buildContravariantLaws,
+  buildTypeclassLaws,
   getMonoUnaryEquivalence,
   monoArbitrary,
   monoEquivalence,
@@ -15,8 +19,14 @@ export {
   unfoldContravariantGiven,
   unfoldMonomorphicGiven,
 } from './laws/typeclass/runner/monomorphic.js'
-export {testParameterizedTypeclassLaws} from './laws/typeclass/runner/parameterized.js'
-export {testTypeclassLawsFor} from './laws/typeclass/runner/typeclass.js'
+export {
+  buildParameterizedTypeclassLaws,
+  testParameterizedTypeclassLaws,
+} from './laws/typeclass/runner/parameterized.js'
+export {
+  buildTypeclassLawsFor,
+  testTypeclassLawsFor,
+} from './laws/typeclass/runner/typeclass.js'
 
 export {concreteLaws} from './laws/typeclass/concrete/catalog.js'
 export type {ConcreteClass} from './laws/typeclass/concrete/catalog.js'
