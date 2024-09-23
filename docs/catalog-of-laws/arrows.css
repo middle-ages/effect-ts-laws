@@ -34,7 +34,7 @@ arrow-tail-middle {
   width: var(--arrow-width);
   height: var(--arrow-height);
   position: absolute;
-  right: -1px;
+  right: -2px;
   background-repeat: no-repeat;
   background-size: contain;
 }

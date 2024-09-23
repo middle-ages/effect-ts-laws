@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en" data-theme="light">
   <head>
     <title>Book of Laws</title>
@@ -6,6 +7,22 @@
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=1" />
     <meta name="color-scheme" content="light dark" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+      crossorigin="anonymous" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+      integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg"
+      crossorigin="anonymous"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+      integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
+      crossorigin="anonymous"
+      onload="renderMathInElement(document.body, {delimiters: [{left: '$', right: '$', display: false}], throwOnError : false, trust: true})"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,12 +31,32 @@
       type="text/css"
       href="catalog-of-laws/index.css" />
   </head>
-
   <body>
+    <macro>$\global\def\empty{\htmlClass{empty}{\varnothing}}$</macro>
+    <macro>$\global\def\▹{\:\htmlClass{pipe}{\footnotesize{▹}}\,}$</macro>
+    <macro>$\global\def\∘{\:\htmlClass{flow}{\scriptsize{∘}}\,}$</macro>
+    <macro>$\global\def\fn#1{\htmlClass{fn}{#1}}$</macro>
+    <macro>$\global\def\imap{\fn{imap}}$</macro>
+    <macro>$\global\def\map{\fn{map}}$</macro>
+    <macro>$\global\def\flatMap{\fn{flatMap}}$</macro>
+    <macro>$\global\def\contramap{\fn{contramap}}$</macro>
+    <macro>$\global\def\of{\fn{of}}$</macro>
+    <macro>$\global\def\ap{\fn{ap}}$</macro>
+    <macro>$\global\def\id{\fn{id}}$</macro>
+    <macro>$\global\def\product{\fn{product}}$</macro>
+    <macro>$\global\def\traverse{\fn{traverse}}$</macro>
+    <macro>$\global\def\apply{\fn{apply}}$</macro>
+    <macro>$\global\def\compose{\fn{compose}}$</macro>
+    <macro>$\global\def\F{\mathrm{F}}$</macro>
+    <macro>$\global\def\G{\mathrm{G}}$</macro>
+    <macro>$\global\def\H{\mathrm{H}}$</macro>
+    <macro>$\global\def\GH{\mathrm{GH}}$</macro>
+    <macro>$\global\def\Id{\mathrm{Id}}$</macro>
+
     <diagram>
       <header>
         <h1>Typeclass Laws</h1>
-        <a href="https://github.com/middle-ages/effect-ts-laws"
+        <a class="home" href="https://github.com/middle-ages/effect-ts-laws"
           >⚖ effect-ts-laws</a
         >
       </header>
@@ -35,30 +72,35 @@
           <d></d>
           <e>Equivalence</e>
 
-          <d>transitivity</d><d>a=b ∧ b=c</d><d>⇒</d><d>a=c</d>
+          <d>transitivity</d>
+          <d>$a=b \: ∧ \: b=c$</d><d>$⇒$</d><d>$a=c$</d>
 
-          <d>symmetry</d><d>a=b</d><d>⇔</d><d>b=a</d>
+          <d>symmetry</d>
+          <d>$a=b$</d><d>$⇔$</d><d>$b=a$</d>
 
-          <d>reflexivity</d><d>a</d><d>=</d><d>a</d>
+          <d>reflexivity</d><d>$a$</d><d>$=$</d><d>$a$</d>
         </laws>
 
-        <separator></separator>
-        <laws class="laws-5" style="grid-row-start: 4; --laws: 5">
+        <laws class="laws-5" style="--laws: 5">
           <d></d>
           <e>Order</e>
 
-          <d>transitivity</d><d>a≤b ∧ b≤c</d><d>⇒</d><d>a≤c</d>
+          <d>transitivity</d>
+          <d>$a≤b \: ∧ \: b≤c$</d><d>$⇒$</d><d>$a≤c$</d>
 
-          <d>reflexivity</d><d>a</d><d>≤</d><d>a</d>
+          <d>connectivity</d>
+          <d>$a≤b$</d><d>$∨$</d><d>$b≤a$</d>
 
-          <d>connectivity</d><d>a≤b</d><d>∨</d><d>b≤a</d>
+          <d>reflexivity</d>
+          <d>$a$</d><d>$≤$</d><d>$a$</d>
 
-          <d>complement consistency</d><d>a≤b</d><d>⇒</d><d>¬a>b</d>
+          <d>complement consistency</d>
+          <d>$a≤b$</d><d>$⇒$</d><d>$a \ngtr b$</d>
 
-          <d>equivalence consistency</d><d>a≤b ∧ b≥a</d><d>⇒</d><d>a=b</d>
+          <d>equivalence consistency</d>
+          <d>$a≤b \: ∧ \: b≤a$</d><d>$⇒$</d><d>$a=b$</d>
         </laws>
 
-        <separator></separator>
         <laws style="--laws: 2">
           <div>
             <line-middle-top></line-middle-top>
@@ -66,15 +108,15 @@
           </div>
           <e>Semigroup</e>
 
-          <d>associativity</d><d>(a ⊕ b) ⊕ c</d><d>=</d><d>a ⊕ (b ⊕ c)</d>
+          <d>associativity</d>
+          <d>$(a ⊕ b) ⊕ c$</d><d>$=$</d><d>$a ⊕ (b ⊕ c)$</d>
 
           <d>combineMany associativity</d>
-          <d>combineMany(a, [b, c])</d>
-          <d>=</d>
-          <d>combine(a, combine(b, c))</d>
+          <d>$\fn{combineMany}(a, [b, c])$</d>
+          <d>$=$</d>
+          <d>$a ⊕ (b ⊕ c)$</d>
         </laws>
 
-        <separator></separator>
         <laws style="--laws: 2">
           <div>
             <line-middle-bottom></line-middle-bottom>
@@ -82,12 +124,13 @@
           </div>
           <e>Monoid</e>
 
-          <d>left identity</d><d>∅ ⊕ a</d><d>=</d><d>a</d>
+          <d>left identity</d>
+          <d>$\empty ⊕ a$</d><d>$=$</d><d>$a$</d>
 
-          <d>right identity</d><d>a</d><d>=</d><d>a ⊕ ∅</d>
+          <d>right identity</d>
+          <d>$a$</d><d>$=$</d><d>$a ⊕ \empty$</d>
         </laws>
 
-        <separator></separator>
         <laws style="--laws: 2">
           <div>
             <line-double-top-down class="half-top"></line-double-top-down>
@@ -97,15 +140,15 @@
           </div>
           <e>Invariant</e>
 
-          <d>identity</d><d>imap(id, id)</d><d>=</d> <d>id</d>
+          <d>identity</d><d>$\imap(\id, \id)$</d><d>$=$</d>
+          <d>$\id$</d>
 
           <d>composition</d>
-          <d>a ▹ imap(ab, ba) ▹ imap(bc, cb)</d>
-          <d>=</d>
-          <d>a ▹ imap(bc ∘ ab, ba ∘ cb)</d>
+          <d>$\imap(ab, ba) \∘ \imap(bc, cb)$</d>
+          <d>$=$</d>
+          <d>$\imap(bc \∘ ab, ba \∘ cb)$</d>
         </laws>
 
-        <separator></separator>
         <laws style="--laws: 2">
           <div>
             <line-middle-bottom></line-middle-bottom>
@@ -113,15 +156,15 @@
           </div>
           <e>Contravariant</e>
 
-          <d>identity</d><d>contramap(id)</d><d>=</d><d>id</d>
+          <d>identity</d>
+          <d>$\contramap(\id)$</d><d>$=$</d><d>$\id$</d>
 
           <d>composition</d>
-          <d>fa ▹ contramap(ba) ▹ contramap(cb)</d>
-          <d>=</d>
-          <d>fa ▹ contramap(ba ∘ cb)</d>
+          <d>$\contramap(ba) \∘ \contramap(cb)$</d>
+          <d>$=$</d>
+          <d>$\contramap(ba \∘ cb)$</d>
         </laws>
 
-        <separator></separator>
         <laws style="--laws: 2">
           <div>
             <arrow-tail class="top-3"></arrow-tail>
@@ -133,14 +176,14 @@
           </div>
           <e>Covariant</e>
 
-          <d>identity</d><d>map(id)</d><d>=</d><d>id</d>
+          <d>identity</d><d>$\map(\id)$</d><d>$=$</d><d>$\id$</d>
 
           <d>composition</d>
-          <d>a ▹ map(bc ∘ ab)</d>
-          <d>=</d><d>a ▹ map(ab) ▹ map(bc)</d>
+          <d>$\map(ab) \∘ \map(bc)$</d>
+          <d>$=$</d>
+          <d>$\map(bc \∘ ab)$</d>
         </laws>
 
-        <separator></separator>
         <laws class="laws-7" style="--laws: 7">
           <div>
             <line
@@ -154,40 +197,40 @@
           </div>
           <e>Applicative</e>
 
-          <d>identity</d><d>id ▹ of ▹ ap(a)</d><d>=</d><d>a</d>
+          <d>identity</d>
+          <d>$\id \,\▹ \, \of \,\▹ \, \ap(a)$</d><d>$=$</d><d>$a$</d>
 
           <d>homomorphism</d>
-          <d>ab ▹ of ▹ (a ▹ of ▹ ap)</d>
-          <d>=</d>
-          <d>a ▹ ab ▹ of</d>
+          <d>$ab \▹ \of \▹ (a \▹ \of \▹ \ap)$</d>
+          <d>$=$</d>
+          <d>$a \▹ ab \▹ \of$</d>
 
           <d>associative composition</d>
-          <d>fbc ▹ map(compose) ▹ ap(fab) ▹ ap(fa)</d>
-          <d>=</d>
-          <d>fbc ▹ ap(fab ▹ ap(fa))</d>
+          <d>$fbc\, \▹ \map(\compose) \▹ \ap(fab) \▹ \ap(fa)$</d>
+          <d>$=$</d>
+          <d>$fbc\, \▹ \ap\big(fab \▹ \ap(fa)\big)$</d>
 
           <d>interchange</d>
-          <d>fab ▹ ap(of(a))</d>
-          <d>=</d>
-          <d>a ▹ apply ▹ of ▹ ap(fab)</d>
+          <d>$fab\, \▹ \ap\big(\of(a)\big)$</d>
+          <d>$=$</d>
+          <d>$a \▹ \apply \▹ \of \▹ \ap(fab)$</d>
 
           <d>map consistency</d>
-          <d>fa ▹ map(ab)</d>
-          <d>=</d>
-          <d>ab ▹ of ▹ ap(fa)</d>
+          <d>$fa \▹ \map(ab)$</d>
+          <d>$=$</d>
+          <d>$ab \▹ \of \▹ \ap(fa)$</d>
 
           <d>product consistency</d>
-          <d>fab ▹ ap(fa)</d>
-          <d>=</d>
-          <d>product(fab, fa) ▹ map(([ab, a]) ⇒ ab(a))</d>
+          <d>$fab\, \▹ \ap(fa)$</d>
+          <d>$=$</d>
+          <d>$\product(fab, fa) \▹ \map\big(([ab, a]) ⇒ ab(a)\big)$</d>
 
           <d>flatMap consistency</d>
-          <d>fab ▹ ap(fa)</d>
-          <d>=</d>
-          <d>fab ▹ flatMap(ab ⇒ map(fa, ab))</d>
+          <d>$\ap(fa)$</d>
+          <d>$=$</d>
+          <d>$\flatMap\big(ab ⇒ \!\map(fa, ab)\big)$</d>
         </laws>
 
-        <separator></separator>
         <laws class="laws-4" style="--laws: 4">
           <div>
             <line
@@ -202,22 +245,22 @@
           </div>
           <e>Monad</e>
 
-          <d>left identity</d><d>of ∘ flatMap(f)</d><d>=</d><d>afb</d>
+          <d>left identity</d><d>$\of \∘ \flatMap(afb)$</d><d>$=$</d
+          ><d>$afb$</d>
 
-          <d>right identity</d><d>flatMap(of)</d><d>=</d><d>id</d>
+          <d>right identity</d><d>$\flatMap(\of)$</d><d>$=$</d><d>$\id$</d>
 
           <d>associativity</d>
-          <d>fa ▹ flatMap(afb) ▹ flatMap(bfc)</d>
-          <d>=</d>
-          <d>fa ▹ flatMap(flatMap(bfc) ∘ afb)</d>
+          <d>$\flatMap(afb) \∘ \flatMap(bfc)$</d>
+          <d>$=$</d>
+          <d>$\flatMap\big(\flatMap(bfc) \∘ afb\big)$</d>
 
           <d>map consistency</d>
-          <d>map(ab)</d>
-          <d>=</d>
-          <d>flatMap(of ∘ ab)</d>
+          <d>$\map(ab)$</d>
+          <d>$=$</d>
+          <d>$\flatMap(\of \∘ ab)$</d>
         </laws>
 
-        <separator></separator>
         <laws
           style="
             padding-bottom: var(--vpad);
@@ -227,17 +270,17 @@
           <d></d>
           <e>Traversable</e>
 
-          <d>identity</d><d>Id.traverse(id)</d><d>=</d><d>id</d>
+          <d>identity</d><d>$\Id.\traverse(\id)$</d><d>$=$</d><d>$\id$</d>
 
           <d>composition</d>
-          <d>G.map(H.traverse(bhc)) ∘ G.traverse(agb)</d>
-          <d>=</d>
-          <d>GH.traverse(G.map(bhc) ∘ agb)</d>
+          <d>$\G.\map\big(\H.\traverse(bhc)\big) \∘ \G.\traverse(agb)$</d>
+          <d>$=$</d>
+          <d>$\GH.\traverse\big(\G.\map(bhc) \∘ agb\big)$</d>
 
           <d>map consistency</d>
-          <d>F.map(ab)</d>
-          <d>=</d>
-          <d>Id.traverse(ab)</d>
+          <d>$\F.\map(ab)$</d>
+          <d>$=$</d>
+          <d>$\Id.\traverse(ab)$</d>
         </laws>
       </article>
     </diagram>

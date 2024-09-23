@@ -13,13 +13,10 @@ import {ConcreteGiven, ConcreteLambdas} from '../concrete/given.js'
 export const testConcreteTypeclassLaw =
   <Typeclass extends ConcreteClass>(typeclass: Typeclass) =>
   <A>(
-    options: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
+    given: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
     parameters?: Overrides,
   ) => {
-    testLaws(
-      buildConcreteTypeclassLaw<Typeclass>(typeclass)(options),
-      parameters,
-    )
+    testLaws(buildConcreteTypeclassLaw<Typeclass>(typeclass)(given), parameters)
   }
 
 /**
@@ -28,8 +25,8 @@ export const testConcreteTypeclassLaw =
  */
 export const buildConcreteTypeclassLaw =
   <Typeclass extends ConcreteClass>(typeclass: Typeclass) =>
-  <A>(options: ConcreteGiven<ConcreteLambdas[Typeclass], A>): LawSet =>
-    pipe(options, concreteLawsFor(typeclass))
+  <A>(given: ConcreteGiven<ConcreteLambdas[Typeclass], A>): LawSet =>
+    pipe(given, concreteLawsFor(typeclass))
 
 /**
  * Test [concrete type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)
@@ -37,17 +34,17 @@ export const buildConcreteTypeclassLaw =
  * @param instances - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Equivalence: Number.Equivalence }` will run
  * the instance through the `Equivalence` typeclass laws.
- * @param options - The common concrete options: equivalence and an arbitrary
+ * @param given - The common concrete options: equivalence and an arbitrary
  * for the underlying type of the test.
  * @param parameters - Optional runtime `fast-check` parameters.
  * @category harness
  */
 export const testConcreteTypeclassLaws = <A>(
   instances: Partial<Concrete<A>>,
-  options: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
+  given: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
   parameters?: Overrides,
 ) => {
-  testLawSets(parameters)(...buildConcreteTypeclassLaws(instances, options))
+  testLawSets(parameters)(...buildConcreteTypeclassLaws(instances, given))
 }
 
 /**
@@ -56,14 +53,13 @@ export const testConcreteTypeclassLaws = <A>(
  * @param instances - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Equivalence: Number.Equivalence }` will run
  * the instance through the `Equivalence` typeclass laws.
- * @param options - The common concrete options: equivalence and an arbitrary
+ * @param given - The common concrete options: equivalence and an arbitrary
  * for the underlying type of the test.
- * @param parameters - Optional runtime `fast-check` parameters.
  * @category harness
  */
 export const buildConcreteTypeclassLaws = <A>(
   instances: Partial<Concrete<A>>,
-  options: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
+  given: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
 ): LawSet[] => {
   const results: LawSet[] = []
   for (const key of Object.keys(instances)) {
@@ -71,7 +67,7 @@ export const buildConcreteTypeclassLaws = <A>(
 
     results.push(
       buildConcreteTypeclassLaw(typeclass)({
-        ...options,
+        ...given,
         F: instances[typeclass],
       } as ConcreteGiven<ConcreteLambdas[typeof typeclass], A>),
     )

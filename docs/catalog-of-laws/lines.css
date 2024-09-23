@@ -1,6 +1,6 @@
 :root {
   --gap-height: calc(var(--separator-height-half) + var(--vpad-laws));
-  --gap-line-height: calc(var(--gap-height) + var(--line-height));
+  --gap-line-height: calc(var(--gap-height) + var(--line-height) + var(--stroke-half));
   --line-middle: calc(50% - var(--stroke-half));
   --line-half: calc(var(--line-middle) - var(--arrow-height-half));
   --line-third: calc(var(--line-middle) + var(--arrow-height));
@@ -16,7 +16,7 @@ line-middle-bottom {
   display: block;
   position: absolute;
   right: 2px;
-  height: var(--gap-line-height);
+  height: calc(var(--gap-line-height) + var(--stroke-half));
   width: var(--line-width);
   border-left: var(--line);
 }

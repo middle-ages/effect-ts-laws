@@ -3,11 +3,7 @@
 @import "table.css";
 @import "arrows.css";
 @import "lines.css";
-/*
-html * {
-  transition: all 0.1s linear;
-}
-  */
+@import "tex.css";
 html {
   padding: 0;
   margin: 0;
@@ -28,49 +24,51 @@ img {
   height: var(--arrow-height);
 }
 header {
+  line-height: var(--line-height-header);
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  min-width: 100ex;
-  z-index: 10;
+  z-index: 40;
   display: flex;
-  line-height: var(--line-height-header);
   text-wrap: nowrap;
   align-items: baseline;
   justify-content: space-between;
   background: var(--color-bg);
-  & > *:first-child {
-    flex: 1;
-  }
-  & > *:nth-child(2) {
-    right: var(--hpad-half);
-    display: block;
-    background: var(--color-bg);
-    padding-right: var(--hpad);
-  }
 }
 h1 {
+  flex: 1;
+  z-index: 35;
   text-align: center;
   font-size: var(--font-size-header);
-  color: var(--color-low);
+  color: var(--color-title);
   font-weight: 500;
   margin: 0;
+  background: var(--color-bg);
+  position: relative;
+  line-height: var(--line-height-header);
 }
 a {
+  display: inline-block;
+  font-size: 16px;
+  z-index: 30;
+  position: relative;
   text-decoration: none;
-  outline-offset: 2px;
-  outline-width: 2px;
-  outline-style: dotted;
-  border-radius: 4px;
-  outline-color: transparent;
+  padding: 0 var(--hpad) 0 var(--hpad);
   &:hover {
     text-decoration: underline;
   }
+  outline-offset: -10px;
+  outline-width: 2px;
+  outline-style: dotted;
+  border-radius: calc(var(--line-height) / 2);
+  outline-color: transparent;
+  line-height: calc(var(--line-height) / 5 + var(--line-height-header));
   &:focus {
     outline-color: var(--color-outline);
   }
 }
-d {
-  display: block;
+a.home {
+  position: relative;
+  top: 0;
 }

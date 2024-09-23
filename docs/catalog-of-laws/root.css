@@ -3,31 +3,27 @@
    *              1        2       3    4     5      6
    * columns: extends, typeclass, law, lhs, center, rhs 
    */
-  --column-count: 6;
-  --unit: 16px;
-  --hpad: 1rem;
-  --vpad: 10px;
+  --font-size: 17px;
+  --line-height: calc(1.6 * var(--font-size));
+  --line-height-header: 40px;
+  --hpad: 12px;
+  --vpad: 12px;
   --vpad-laws: 4px;
-  --stroke: 1px;
-  --font-size-factor: 1;
+  --stroke: 1.25px;
   --font-size-header-factor: 1.5;
-  --line-height-factor: 1.5;
   --separator-height-factor: 0.3;
   --hide-right: 1px;
-  --arrow-width: 6px;
-  --arrow-height: 10px;
+  --arrow-width: 8px;
+  --arrow-height: 12px;
   /** Computed */
   --line-2-width: calc(var(--line-width) + var(--arrow-height));
-  --font-size: calc(var(--font-size-factor) * var(--unit));
   --font-size-header: calc(var(--font-size-header-factor) * var(--font-size));
   --separator-height: calc(var(--separator-height-factor) * var(--line-height));
-  --line-height: calc(var(--line-height-factor) * var(--font-size));
   --line-width: calc(3 * var(--line-height) / 2);
   --line-width-total: calc(var(--line-2-width) + var(--arrow-height));
   --line: var(--stroke) solid var(--color-line);
   --line-table: 1px solid var(--color-table-line);
-  --line-table-high: 1.5px solid var(--color-table-line-high);
-  --line-height-header: calc(7 * var(--font-size-header) / 4);
+  --line-table-high: 1px solid var(--color-table-line-high);
   /** Multiples */
   --line-height-third: calc(var(--line-height) / 3);
   --line-height-half: calc(var(--line-height) / 2);
@@ -37,14 +33,15 @@
   --hpad-2: calc(var(--hpad) * 2);
   --line-height-2: calc(var(--line-height) * 2);
   /** Colors */
+  --color-title: #567;
+  --color-header: #669;
+  --color-typeclass: #686261;
+  --color-law: #40444a;
   --color-table-line-high: #cce;
   --color-table-line: #bbd;
-  --color-op: #aac;
-  --color-header: #99a;
-  --color-low: #779;
-  --color-lower: #446;
-  --color-line: #000;
-  --color-outline: #dbe;
-  --color-law-bg: #fefbf9;
+  --color-op: #88a;
+  --color-line: #777;
+  --color-outline: #51b;
+  --color-law-bg: #ecebea;
   --color-bg: #fff;
 }

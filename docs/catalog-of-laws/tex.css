@@ -1,0 +1,33 @@
+:root {
+  --leading-1: calc(1rex / 4);
+  --leading-2: calc(1rex / 2);
+}
+.enclosing.empty,
+.enclosing.fn {
+  & * {
+    margin: 0 !important;
+  }
+}
+.enclosing.fn {
+  margin-right: var(--leading-1);
+  & * {
+    font-family: 'CMU Concrete' !important;
+    color: #343230;
+  }
+}
+.enclosing.empty {
+  margin-right: var(--leading-2);
+  & * {
+    font-family: Symbola !important;
+  }
+}
+.macro {
+  display: none;
+}
+.flow,
+.pipe {
+  & > span > span {
+    position: relative;
+    top: calc(-1rex / 12);
+  }
+}

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap");
 html, d {
   font-family: Inter, system-ui;
   font-optical-sizing: auto;
@@ -7,4 +7,16 @@ html, d {
   font-style: normal;
   font-size: var(--font-size);
   line-height: var(--line-height);
+}
+@font-face {
+  font-family: "CMU Concrete";
+  font-style: normal;
+  font-weight: normal;
+  src: local("CMU Concrete"), url("CMUConcrete.woff") format("woff");
+}
+@font-face {
+  font-family: "Symbola";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Symbola"), url("Symbola.ttf") format("ttf");
 }
