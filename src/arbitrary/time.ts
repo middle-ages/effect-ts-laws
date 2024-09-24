@@ -1,19 +1,42 @@
-import {DateTime as DT, Duration as DU, flow, pipe} from 'effect'
+import {Bounded as BU} from '@effect/typeclass'
+import {DateTime as DT, Duration as DU, pipe} from 'effect'
 import fc from 'fast-check'
+import {tinyInteger} from './data.js'
 import {Monad as arbitraryMonad} from './instances.js'
 
-const {map} = arbitraryMonad
+const {flatMap, map} = arbitraryMonad
 
 /**
- * `Duration` arbitrary. The unit of the optional `min`/`max` constraints is
- * milliseconds.
+ * `Duration` arbitrary.
  * @category arbitraries
  */
-export const duration: (
-  options?: fc.IntegerConstraints,
-) => fc.Arbitrary<DU.Duration> = flow(
-  fc.integer,
+export const duration: fc.Arbitrary<DU.Duration> = pipe(
+  tinyInteger,
   map(i => DU.millis(i)),
+)
+
+/**
+ * Arbitrary for a duration and its bounds.
+ * @category arbitraries
+ */
+
+export const boundedDuration: fc.Arbitrary<
+  [fc.Arbitrary<DU.Duration>, BU.Bounded<DU.Duration>]
+> = pipe(
+  fc.tuple(tinyInteger, tinyInteger),
+  flatMap(([first, second]) => {
+    const [min, max] = first < second ? [first, second] : [second, first]
+    const bounded: fc.Arbitrary<BU.Bounded<DU.Duration>> = fc.constant({
+      compare: DU.Order,
+      maxBound: DU.millis(min),
+      minBound: DU.millis(max),
+    })
+
+    return fc.tuple(
+      fc.constant(map(fc.integer({min, max}), i => DU.millis(i))),
+      bounded,
+    )
+  }),
 )
 
 /**

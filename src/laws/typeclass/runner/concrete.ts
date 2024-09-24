@@ -2,7 +2,7 @@ import {Monoid as MO} from '@effect/typeclass'
 import {Equivalence as EQ, pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {LawSet, Overrides, testLaws, testLawSets} from '../../../law.js'
+import {LawSet, Overrides, testLaws, testLawSets} from '#law'
 import {ConcreteClass, concreteLawsFor} from '../concrete/catalog.js'
 import {ConcreteGiven, ConcreteLambdas} from '../concrete/given.js'
 
@@ -44,7 +44,9 @@ export const testConcreteTypeclassLaws = <A>(
   given: Omit<ConcreteGiven<TypeLambda, A>, 'F'>,
   parameters?: Overrides,
 ) => {
-  testLawSets(parameters)(...buildConcreteTypeclassLaws(instances, given))
+  testLawSets({verbose: true, ...parameters})(
+    ...buildConcreteTypeclassLaws(instances, given),
+  )
 }
 
 /**

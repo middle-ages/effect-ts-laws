@@ -1,15 +1,17 @@
-import {LawSet} from '../../../law.js'
+import {LawSet} from '#law'
 import {Equivalence} from './Equivalence.js'
 import {ConcreteGiven, ConcreteLambdas} from './given.js'
 import {Monoid} from './Monoid.js'
 import {Order} from './Order.js'
 import {Semigroup} from './Semigroup.js'
+import {Bounded} from './Bounded.js'
 
 /**
  * Map of typeclass name to their laws, for typeclasses of concrete types.
  * @category model
  */
 export const concreteLaws = {
+  Bounded,
   Equivalence,
   Monoid,
   Order,

@@ -8,7 +8,7 @@ import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {Equivalence as EQ, identity, pipe} from 'effect'
 import {apply, compose} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '../../../law.js'
+import {addLawSet, Law, lawTests} from '#law'
 import {Monoid} from '../concrete/Monoid.js'
 import {Covariant} from './Covariant.js'
 import {

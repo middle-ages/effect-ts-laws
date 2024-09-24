@@ -1,8 +1,8 @@
+import {testUnaryEquivalence, tinyInteger} from '#arbitrary'
 import {Semigroup as SG} from '@effect/typeclass'
 import {getSemigroup as arraySemigroup} from '@effect/typeclass/data/Array'
 import {Array as AR, Equivalence as EQ, Number as NU, Order as OD} from 'effect'
 import fc from 'fast-check'
-import {testUnaryEquivalence, tinyInteger} from '../../../../arbitrary.js'
 
 /**
  * The underlying type used for monomorphic typeclass law tests.

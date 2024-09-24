@@ -72,6 +72,7 @@ export {
   parameterizedLawsFor,
 } from './laws/typeclass/parameterized/catalog.js'
 
+export {Bounded} from './laws/typeclass/concrete/Bounded.js'
 export {Equivalence} from './laws/typeclass/concrete/Equivalence.js'
 export {Monoid} from './laws/typeclass/concrete/Monoid.js'
 export {Order} from './laws/typeclass/concrete/Order.js'

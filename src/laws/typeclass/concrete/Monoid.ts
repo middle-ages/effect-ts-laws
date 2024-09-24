@@ -1,6 +1,6 @@
+import {Law} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
-import {Law} from '../../../law.js'
 import {ConcreteGiven, concreteLaws} from './given.js'
 import {Semigroup} from './Semigroup.js'
 
@@ -15,13 +15,13 @@ export const Monoid = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
     'Monoid',
     Law(
       'leftIdentity',
-      '∅ ⊹ a = a',
+      '∅ ⊕ a = a',
       a,
     )((a: A) => equalsA(F.combine(F.empty, a), a)),
 
     Law(
       'rightIdentity',
-      'a = a ⊹ ∅',
+      'a = a ⊕ ∅',
       a,
     )((a: A) => equalsA(F.combine(a, F.empty), a)),
   )(suffix, Semigroup(given))

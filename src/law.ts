@@ -14,5 +14,4 @@ export {
 } from './law/lawSet.js'
 
 export type {LiftEquivalence, LiftedEquivalences} from './law/equivalence.js'
-export type {UnknownArgs} from './law/law.js'
-export type {Overrides} from './law/lawSet.js'
+export type {Overrides, UnknownArgs} from './law/law.js'

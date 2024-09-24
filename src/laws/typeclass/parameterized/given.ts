@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import {Monoid as MO} from '@effect/typeclass'
-import {Equivalence as EQ, Option as OP, pipe} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {OptionTypeLambda} from 'effect/Option'
-import fc from 'fast-check'
 import {
   liftArbitraries,
   LiftArbitrary,
   option,
   unary,
   unaryToKind,
-} from '../../../arbitrary.js'
-import {ComposeKey, composeMap, ComposeTypeLambda} from '../../../compose.js'
-import {LiftEquivalence, liftEquivalences} from '../../../law.js'
+} from '#arbitrary'
+import {ComposeKey, composeMap, ComposeTypeLambda} from '#compose'
+import {LiftEquivalence, liftEquivalences} from '#law'
+import {Monoid as MO} from '@effect/typeclass'
+import {Equivalence as EQ, Option as OP, pipe} from 'effect'
+import {Kind, TypeLambda} from 'effect/HKT'
+import {OptionTypeLambda} from 'effect/Option'
+import fc from 'fast-check'
 
 /**
  * Options for testing

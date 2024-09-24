@@ -2,7 +2,7 @@ import {Invariant as IN} from '@effect/typeclass'
 import {Covariant as optionInvariant} from '@effect/typeclass/data/Option'
 import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '../../../law.js'
+import {addLawSet, Law, lawTests} from '#law'
 import {
   ParameterizedGiven as Given,
   unfoldGiven,

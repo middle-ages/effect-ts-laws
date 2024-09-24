@@ -1,5 +1,5 @@
+import {Law} from '#law'
 import {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
-import {Law} from '../../../law.js'
 import {ConcreteGiven, concreteLaws} from './given.js'
 
 /**
@@ -16,7 +16,7 @@ export const Semigroup = <A>({
     'Semigroup',
     Law(
       'associativity',
-      '∀a,b,a ∈ T: (a ⊹ b) ⊹ c = a ⊹ (b ⊹ c)',
+      '∀a,b,a ∈ T: (a ⊕ b) ⊕ c = a ⊕ (b ⊕ c)',
       a,
       a,
       a,

@@ -1,7 +1,7 @@
 import {Equivalence as EQ} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {Law, LawSet, UnknownArgs} from '../../../law.js'
+import {Law, LawSet, UnknownArgs} from '#law'
 
 /**
  * Common options for testing _concrete type_ typeclass laws. These are

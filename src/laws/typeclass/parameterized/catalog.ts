@@ -1,5 +1,5 @@
 import {Kind, TypeLambda} from 'effect/HKT'
-import {LawSet} from '../../../law.js'
+import {LawSet} from '#law'
 import {Applicative} from './Applicative.js'
 import {Bicovariant} from './Bicovariant.js'
 import {Contravariant} from './Contravariant.js'

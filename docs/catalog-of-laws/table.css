@@ -78,10 +78,6 @@ article {
     & > *:nth-child(n + 7):nth-child(-n + 10) {
       grid-row: 2/3;
     }
-    & > *:nth-child(4n + 4),
-    & > *:nth-child(4n + 6) {
-      font-family: monospace;
-    }
     & > *:nth-child(4n + 3) {
       grid-column: 3/4;
       color: var(--color-law);

@@ -24,6 +24,7 @@ export type {
 
 export {
   arbitraryMonad,
+  boundedDuration,
   cause,
   duration,
   either,
@@ -103,6 +104,7 @@ export {
 export type {
   ApplicativeTypeLambda,
   BicovariantTypeLambda,
+  Bounded,
   ComposeGiven,
   ConcreteClass,
   ConcreteGiven,

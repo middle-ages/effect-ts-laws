@@ -1,7 +1,7 @@
 import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {Law, LawSet} from '../../../law.js'
+import {Law, LawSet} from '#law'
 import {Covariant} from './Covariant.js'
 import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 

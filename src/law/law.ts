@@ -2,7 +2,6 @@ import {Option as OP, Predicate as PR} from 'effect'
 import {tupled} from 'effect/Function'
 import fc from 'fast-check'
 import {assert, test} from 'vitest'
-import {Overrides} from './lawSet.js'
 
 /**
  * A paper-thin wrapper over a fast-check property and its runtime
@@ -200,3 +199,15 @@ const asAssert =
  * @internal
  */
 export type UnknownArgs = [unknown, ...unknown[]]
+
+/**
+ * `fast-check` runtime
+ * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
+ * Fields with a type that depends on the property argument list
+ * are omitted here and must be set on individual law tests.
+ * @category fast-check
+ */
+export type Overrides = Omit<
+  fc.Parameters,
+  'reporter' | 'asyncReporter' | 'examples'
+>

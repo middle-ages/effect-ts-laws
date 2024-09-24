@@ -1,7 +1,7 @@
 import {Array as AR, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {UnionToIntersection} from 'effect/Types'
-import {LawSet, Overrides, testLawSets} from '../../../law.js'
+import {LawSet, Overrides, testLawSets} from '#law'
 import {
   Parameterized,
   ParameterizedClass,

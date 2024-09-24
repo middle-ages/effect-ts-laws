@@ -1,6 +1,6 @@
+import {Law, lawTests} from '#law'
 import {Boolean as BO} from 'effect'
 import {EquivalenceTypeLambda} from 'effect/Equivalence'
-import {Law, lawTests} from '../../../law.js'
 import {ConcreteGiven} from './given.js'
 
 /**

@@ -1,7 +1,7 @@
 import {Contravariant as CN} from '@effect/typeclass'
 import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '../../../law.js'
+import {addLawSet, Law, lawTests} from '#law'
 import {Invariant} from './Invariant.js'
 import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 

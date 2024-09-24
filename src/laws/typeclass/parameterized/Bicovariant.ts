@@ -2,7 +2,7 @@ import {Bicovariant as BI, Covariant as CO} from '@effect/typeclass'
 import {identity, pipe} from 'effect'
 import {dual} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {LawSet} from '../../../law.js'
+import {LawSet} from '#law'
 import {Covariant} from './Covariant.js'
 import {ParameterizedGiven as Given} from './given.js'
 

@@ -1,3 +1,6 @@
+import {option, unary, unaryToKind} from '#arbitrary'
+import {composeApplicative} from '#compose'
+import {addLawSet, Law, lawTests} from '#law'
 import {Covariant as CO, Traversable as TA} from '@effect/typeclass'
 import {Applicative as arrayApplicative} from '@effect/typeclass/data/Array'
 import {Applicative as identityApplicative} from '@effect/typeclass/data/Identity'
@@ -18,9 +21,6 @@ import {ReadonlyArrayTypeLambda} from 'effect/Array'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
-import {option, unary, unaryToKind} from '../../../arbitrary.js'
-import {composeApplicative} from '../../../compose.js'
-import {addLawSet, Law, lawTests} from '../../../law.js'
 import {ParameterizedGiven as Given, withOuterOption} from './given.js'
 
 /**

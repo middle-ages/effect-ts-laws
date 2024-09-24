@@ -1,6 +1,6 @@
+import {LawSet, Overrides, testLaws} from '#law'
 import {Array as AR, pipe, Tuple as TU} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {LawSet, Overrides, testLaws} from '../../../law.js'
 import {ConcreteClass} from '../concrete/catalog.js'
 import {
   isParameterizedTypeclassName,

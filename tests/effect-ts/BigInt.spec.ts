@@ -7,7 +7,7 @@ import fc from 'fast-check'
 describe('@effect/typeclass/data/BigInt', () => {
   describe('Semigroup/monoid', () => {
     pipe(
-      {'+': MonoidSum, '⨯': MonoidMultiply},
+      {Σ: MonoidSum, Π: MonoidMultiply},
       testMonoids(fc.bigInt(), (a, b) => a === b),
     )
   })

@@ -1,6 +1,6 @@
 import {pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {LawSet, Overrides, testLawSets} from '../../../law.js'
+import {LawSet, Overrides, testLawSets} from '#law'
 import {
   ContravariantGiven,
   unfoldContravariantGiven,

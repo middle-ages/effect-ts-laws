@@ -19,7 +19,13 @@ export {
   unaryInKind,
   unaryToKind,
 } from './arbitrary/function.js'
-export {duration, offsetTimezone, utc, zoned} from './arbitrary/time.js'
+export {
+  boundedDuration,
+  duration,
+  offsetTimezone,
+  utc,
+  zoned,
+} from './arbitrary/time.js'
 
 export type {
   ArbitraryToEquivalence,

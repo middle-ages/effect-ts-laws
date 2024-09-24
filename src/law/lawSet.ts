@@ -1,7 +1,6 @@
 import {Array as AR, Option as OP, pipe, Tuple as TU} from 'effect'
-import fc from 'fast-check'
 import {describe} from 'vitest'
-import {checkLaw, Law, testLaw} from './law.js'
+import {checkLaw, Law, Overrides, testLaw} from './law.js'
 
 /**
  * A `LawSet` is a recursive data structure with an array of {@link Law}s
@@ -201,18 +200,6 @@ export const checkLawSets =
     ...sets: LawSet[]
   ): string[] =>
     checkLaws(lawSetTests(...sets), parameters)
-
-/**
- * `fast-check` runtime
- * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
- * Fields with a type that depends on the property argument list
- * are omitted here and must be set on individual law tests.
- * @category fast-check
- */
-export type Overrides = Omit<
-  fc.Parameters,
-  'reporter' | 'asyncReporter' | 'examples'
->
 
 // Rebuilds the tree filtering out LawSets so that LawSet.name is unique
 const dedupe = (

@@ -26,8 +26,8 @@ describe('@effect/typeclass/data/Number', () => {
   describe('Semigroup/monoid', () => {
     pipe(
       {
-        '+': MonoidSum,
-        '⨯': MonoidMultiply,
+        Σ: MonoidSum,
+        Π: MonoidMultiply,
         min: MonoidMin,
         max: MonoidMax,
       },
