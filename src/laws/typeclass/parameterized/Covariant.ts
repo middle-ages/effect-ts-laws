@@ -1,8 +1,8 @@
+import {addLawSet, Law, lawTests} from '#law'
 import {Covariant as CO} from '@effect/typeclass'
 import {Covariant as optionCovariant} from '@effect/typeclass/data/Option'
 import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '#law'
 import {Invariant} from './Invariant.js'
 import {
   ParameterizedGiven as Given,
@@ -11,7 +11,7 @@ import {
 } from './given.js'
 
 /**
- * Test typeclass laws for `Covariant` and its requirement: `Invariant`.
+ * Test typeclass laws for `Covariant`.
  * @category typeclass laws
  */
 export const Covariant = <
@@ -51,16 +51,20 @@ const buildLaws = <
   return lawTests(
     name,
 
-    Law('identity', 'map(id) = id', fa)(a => equalsFa(F.map(a, identity), a)),
+    Law(
+      'identity',
+      'map(id) = id',
+      fa,
+    )(fa => equalsFa(F.map(fa, identity), fa)),
 
     Law(
       'composition',
-      'a ▹ map(bc ∘ ab) = a ▹ map(ab) ▹ map(bc)',
+      'map(bc ∘ ab) = map(bc) ∘ map(ab)',
       fa,
       ab,
       bc,
-    )((a, ab, bc) =>
-      equalsFc(F.map(a, flow(ab, bc)), pipe(a, F.map(ab), F.map(bc))),
+    )((fa, ab, bc) =>
+      equalsFc(F.map(fa, flow(ab, bc)), pipe(fa, F.map(ab), F.map(bc))),
     ),
   )
 }

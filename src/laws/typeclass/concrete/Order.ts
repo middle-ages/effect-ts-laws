@@ -29,7 +29,7 @@ export const Order = <A>({
     ]
 
   const consistencyLaw = Law(
-    'orderEqualsConsistency',
+    'order equals consistency',
     `∀a,b ∈ T: a≤b ∧ b≥a ⇒ a=c`,
     a,
     a,
@@ -53,7 +53,7 @@ export const buildLaws =
       'Order',
       Law(
         'transitivity',
-        `∀a,b,c ∈ T: a${sym}b ∧ b${sym}c ⇒ a${sym}c`,
+        `a${sym}b ∧ b${sym}c ⇒ a${sym}c`,
         a,
         a,
         a,
@@ -61,22 +61,22 @@ export const buildLaws =
 
       Law(
         'antisymmetry',
-        `∀a,b ∈ T: a${sym}b ∧ b${sym}a ⇒ a=b`,
+        `a${sym}b ∧ b${sym}a ⇒ a=b`,
         a,
         a,
       )((a, b) => BO.implies(op(a, b) && op(b, a), equalsA(a, b))),
 
-      Law('reflexivity', '∀a ∈ T: a${sym}a', a)((a: A) => op(a, a)),
+      Law('reflexivity', 'a${sym}a', a)((a: A) => op(a, a)),
 
       Law(
         'connectivity',
-        `∀a,b ∈ T: a${sym}b ∨ b${sym}a`,
+        `a${sym}b ∨ b${sym}a`,
         a,
         a,
       )((a, b) => op(a, b) || op(b, a)),
 
       Law(
-        'complementConsistency',
+        'complement consistency',
         `∀a,b ∈ T: a${sym}b ⇒ a${sym === '≤' ? '≯' : '≮'}b`,
         a,
         a,

@@ -17,8 +17,8 @@ export const Bounded = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {
 
   return concreteLaws(
     'Bounded',
-    Law('lower bounded', '∀a ∈ T: a ≥ minBound ', a)(a => gte(a, F.minBound)),
-    Law('upper bounded', '∀a ∈ T: a ≤ maxBound ', a)(a => lte(a, F.maxBound)),
+    Law('lower bounded', 'a ≥ minBound ', a)(a => gte(a, F.minBound)),
+    Law('upper bounded', 'a ≤ maxBound ', a)(a => lte(a, F.maxBound)),
   )(suffix)
 }
 

@@ -1,8 +1,5 @@
 :root {
-  --arrow-height-half: calc(var(--arrow-height) / 2);
   --middle: calc(50% - var(--arrow-height-half));
-  --top-2: calc(var(--middle) - var(--arrow-height-half));
-  --top-3: calc(var(--top-2) - var(--arrow-height-half));
 }
 arrow-head-middle,
 arrow-tail-middle,
@@ -10,21 +7,11 @@ arrow-head.middle,
 arrow-tail.middle {
   top: var(--middle);
 }
-arrow-head.top-2,
-arrow-tail.top-2 {
-  top: var(--top-2);
-}
-arrow-head.bottom-2,
-arrow-tail.bottom-2 {
-  bottom: var(--top-2);
-}
-arrow-head.top-3,
 arrow-tail.top-3 {
-  top: var(--top-3);
+  bottom: calc(50% + var(--stroke-half));
 }
-arrow-head.bottom-3,
-arrow-tail.bottom-3 {
-  bottom: var(--top-3);
+arrow-head.bottom-3 {
+  bottom: calc(50% - var(--arrow-height));
 }
 arrow-head,
 arrow-tail,
@@ -34,7 +21,7 @@ arrow-tail-middle {
   width: var(--arrow-width);
   height: var(--arrow-height);
   position: absolute;
-  right: -2px;
+  right: calc(-1 * var(--arrow-width) / 2 + 3px);
   background-repeat: no-repeat;
   background-size: contain;
 }

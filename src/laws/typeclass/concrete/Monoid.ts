@@ -14,13 +14,13 @@ export const Monoid = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
   return concreteLaws(
     'Monoid',
     Law(
-      'leftIdentity',
+      'left identity',
       '∅ ⊕ a = a',
       a,
     )((a: A) => equalsA(F.combine(F.empty, a), a)),
 
     Law(
-      'rightIdentity',
+      'right identity',
       'a = a ⊕ ∅',
       a,
     )((a: A) => equalsA(F.combine(a, F.empty), a)),

@@ -35,6 +35,6 @@ describe('Monad laws self-test', () => {
         laws,
         checkLaws,
       )[0],
-    ).toMatch(/leftIdentity/)
+    ).toMatch(/left identity/)
   })
 })

@@ -11,12 +11,12 @@ laws {
 article {
   position: relative;
   top: calc(var(--line-height-header));
-  grid-template-columns: repeat(2, min-content) 21rex repeat(3, min-content);
+  grid-template-columns: repeat(2, min-content) 23rex repeat(3, min-content);
   background:
-    linear-gradient(#ffff calc(var(--line-height)),
+    linear-gradient(#ffff 0,
       #ffff calc(var(--line-height) + var(--vpad)),
       #fff0 calc(var(--line-height) + 4 * var(--vpad))),
-    linear-gradient(#0007 0,
+    linear-gradient(#0008 0,
       #0000 calc(3 * var(--line-height)));
   background-attachment: scroll, fixed;
   laws,
@@ -25,10 +25,8 @@ article {
   }
   .header {
     position: sticky;
-    width: 100%;
     top: calc(var(--line-height-header));
-    z-index: 55;
-    grid-row: 1/2;
+    z-index: 40;
     border-top: var(--line-table-high);
     border-bottom: var(--line-table);
     background: var(--color-bg);
@@ -36,9 +34,6 @@ article {
     & > * {
       text-align: center;
       color: var(--color-header);
-    }
-    & > *:last-child {
-      border-image: none;
     }
   }
   laws {
@@ -119,7 +114,6 @@ article {
     background: var(--color-law-bg);
     border-top-left-radius: var(--radius);
     border-bottom-left-radius: var(--radius);
-    box-shadow: inset 0.5px 1px 6px 0.4px #181513,
-      inset 1px 2px 9px 2.5px #a7a3a0;
+    box-shadow: inset 1px 1px 8px 2px #120906;
   }
 }

@@ -32,12 +32,18 @@
       href="catalog-of-laws/index.css" />
   </head>
   <body>
-    <macro>$\global\def\empty{\htmlClass{empty}{\varnothing}}$</macro>
-    <macro>$\global\def\▹{\:\htmlClass{pipe}{\footnotesize{▹}}\,}$</macro>
+    <macro>$\global\def\({\big(}$</macro>
+    <macro>$\global\def\){\big)}$</macro>
+    <macro>$\global\def\∅{\htmlClass{empty}{\varnothing}}$</macro>
+    <macro>$\global\def\▹{\,\:\htmlClass{pipe}{\footnotesize{▹}}\,\,}$</macro>
     <macro>$\global\def\∘{\:\htmlClass{flow}{\scriptsize{∘}}\,}$</macro>
     <macro>$\global\def\fn#1{\htmlClass{fn}{#1}}$</macro>
     <macro>$\global\def\imap{\fn{imap}}$</macro>
     <macro>$\global\def\map{\fn{map}}$</macro>
+    <macro>$\global\def\coproduct{\fn{coproduct}}$</macro>
+    <macro>$\global\def\coproductMany{\fn{coproductMany}}$</macro>
+    <macro>$\global\def\coproductAll{\fn{coproductAll}}$</macro>
+    <macro>$\global\def\combineMany{\fn{combineMany}}$</macro>
     <macro>$\global\def\flatMap{\fn{flatMap}}$</macro>
     <macro>$\global\def\contramap{\fn{contramap}}$</macro>
     <macro>$\global\def\of{\fn{of}}$</macro>
@@ -73,7 +79,7 @@
           <e>Equivalence</e>
 
           <d>transitivity</d>
-          <d>$a=b \: ∧ \: b=c$</d><d>$⇒$</d><d>$a=c$</d>
+          <d>$a=b ∧ b=c$</d><d>$⇒$</d><d>$a=c$</d>
 
           <d>symmetry</d>
           <d>$a=b$</d><d>$⇔$</d><d>$b=a$</d>
@@ -86,7 +92,7 @@
           <e>Order</e>
 
           <d>transitivity</d>
-          <d>$a≤b \: ∧ \: b≤c$</d><d>$⇒$</d><d>$a≤c$</d>
+          <d>$a≤b ∧ b≤c$</d><d>$⇒$</d><d>$a≤c$</d>
 
           <d>connectivity</d>
           <d>$a≤b$</d><d>$∨$</d><d>$b≤a$</d>
@@ -98,12 +104,12 @@
           <d>$a≤b$</d><d>$⇒$</d><d>$a \ngtr b$</d>
 
           <d>equivalence consistency</d>
-          <d>$a≤b \: ∧ \: b≤a$</d><d>$⇒$</d><d>$a=b$</d>
+          <d>$a≤b ∧ b≤a$</d><d>$⇒$</d><d>$a=b$</d>
         </laws>
 
         <laws style="--laws: 2">
           <div>
-            <line-middle-top></line-middle-top>
+            <line-middle-down></line-middle-down>
             <arrow-head-middle></arrow-head-middle>
           </div>
           <e>Semigroup</e>
@@ -112,31 +118,30 @@
           <d>$(a ⊕ b) ⊕ c$</d><d>$=$</d><d>$a ⊕ (b ⊕ c)$</d>
 
           <d>combineMany associativity</d>
-          <d>$\fn{combineMany}(a, [b, c])$</d>
+          <d>$\combineMany(a, [b, c])$</d>
           <d>$=$</d>
           <d>$a ⊕ (b ⊕ c)$</d>
         </laws>
 
         <laws style="--laws: 2">
           <div>
-            <line-middle-bottom></line-middle-bottom>
+            <line-middle-up></line-middle-up>
             <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Monoid</e>
 
           <d>left identity</d>
-          <d>$\empty ⊕ a$</d><d>$=$</d><d>$a$</d>
+          <d>$\∅ ⊕ a$</d><d>$=$</d><d>$a$</d>
 
           <d>right identity</d>
-          <d>$a$</d><d>$=$</d><d>$a ⊕ \empty$</d>
+          <d>$a ⊕ \∅$</d><d>$=$</d><d>$a$</d>
         </laws>
 
         <laws style="--laws: 2">
           <div>
-            <line-double-top-down class="half-top"></line-double-top-down>
-            <line class="half-bottom down"></line>
-            <arrow-head class="top-2"></arrow-head>
-            <arrow-head class="bottom-2"></arrow-head>
+            <line-middle-down-double></line-middle-down-double>
+            <line-middle-down></line-middle-down>
+            <arrow-head-middle></arrow-head-middle>
           </div>
           <e>Invariant</e>
 
@@ -151,7 +156,7 @@
 
         <laws style="--laws: 2">
           <div>
-            <line-middle-bottom></line-middle-bottom>
+            <line-middle-up></line-middle-up>
             <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Contravariant</e>
@@ -167,12 +172,12 @@
 
         <laws style="--laws: 2">
           <div>
+            <line-top-up-double></line-top-up-double>
+            <line-bottom-down></line-bottom-down>
+            <line-bottom-down-double></line-bottom-down-double>
+            <line-bottom-down-triple></line-bottom-down-triple>
             <arrow-tail class="top-3"></arrow-tail>
-            <arrow-head-middle></arrow-head-middle>
             <arrow-head class="bottom-3"></arrow-head>
-            <line class="third-top up line-2"></line>
-            <line-double-top-down></line-double-top-down>
-            <line class="third-bottom down"></line>
           </div>
           <e>Covariant</e>
 
@@ -186,19 +191,18 @@
 
         <laws class="laws-7" style="--laws: 7">
           <div>
-            <line
-              class="middle-bottom up"
+            <line-middle-up
               style="
                 height: calc(
                   var(--gap-line-height) + 5 * var(--line-height-half)
                 );
-              "></line>
+              "></line-middle-up>
             <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Applicative</e>
 
           <d>identity</d>
-          <d>$\id \,\▹ \, \of \,\▹ \, \ap(a)$</d><d>$=$</d><d>$a$</d>
+          <d>$\id \▹ \of \▹ \ap(a)$</d><d>$=$</d><d>$a$</d>
 
           <d>homomorphism</d>
           <d>$ab \▹ \of \▹ (a \▹ \of \▹ \ap)$</d>
@@ -206,12 +210,12 @@
           <d>$a \▹ ab \▹ \of$</d>
 
           <d>associative composition</d>
-          <d>$fbc\, \▹ \map(\compose) \▹ \ap(fab) \▹ \ap(fa)$</d>
+          <d>$fbc \▹ \map(\compose) \▹ \ap(fab) \▹ \ap(fa)$</d>
           <d>$=$</d>
-          <d>$fbc\, \▹ \ap\big(fab \▹ \ap(fa)\big)$</d>
+          <d>$fbc \▹ \ap\(fab \▹ \ap(fa)\)$</d>
 
           <d>interchange</d>
-          <d>$fab\, \▹ \ap\big(\of(a)\big)$</d>
+          <d>$fab \▹ \ap\(\of(a)\)$</d>
           <d>$=$</d>
           <d>$a \▹ \apply \▹ \of \▹ \ap(fab)$</d>
 
@@ -221,26 +225,25 @@
           <d>$ab \▹ \of \▹ \ap(fa)$</d>
 
           <d>product consistency</d>
-          <d>$fab\, \▹ \ap(fa)$</d>
+          <d>$fab \▹ \ap(fa)$</d>
           <d>$=$</d>
-          <d>$\product(fab, fa) \▹ \map\big(([ab, a]) ⇒ ab(a)\big)$</d>
+          <d>$\product(fab, fa) \▹ \map\(([ab, a]) ⇒ ab(a)\)$</d>
 
           <d>flatMap consistency</d>
           <d>$\ap(fa)$</d>
           <d>$=$</d>
-          <d>$\flatMap\big(ab ⇒ \!\map(fa, ab)\big)$</d>
+          <d>$\flatMap\(ab ⇒ !\map(fa, ab)\)$</d>
         </laws>
 
         <laws class="laws-4" style="--laws: 4">
           <div>
-            <line
-              class="middle-bottom up line-2"
+            <line-middle-up-double
               style="
                 height: calc(
-                  2 * var(--gap-line-height) + 14 * var(--line-height-half) +
-                    var(--gap-height)
+                  var(--gap-line-height-2) + 6 * var(--line-height) +
+                    var(--radius-1) - var(--stroke)
                 );
-              "></line>
+              "></line-middle-up-double>
             <arrow-tail-middle></arrow-tail-middle>
           </div>
           <e>Monad</e>
@@ -253,12 +256,55 @@
           <d>associativity</d>
           <d>$\flatMap(afb) \∘ \flatMap(bfc)$</d>
           <d>$=$</d>
-          <d>$\flatMap\big(\flatMap(bfc) \∘ afb\big)$</d>
+          <d>$\flatMap\(\flatMap(bfc) \∘ afb\)$</d>
 
           <d>map consistency</d>
           <d>$\map(ab)$</d>
           <d>$=$</d>
           <d>$\flatMap(\of \∘ ab)$</d>
+        </laws>
+
+        <laws class="laws-2" style="--laws: 2">
+          <d>
+            <arrow-tail class="top-3"></arrow-tail>
+            <arrow-head class="bottom-3"></arrow-head>
+            <line-top-up-triple
+              style="
+                height: calc(
+                  3 * (var(--gap-line-height) + 3 * var(--line-height)) +
+                    var(--arrow-height) - var(--stroke)
+                );
+              "></line-top-up-triple>
+            <line-bottom-down></line-bottom-down>
+          </d>
+          <e>SemiAlternative</e>
+
+          <d>associativity</d>
+          <d>$(fa_1 ⊕ fa_2) ⊕ fa_3$</d>
+          <d>$=$</d><d>$fa_1 ⊕ (fa_2 ⊕ fa_3)$</d>
+
+          <d>coproductMany associativity</d>
+          <d>$\coproductMany(fa_1, [fa_2, fa_3])$</d>
+          <d>$=$</d><d>$fa_1 ⊕ (fa_2 ⊕ fa_3)$</d>
+        </laws>
+
+        <laws class="laws-3" style="--laws: 3">
+          <d>
+            <line-middle-up
+              style="
+                height: calc(var(--gap-line-height) + var(--line-height-half));
+              "></line-middle-up>
+            <arrow-tail-middle></arrow-tail-middle>
+          </d>
+          <e>Alternative</e>
+
+          <d>left identity</d><d>$\∅ ⊕ fa$</d> <d>$=$</d><d>$fa$</d>
+
+          <d>right identity</d><d>$fa ⊕ \∅$</d> <d>$=$</d><d>$fa$</d>
+
+          <d>coproductAll zero</d
+          ><d>$\coproductAll\:\!\raisebox{0.5pt}{([\,])}$</d> <d>$=$</d
+          ><d>$\∅$</d>
         </laws>
 
         <laws
@@ -273,9 +319,9 @@
           <d>identity</d><d>$\Id.\traverse(\id)$</d><d>$=$</d><d>$\id$</d>
 
           <d>composition</d>
-          <d>$\G.\map\big(\H.\traverse(bhc)\big) \∘ \G.\traverse(agb)$</d>
+          <d>$\G.\map\(\H.\traverse(bhc)\) \∘ \G.\traverse(agb)$</d>
           <d>$=$</d>
-          <d>$\GH.\traverse\big(\G.\map(bhc) \∘ agb\big)$</d>
+          <d>$\GH.\traverse\(\G.\map(bhc) \∘ agb\)$</d>
 
           <d>map consistency</d>
           <d>$\F.\map(ab)$</d>

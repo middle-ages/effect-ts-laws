@@ -1,71 +1,108 @@
 :root {
+  --delta-1: 8px;
+  --delta-2: 6px;
   --gap-height: calc(var(--separator-height-half) + var(--vpad-laws));
-  --gap-line-height: calc(var(--gap-height) + var(--line-height) + var(--stroke-half));
+  --gap-line-height: calc(var(--gap-height) + var(--line-height) + var(--stroke));
+  --gap-line-height-2: calc(var(--gap-line-height) * 2 + var(--gap-height));
   --line-middle: calc(50% - var(--stroke-half));
   --line-half: calc(var(--line-middle) - var(--arrow-height-half));
   --line-third: calc(var(--line-middle) + var(--arrow-height));
   --radius-1: calc(var(--gap-line-height) - var(--arrow-height));
-  --radius-2: calc(var(--radius-1) + var(--arrow-height));
+  --radius-2: calc(var(--radius-1) + var(--delta-1));
+  --radius-3: calc(var(--radius-1) + var(--delta-1) + var(--delta-2) + 8px);
   --quad-height: calc(var(--radius-1) + 2 * var(--gap-line-height));
 }
-line,
-line-double-top-down,
-line-double-bottom-up,
-line-middle-top,
-line-middle-bottom {
+line-top-up,
+line-bottom-down,
+line-middle-up,
+line-middle-down,
+line-top-up-double,
+line-middle-up-double,
+line-middle-down-double,
+line-bottom-down-double,
+line-top-up-triple,
+line-bottom-down-triple {
   display: block;
   position: absolute;
   right: 2px;
-  height: calc(var(--gap-line-height) + var(--stroke-half));
+  height: var(--gap-line-height);
   width: var(--line-width);
   border-left: var(--line);
 }
-line-double-top-down,
-line-double-bottom-up,
-.line-2 {
-  width: calc(var(--line-width) + var(--arrow-height));
+line-top-up-double,
+line-middle-up-double,
+line-middle-down-double,
+line-bottom-down-double {
+  width: calc(var(--line-width) + var(--delta-1));
 }
-line-middle-bottom,
-.middle-bottom {
-  bottom: var(--line-middle);
+line-top-up-triple,
+line-bottom-down-triple {
+  width: calc(var(--line-width) + var(--delta-1) + var(--delta-2) + var(--stroke));
 }
-.half-top {
-  top: var(--line-half);
-  height: calc(var(--gap-line-height) + var(--arrow-height-half));
-}
-.half-bottom {
-  top: calc(var(--line-half) + var(--arrow-height));
-  height: calc(var(--gap-line-height) - var(--arrow-height-half));
-}
-.third-top {
-  bottom: var(--line-third);
-  height: var(--quad-height);
-}
-.third-bottom {
-  top: var(--line-third);
-  height: var(--radius-1);
-}
-line-middle-bottom,
-.up {
+line-top-up,
+line-middle-up,
+line-top-up-double,
+line-middle-up-double,
+line-top-up-triple {
   border-bottom: var(--line);
+}
+line-middle-up,
+line-top-up {
   border-bottom-left-radius: var(--radius-1);
 }
-line-middle-top,
-.down {
-  border-top: var(--line);
-  border-top-left-radius: var(--radius-1);
-}
-line-double-bottom-up,
-.line-2.up {
+line-middle-up-double,
+line-top-up-double {
   border-bottom-left-radius: var(--radius-2);
 }
-line-double-top-down,
-line-double-bottom-up,
-.line-2.down {
+line-top-up-triple {
+  border-bottom-left-radius: var(--radius-3);
+}
+line-middle-down,
+line-bottom-down,
+line-middle-down-double,
+line-bottom-down-double,
+line-bottom-down-triple {
   border-top: var(--line);
+}
+line-middle-down,
+line-bottom-down {
+  border-top-left-radius: var(--radius-1);
+}
+line-middle-down-double,
+line-bottom-down-double {
   border-top-left-radius: var(--radius-2);
 }
-line-middle-top,
-line-double-top-down {
+line-bottom-down-triple {
+  border-top-left-radius: var(--radius-3);
+}
+line-middle-up,
+line-middle-up-double {
+  bottom: var(--line-middle);
+}
+line-middle-down,
+line-middle-down-double {
   top: var(--line-middle);
+}
+line-top-up,
+line-top-up-double,
+line-top-up-triple {
+  bottom: calc(var(--gap-line-height) + var(--stroke-half));
+}
+line-top-up {
+  height: calc(var(--gap-height) + 2 * var(--line-height) + var(--stroke) + var(--radius-1));
+}
+line-top-up-double {
+  height: calc(var(--gap-height) + 5 * var(--line-height-half) + var(--radius-1) - var(--stroke));
+}
+line-bottom-down,
+line-bottom-down-double,
+line-bottom-down-triple {
+  top: calc(50% + var(--arrow-height-half) - var(--stroke-half));
+}
+line-bottom-down {
+  height: calc(var(--gap-line-height) - var(--arrow-height-half) - var(--stroke));
+}
+line-bottom-down-double,
+line-bottom-down-triple {
+  height: calc(var(--gap-line-height) - var(--arrow-height-half) - var(--stroke));
 }

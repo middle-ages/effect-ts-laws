@@ -1,3 +1,4 @@
+import {addLawSet, Law, lawTests} from '#law'
 import {
   Applicative as AP,
   Monad as MD,
@@ -8,7 +9,6 @@ import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {Equivalence as EQ, identity, pipe} from 'effect'
 import {apply, compose} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '#law'
 import {Monoid} from '../concrete/Monoid.js'
 import {Covariant} from './Covariant.js'
 import {
@@ -75,9 +75,10 @@ const buildLaws = <
   name: string,
   given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) => {
-  const {F, a, fa, equalsFa, equalsFb, equalsFc, ab, bc} = unfoldGiven(given)
+  const {F, a, fa, equalsFa, equalsFb, equalsFc, ab, fabOf, fbcOf} =
+    unfoldGiven(given)
 
-  const [fab, fbc] = [ab.map(F.of), bc.map(F.of)],
+  const [fab, fbc] = [fabOf(F.of), fbcOf(F.of)],
     [ap, of, map] = [SA.ap(F), F.of, F.map]
 
   return lawTests(
@@ -128,14 +129,14 @@ const buildLaws = <
     }),
 
     Law(
-      'mapConsistency',
+      'map consistency',
       'fa ▹ map(ab) = ab ▹ of ▹ ap(fa)',
       fa,
       ab,
     )((fa, ab) => equalsFb(pipe(fa, map(ab)), pipe(ab, F.of, ap(fa)))),
 
     Law(
-      'productConsistency',
+      'product consistency',
       'fab ▹ ap(fa) = product(fab, fa) ▹ map(([ab, a]) ⇒ ab(a))',
       fa,
       fab,
@@ -154,7 +155,7 @@ const buildLaws = <
     ...('flatMap' in F
       ? [
           Law(
-            'flatMapConsistency',
+            'flatMap consistency',
             'fab ▹ ap(fa) = fab ▹ flatMap(ab ⇒ map(fa, ab))',
             fa,
             fab,

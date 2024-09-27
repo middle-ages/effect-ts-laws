@@ -1,5 +1,6 @@
 /** Typeclass law tests for the `Option` datatype. */
 import {
+  Alternative,
   Applicative,
   getOptionalMonoid,
   Monad,
@@ -26,5 +27,6 @@ describe('@effect/typeclass/data/Option', () => {
     Applicative,
     Monad,
     Traversable,
+    Alternative,
   })
 })

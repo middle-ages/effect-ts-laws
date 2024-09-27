@@ -61,6 +61,7 @@ export type {
 export * as Arbitrary from './src/arbitrary.js'
 
 export {
+  Alternative,
   Applicative,
   Bicovariant,
   Contravariant,
@@ -102,6 +103,7 @@ export {
 } from './src/laws.js'
 
 export type {
+  AlternativeTypeLambda,
   ApplicativeTypeLambda,
   BicovariantTypeLambda,
   Bounded,

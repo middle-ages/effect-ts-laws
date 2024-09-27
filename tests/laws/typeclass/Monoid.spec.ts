@@ -15,7 +15,7 @@ describe('Monoid laws self-test', () => {
 
   test('fail: “non-empty zero” fails left-identity law', () => {
     expect(pipe({...instance, empty: [1]}, laws, checkLaws)[0]).toMatch(
-      /leftIdentity/,
+      /left identity/,
     )
   })
 })

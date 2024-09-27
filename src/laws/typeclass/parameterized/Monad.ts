@@ -1,7 +1,7 @@
+import {Law, LawSet} from '#law'
 import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {Law, LawSet} from '#law'
 import {Covariant} from './Covariant.js'
 import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 
@@ -26,14 +26,14 @@ export const Monad = <
   return LawSet(Covariant(given))(
     'Monad',
     Law(
-      'leftIdentity',
+      'left identity',
       'of ∘ flatMap(afb) = afb',
       a,
       afb,
     )((a, afb) => equalsFb(pipe(a, F.of, F.flatMap(afb)), afb(a))),
 
     Law(
-      'rightIdentity',
+      'right identity',
       'flatMap(of) = id',
       fa,
     )(fa => equalsFa(pipe(fa, F.flatMap(F.of)), fa)),
@@ -52,7 +52,7 @@ export const Monad = <
     ),
 
     Law(
-      'mapConsistency',
+      'map consistency',
       'map(ab) = flatMap(of ∘ ab)',
       fa,
       ab,

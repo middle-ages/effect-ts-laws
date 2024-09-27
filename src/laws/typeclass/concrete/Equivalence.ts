@@ -15,20 +15,15 @@ export const Equivalence = <A>({
     'Equivalence',
     Law(
       'transitivity',
-      '∀a,b,c ∈ T: a=b ∧ b=c ⇒ a=c',
+      'a=b ∧ b=c ⇒ a=c',
       a,
       a,
       a,
     )((a: A, b: A, c: A) => BO.implies(F(a, b) && F(b, c), F(a, c))),
 
-    Law(
-      'symmetry',
-      '∀a,b ∈ T: a=b ⇔ b=a',
-      a,
-      a,
-    )((a: A, b: A) => F(a, b) === F(b, a)),
+    Law('symmetry', 'a=b ⇔ b=a', a, a)((a: A, b: A) => F(a, b) === F(b, a)),
 
-    Law('reflexivity', '∀a ∈ T: a=a', a)((a: A) => F(a, a)),
+    Law('reflexivity', 'a=a', a)((a: A) => F(a, a)),
   )
 
 declare module './given.js' {

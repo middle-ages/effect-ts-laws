@@ -9,9 +9,13 @@
   }
 }
 .enclosing.fn {
+  --size: calc(1.1 * var(--font-size));
   margin-right: var(--leading-1);
+  position: relative;
+  top: 0px;
   & * {
     font-family: 'CMU Concrete' !important;
+    font-size: var(--size) !important;
     color: #343230;
   }
 }

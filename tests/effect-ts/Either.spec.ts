@@ -3,6 +3,7 @@ import {
   Applicative,
   Bicovariant,
   Monad,
+  SemiAlternative,
   Traversable,
 } from '@effect/typeclass/data/Either'
 import {Either as EI, String as STR} from 'effect'
@@ -32,10 +33,11 @@ describe('@effect/typeclass/data/Either', () => {
     string
   > = arbitraryA => either(fc.string(), arbitraryA)
   testTypeclassLaws({getEquivalence, getArbitrary})({
-    Equivalence: getEquivalence(monoEquivalence),
     Applicative,
-    Monad,
-    Traversable,
     Bicovariant,
+    Equivalence: getEquivalence(monoEquivalence),
+    Monad,
+    SemiAlternative,
+    Traversable,
   })
 })

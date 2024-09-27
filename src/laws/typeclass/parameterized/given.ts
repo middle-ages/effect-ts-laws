@@ -66,10 +66,15 @@ export const unfoldGiven = <
       equalsB,
       equalsC,
     ),
-    [fa, fb, fc] = liftArbitraries(getArbitrary)(a, b, c)
+    [fa, fb, fc] = liftArbitraries(getArbitrary)(a, b, c),
+    ab = unary<A>()(b),
+    bc = unary<B>()(c),
+    ba = unary<B>()(a),
+    cb = unary<C>()(b)
 
   return {
     ...given,
+
     equalsFa,
     equalsFb,
     equalsFc,
@@ -78,14 +83,16 @@ export const unfoldGiven = <
     fb,
     fc,
 
-    ab: unary<A>()(b),
-    bc: unary<B>()(c),
-
-    ba: unary<B>()(a),
-    cb: unary<C>()(b),
+    ab,
+    bc,
+    ba,
+    cb,
 
     afb: pipe(b, unaryToKind<A>()(getArbitrary)),
     bfc: pipe(c, unaryToKind<B>()(getArbitrary)),
+
+    fabOf: (of: <T>(a: T) => Kind<F, In1, Out2, Out1, T>) => ab.map(of),
+    fbcOf: (of: <T>(a: T) => Kind<F, In1, Out2, Out1, T>) => bc.map(of),
   }
 }
 
