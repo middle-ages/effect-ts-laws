@@ -4,13 +4,15 @@
   --gap-height: calc(var(--separator-height-half) + var(--vpad-laws));
   --gap-line-height: calc(var(--gap-height) + var(--line-height) + var(--stroke));
   --gap-line-height-2: calc(var(--gap-line-height) * 2 + var(--gap-height));
+  --height-3: calc(var(--gap-line-height) + var(--line-height) + var(--radius-1));
+  --height-5: calc(var(--gap-line-height) + var(--line-height-half));
+  --height-9: calc(var(--gap-line-height) + 5 * var(--line-height-half));
+  --height-13: calc(var(--gap-line-height-2) + 6 * var(--line-height) + var(--radius-1) - var(--stroke));
+  --height-15: calc(3 * (var(--gap-line-height) + 3 * var(--line-height)) + var(--arrow-height) - var(--stroke));
   --line-middle: calc(50% - var(--stroke-half));
-  --line-half: calc(var(--line-middle) - var(--arrow-height-half));
-  --line-third: calc(var(--line-middle) + var(--arrow-height));
   --radius-1: calc(var(--gap-line-height) - var(--arrow-height));
   --radius-2: calc(var(--radius-1) + var(--delta-1));
   --radius-3: calc(var(--radius-1) + var(--delta-1) + var(--delta-2) + 8px);
-  --quad-height: calc(var(--radius-1) + 2 * var(--gap-line-height));
 }
 line-top-up,
 line-bottom-down,
@@ -89,20 +91,15 @@ line-top-up-triple {
   bottom: calc(var(--gap-line-height) + var(--stroke-half));
 }
 line-top-up {
-  height: calc(var(--gap-height) + 2 * var(--line-height) + var(--stroke) + var(--radius-1));
+  height: var(--height-3);
 }
 line-top-up-double {
-  height: calc(var(--gap-height) + 5 * var(--line-height-half) + var(--radius-1) - var(--stroke));
+  height: calc(var(--height-3) + var(--line-height-half));
 }
 line-bottom-down,
 line-bottom-down-double,
 line-bottom-down-triple {
-  top: calc(50% + var(--arrow-height-half) - var(--stroke-half));
-}
-line-bottom-down {
-  height: calc(var(--gap-line-height) - var(--arrow-height-half) - var(--stroke));
-}
-line-bottom-down-double,
-line-bottom-down-triple {
-  height: calc(var(--gap-line-height) - var(--arrow-height-half) - var(--stroke));
+  --arrow-stroke: calc(var(--arrow-height-half) - var(--stroke-half));
+  top: calc(50% + var(--arrow-stroke));
+  height: calc(var(--gap-line-height) - var(--arrow-stroke));
 }
