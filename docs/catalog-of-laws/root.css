@@ -5,6 +5,7 @@
    */
   --font-size: 17px;
   --font-size-title: 22px;
+  --latex-font-size: calc(1.1 * var(--font-size));
   --line-height: calc(1.7 * var(--font-size));
   --line-height-header: calc(1.4 * var(--font-size));
   --line-height-title: 40px;
@@ -20,7 +21,7 @@
   --separator-height: calc(var(--separator-height-factor) * var(--line-height));
   --line-width: calc(3 * var(--line-height) / 2);
   --line: var(--stroke) solid var(--color-line);
-  --line-table: 1px solid var(--color-table-line);
+  --line-table: 1.3px solid var(--color-table-line);
   --line-table-high: 1px solid var(--color-table-line-high);
   /** Multiples */
   --line-height-half: calc(var(--line-height) / 2);
@@ -37,12 +38,13 @@
   --color-law-bg: #edeae8;
   --color-law-shadow: #120906;
   --color-table-line-high: #cfcff6;
-  --color-table-line: #99c;
+  --color-table-line: #99a;
   --color-op: #88a;
-  --color-line: #555;
+  --color-line: #666;
   --color-bg: #fff;
   --color-bg-transparent: #fff0;
   --color-bg-semitransparent-inverse: #0009;
   --color-bg-transparent-inverse: #0000;
   --color-outline: #51b;
+  --color-fn: #343230;
 }

@@ -31,6 +31,8 @@
     <macro>$\global\def\∘{\:\htmlClass{flow}{\scriptsize{∘}}\,}$</macro>
     <macro>$\global\def\∅{\htmlClass{empty}{\varnothing}}$</macro>
     <macro>$\global\def\fn#1{\htmlClass{fn}{#1}}$</macro>
+    <macro>$\global\def\minBound{\fn{minBound}}$</macro>
+    <macro>$\global\def\maxBound{\fn{maxBound}}$</macro>
     <macro>$\global\def\imap{\fn{imap}}$</macro>
     <macro>$\global\def\map{\fn{map}}$</macro>
     <macro>$\global\def\coproduct{\fn{coproduct}}$</macro>
@@ -96,6 +98,17 @@
 
           <d>equivalence consistency</d>
           <d>$a≤b ∧ b≤a$</d><d>$⇒$</d><d>$a=b$</d>
+        </laws>
+
+        <laws>
+          <d></d>
+          <e>Bounded</e>
+
+          <d>lower bounded</d>
+          <d>$a$</d><d>$≥$</d><d>$\minBound$</d>
+
+          <d>upper bounded</d>
+          <d>$a$</d><d>$≤$</d><d>$\maxBound$</d>
         </laws>
 
         <laws>
@@ -196,29 +209,29 @@
           <d>$a \▹ ab \▹ \of$</d>
 
           <d>associative composition</d>
-          <d>$fbc \▹ \map(\compose) \▹ \ap(fab) \▹ \ap(fa)$</d>
+          <d>$fbc \▹ \map(\compose) \▹ \ap(f\!ab) \▹ \ap(f\!a)$</d>
           <d>$=$</d>
-          <d>$fbc \▹ \ap\(fab \▹ \ap(fa)\)$</d>
+          <d>$fbc \▹ \ap\(f\!ab \▹ \ap(f\!a)\)$</d>
 
           <d>interchange</d>
-          <d>$fab \▹ \ap\(\of(a)\)$</d>
+          <d>$f\!ab \▹ \ap\(\of(a)\)$</d>
           <d>$=$</d>
-          <d>$a \▹ \apply \▹ \of \▹ \ap(fab)$</d>
+          <d>$a \▹ \apply \▹ \of \▹ \ap(f\!ab)$</d>
 
           <d>map consistency</d>
-          <d>$fa \▹ \map(ab)$</d>
+          <d>$f\!a \▹ \map(ab)$</d>
           <d>$=$</d>
-          <d>$ab \▹ \of \▹ \ap(fa)$</d>
+          <d>$ab \▹ \of \▹ \ap(f\!a)$</d>
 
           <d>product consistency</d>
-          <d>$fab \▹ \ap(fa)$</d>
+          <d>$f\!ab \▹ \ap(f\!a)$</d>
           <d>$=$</d>
-          <d>$\product(fab, fa) \▹ \map\(([ab, a]) ⇒ ab(a)\)$</d>
+          <d>$\product(f\!ab, f\!a) \▹ \map\(([ab, a]) ⇒ ab(a)\)$</d>
 
           <d>flatMap consistency</d>
-          <d>$\ap(fa)$</d>
+          <d>$\ap(f\!a)$</d>
           <d>$=$</d>
-          <d>$\flatMap\(ab ⇒ \!\map(fa, ab)\)$</d>
+          <d>$\flatMap\(ab ⇒ \!\map(f\!a, ab)\)$</d>
         </laws>
 
         <laws>
@@ -229,15 +242,15 @@
           </div>
           <e>Monad</e>
 
-          <d>left identity</d><d>$\of \∘ \flatMap(afb)$</d><d>$=$</d
-          ><d>$afb$</d>
+          <d>left identity</d><d>$\of \∘ \flatMap(a\!f\!b)$</d><d>$=$</d
+          ><d>$a\!f\!b$</d>
 
           <d>right identity</d><d>$\flatMap(\of)$</d><d>$=$</d><d>$\id$</d>
 
           <d>associativity</d>
-          <d>$\flatMap(afb) \∘ \flatMap(bfc)$</d>
+          <d>$\flatMap(a\!f\!b) \∘ \flatMap(b\!f\!c)$</d>
           <d>$=$</d>
-          <d>$\flatMap\(\flatMap(bfc) \∘ afb\)$</d>
+          <d>$\flatMap\(\flatMap(b\!f\!c) \∘ a\!f\!b\)$</d>
 
           <d>map consistency</d>
           <d>$\map(ab)$</d>
@@ -256,12 +269,12 @@
           <e>SemiAlternative</e>
 
           <d>associativity</d>
-          <d>$(fa_1 ⊕ fa_2) ⊕ fa_3$</d>
-          <d>$=$</d><d>$fa_1 ⊕ (fa_2 ⊕ fa_3)$</d>
+          <d>$(f\!a_1 ⊕ f\!a_2) ⊕ f\!a_3$</d>
+          <d>$=$</d><d>$f\!a_1 ⊕ (f\!a_2 ⊕ f\!a_3)$</d>
 
           <d>coproductMany associativity</d>
-          <d>$\coproductMany(fa_1, [fa_2, fa_3])$</d>
-          <d>$=$</d><d>$fa_1 ⊕ (fa_2 ⊕ fa_3)$</d>
+          <d>$\coproductMany(f\!a_1, [f\!a_2, f\!a_3])$</d>
+          <d>$=$</d><d>$f\!a_1 ⊕ (f\!a_2 ⊕ f\!a_3)$</d>
         </laws>
 
         <laws>
@@ -271,9 +284,10 @@
           </d>
           <e>Alternative</e>
 
-          <d>left identity</d><d>$\∅ ⊕ fa$</d> <d>$=$</d><d>$fa$</d>
+          <d>left identity</d><d>$\∅ ⊕ f\!a$</d> <d>$=$</d><d>$f\!a$</d>
 
-          <d>right identity</d><d>$fa ⊕ \∅$</d> <d>$=$</d><d>$fa$</d>
+          <d>right identity</d><d>$f\kern{-1pt}a ⊕ \∅$</d> <d>$=$</d
+          ><d>$f\!a$</d>
 
           <d>coproductAll zero</d
           ><d>$\coproductAll\:\!\raisebox{0.5pt}{([\,])}$</d> <d>$=$</d

@@ -6,7 +6,7 @@
 @import "tex.css";
 body {
   margin: 0;
-  background: #fff;
+  background: var(--color-bg);
 }
 diagram {
   display: block;

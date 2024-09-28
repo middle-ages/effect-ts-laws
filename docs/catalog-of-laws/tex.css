@@ -8,8 +8,8 @@
   margin-right: calc(1rex / 4);
   & * {
     font-family: 'CMU Concrete' !important;
-    font-size: calc(1.1 * var(--font-size)) !important;
-    color: #343230;
+    font-size: var(--latex-font-size) !important;
+    color: var(--color-fn);
   }
 }
 .enclosing.empty {

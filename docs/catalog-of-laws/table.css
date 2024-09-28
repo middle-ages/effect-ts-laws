@@ -43,11 +43,11 @@ article {
       border-image-width: calc(var(--font-size) / 4);
       border-image-repeat: stretch;
       border-image-source: linear-gradient(to right,
-          #0000 0,
-          #0000 25%,
+          var(--color-bg-transparent-inverse) 0,
+          var(--color-bg-transparent-inverse) 25%,
           var(--color-table-line) 30%,
           var(--color-table-line-high) 45%,
-          #ffff 80%);
+          var(--color-bg) 80%);
     }
   }
   laws:nth-child(2) {
