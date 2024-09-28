@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "Law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",

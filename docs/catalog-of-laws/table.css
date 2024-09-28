@@ -8,16 +8,19 @@ laws,
 laws {
   grid-template-columns: subgrid;
 }
+article,
+.header {
+  top: calc(var(--line-height-title));
+}
 article {
   position: relative;
-  top: calc(var(--line-height-header));
-  grid-template-columns: repeat(2, min-content) 23rex repeat(3, min-content);
+  grid-template-columns: repeat(2, min-content) var(--column-max) repeat(3, min-content);
   background:
-    linear-gradient(#ffff 0,
-      #ffff calc(var(--line-height) + var(--vpad)),
-      #fff0 calc(var(--line-height) + 4 * var(--vpad))),
-    linear-gradient(#0008 0,
-      #0000 calc(3 * var(--line-height)));
+    linear-gradient(var(--color-bg) 0,
+      var(--color-bg) calc(var(--line-height-header)),
+      var(--color-bg-transparent) calc(2 * var(--line-height-header))),
+    linear-gradient(var(--color-bg-semitransparent-inverse) 0,
+      var(--color-bg-transparent) calc(3.25 * var(--line-height-header)));
   background-attachment: scroll, fixed;
   laws,
   .header {
@@ -25,21 +28,39 @@ article {
   }
   .header {
     position: sticky;
-    top: calc(var(--line-height-header));
     z-index: 40;
     border-top: var(--line-table-high);
     border-bottom: var(--line-table);
     background: var(--color-bg);
-    padding-right: var(--hide-right);
+    & > *:last-child {
+      border-image-width: 0;
+    }
     & > * {
       text-align: center;
+      line-height: var(--line-height-header);
       color: var(--color-header);
+      border-image-slice: 0 100% 0 0;
+      border-image-width: calc(var(--font-size) / 4);
+      border-image-repeat: stretch;
+      border-image-source: linear-gradient(to right,
+          #0000 0,
+          #0000 25%,
+          var(--color-table-line) 30%,
+          var(--color-table-line-high) 45%,
+          #ffff 80%);
     }
+  }
+  laws:nth-child(2) {
+    grid-row-start: 2;
+    margin-top: calc(var(--vpad));
+  }
+  laws:last-child {
+    padding-bottom: var(--vpad);
+    border-bottom: var(--line-table);
   }
   laws {
     text-wrap: nowrap;
     margin-top: var(--separator-height);
-    z-index: 10;
     & > *:nth-child(n + 2):nth-child(-n + 6) {
       padding-top: var(--vpad-laws);
     }
@@ -52,18 +73,16 @@ article {
     }
     & > *:first-child,
     & > *:nth-child(2) {
-      grid-row: 1/calc(var(--laws) + 1);
+      grid-row: 1/ span 10;
     }
     & > *:first-child {
       position: relative;
-      width: var(--line-width-total);
-      height: 100%;
+      width: var(--lines-width);
     }
     & > *:nth-child(2) {
-      padding: 0 var(--hpad) 0 var(--hpad);
+      padding: 0 var(--pad) 0 var(--pad);
       color: var(--color-typeclass);
-      margin-top: auto;
-      margin-bottom: auto;
+      margin: auto 0 auto 0;
       grid-column: 2/3;
       font-weight: 450;
     }
@@ -84,12 +103,11 @@ article {
     & > *:nth-child(4n + 5) {
       text-align: center;
       grid-column: 5/6;
-      padding-left: 0.5rex;
-      padding-right: 0.5rex;
+      padding: 0 var(--pad-half) 0 var(--pad-half);
+      padding-right: var(--pad-half);
     }
     & > *:nth-child(4n + 6) {
-      padding-right: var(--hpad-half);
-      margin-right: var(--hide-right);
+      padding-right: var(--pad-half);
     }
     & > *:nth-child(n + 15):nth-child(-n + 18) {
       grid-row: 4/5;
@@ -105,15 +123,14 @@ article {
     }
   }
   laws::before {
-    --radius: calc(var(--line-height) - var(--arrow-height-half));
+    --radius: calc(var(--line-height));
     opacity: 8%;
-    grid-row: 1 / calc(var(--laws) + 1);
+    grid-row: 1 / span 10;
     grid-column: 2/-1;
     content: "";
-    clip-path: inset(0 var(--hide-right) 0 0);
     background: var(--color-law-bg);
     border-top-left-radius: var(--radius);
     border-bottom-left-radius: var(--radius);
-    box-shadow: inset 1px 1px 8px 2px #120906;
+    box-shadow: inset 1px 1px 8px 2px var(--color-law-shadow);
   }
 }

@@ -71,6 +71,7 @@ export {
   Monad,
   Monoid,
   Order,
+  SemiAlternative,
   Semigroup,
   Traversable,
   buildConcreteTypeclassLaw,
@@ -123,6 +124,7 @@ export type {
   MonomorphicGiven,
   ParameterizedClass,
   ParameterizedGiven,
+  SemiAlternativeTypeLambda,
   TraversableTypeLambda,
 } from './src/laws.js'
 

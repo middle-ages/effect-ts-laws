@@ -4,12 +4,7 @@
 @import "arrows.css";
 @import "lines.css";
 @import "tex.css";
-html {
-  padding: 0;
-  margin: 0;
-}
 body {
-  padding: 0;
   margin: 0;
   background: #fff;
 }
@@ -17,45 +12,38 @@ diagram {
   display: block;
   width: min-content;
   margin: 0 auto 0 auto;
-  padding: 0 var(--hpad-2) 0 var(--hpad-2);
+  padding: 0 var(--pad-2) 0 var(--pad-2);
 }
-img {
-  width: var(--arrow-width);
-  height: var(--arrow-height);
+header,
+h1 {
+  line-height: var(--line-height-title);
+  background: var(--color-bg);
 }
 header {
-  line-height: var(--line-height-header);
   width: 100%;
   position: fixed;
-  top: 0;
   left: 0;
   z-index: 40;
   display: flex;
   text-wrap: nowrap;
   align-items: baseline;
   justify-content: space-between;
-  background: var(--color-bg);
 }
 h1 {
   flex: 1;
   z-index: 35;
   text-align: center;
-  font-size: var(--font-size-header);
+  font-size: var(--font-size-title);
   color: var(--color-title);
   font-weight: 500;
   margin: 0;
-  background: var(--color-bg);
-  position: relative;
-  line-height: var(--line-height-header);
 }
 a {
   display: inline-block;
-  font-size: 16px;
   z-index: 30;
-  position: relative;
   text-decoration: none;
-  padding: 0 var(--hpad) 0 var(--hpad);
-  &:hover {
+  padding: 0 var(--pad) 0 var(--pad);
+  &:hover, &:active {
     text-decoration: underline;
   }
   outline-offset: -10px;
@@ -63,12 +51,7 @@ a {
   outline-style: dotted;
   border-radius: calc(var(--line-height) / 2);
   outline-color: transparent;
-  line-height: calc(var(--line-height) / 5 + var(--line-height-header));
   &:focus {
     outline-color: var(--color-outline);
   }
-}
-a.home {
-  position: relative;
-  top: 0;
 }

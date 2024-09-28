@@ -3,9 +3,6 @@
   <head>
     <title>Book of Laws</title>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=1" />
     <meta name="color-scheme" content="light dark" />
     <link
       rel="stylesheet"
@@ -22,21 +19,17 @@
       src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
       integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
       crossorigin="anonymous"
-      onload="renderMathInElement(document.body, {delimiters: [{left: '$', right: '$', display: false}], throwOnError : false, trust: true})"></script>
+      onload="onLoad()"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      media="screen"
-      rel="stylesheet"
-      type="text/css"
-      href="catalog-of-laws/index.css" />
+    <link rel="stylesheet" href="catalog-of-laws/index.css" />
   </head>
   <body>
     <macro>$\global\def\({\big(}$</macro>
     <macro>$\global\def\){\big)}$</macro>
-    <macro>$\global\def\∅{\htmlClass{empty}{\varnothing}}$</macro>
     <macro>$\global\def\▹{\,\:\htmlClass{pipe}{\footnotesize{▹}}\,\,}$</macro>
     <macro>$\global\def\∘{\:\htmlClass{flow}{\scriptsize{∘}}\,}$</macro>
+    <macro>$\global\def\∅{\htmlClass{empty}{\varnothing}}$</macro>
     <macro>$\global\def\fn#1{\htmlClass{fn}{#1}}$</macro>
     <macro>$\global\def\imap{\fn{imap}}$</macro>
     <macro>$\global\def\map{\fn{map}}$</macro>
@@ -58,7 +51,6 @@
     <macro>$\global\def\H{\mathrm{H}}$</macro>
     <macro>$\global\def\GH{\mathrm{GH}}$</macro>
     <macro>$\global\def\Id{\mathrm{Id}}$</macro>
-
     <diagram>
       <header>
         <h1>Typeclass Laws</h1>
@@ -71,10 +63,9 @@
           <d title="Typeclass “extends” relation.">Is a</d>
           <d title="Typeclass name in “effect-ts” source.">Typeclass</d>
           <d title="Law name.">Law</d>
-          <d style="grid-column: 4/-1" title="Law predicate.">Predicate</d>
+          <d style="grid-column: span 3" title="Law predicate.">Predicate</d>
         </div>
-        <laws
-          style="grid-row-start: 2; margin-top: calc(var(--vpad)); --laws: 3">
+        <laws>
           <d></d>
           <e>Equivalence</e>
 
@@ -87,7 +78,7 @@
           <d>reflexivity</d><d>$a$</d><d>$=$</d><d>$a$</d>
         </laws>
 
-        <laws class="laws-5" style="--laws: 5">
+        <laws>
           <d></d>
           <e>Order</e>
 
@@ -107,7 +98,7 @@
           <d>$a≤b ∧ b≤a$</d><d>$⇒$</d><d>$a=b$</d>
         </laws>
 
-        <laws style="--laws: 2">
+        <laws>
           <div>
             <line-middle-down></line-middle-down>
             <arrow-head-middle></arrow-head-middle>
@@ -123,7 +114,7 @@
           <d>$a ⊕ (b ⊕ c)$</d>
         </laws>
 
-        <laws style="--laws: 2">
+        <laws>
           <div>
             <line-middle-up></line-middle-up>
             <arrow-tail-middle></arrow-tail-middle>
@@ -137,7 +128,7 @@
           <d>$a ⊕ \∅$</d><d>$=$</d><d>$a$</d>
         </laws>
 
-        <laws style="--laws: 2">
+        <laws>
           <div>
             <line-middle-down-double></line-middle-down-double>
             <line-middle-down></line-middle-down>
@@ -154,7 +145,7 @@
           <d>$\imap(bc \∘ ab, ba \∘ cb)$</d>
         </laws>
 
-        <laws style="--laws: 2">
+        <laws>
           <div>
             <line-middle-up></line-middle-up>
             <arrow-tail-middle></arrow-tail-middle>
@@ -170,14 +161,14 @@
           <d>$\contramap(ba \∘ cb)$</d>
         </laws>
 
-        <laws style="--laws: 2">
+        <laws>
           <div>
             <line-top-up-double></line-top-up-double>
             <line-bottom-down></line-bottom-down>
             <line-bottom-down-double></line-bottom-down-double>
             <line-bottom-down-triple></line-bottom-down-triple>
-            <arrow-tail class="top-3"></arrow-tail>
-            <arrow-head class="bottom-3"></arrow-head>
+            <arrow-tail-top></arrow-tail-top>
+            <arrow-head-bottom></arrow-head-bottom>
           </div>
           <e>Covariant</e>
 
@@ -189,7 +180,7 @@
           <d>$\map(bc \∘ ab)$</d>
         </laws>
 
-        <laws class="laws-7" style="--laws: 7">
+        <laws>
           <div>
             <line-middle-up
               style="
@@ -232,10 +223,10 @@
           <d>flatMap consistency</d>
           <d>$\ap(fa)$</d>
           <d>$=$</d>
-          <d>$\flatMap\(ab ⇒ !\map(fa, ab)\)$</d>
+          <d>$\flatMap\(ab ⇒ \!\map(fa, ab)\)$</d>
         </laws>
 
-        <laws class="laws-4" style="--laws: 4">
+        <laws>
           <div>
             <line-middle-up-double
               style="
@@ -264,10 +255,10 @@
           <d>$\flatMap(\of \∘ ab)$</d>
         </laws>
 
-        <laws class="laws-2" style="--laws: 2">
+        <laws>
           <d>
-            <arrow-tail class="top-3"></arrow-tail>
-            <arrow-head class="bottom-3"></arrow-head>
+            <arrow-tail-top></arrow-tail-top>
+            <arrow-head-bottom></arrow-head-bottom>
             <line-top-up-triple
               style="
                 height: calc(
@@ -288,7 +279,7 @@
           <d>$=$</d><d>$fa_1 ⊕ (fa_2 ⊕ fa_3)$</d>
         </laws>
 
-        <laws class="laws-3" style="--laws: 3">
+        <laws>
           <d>
             <line-middle-up
               style="
@@ -307,12 +298,7 @@
           ><d>$\∅$</d>
         </laws>
 
-        <laws
-          style="
-            padding-bottom: var(--vpad);
-            border-bottom: var(--line-table);
-            --laws: 3;
-          ">
+        <laws>
           <d></d>
           <e>Traversable</e>
 
@@ -331,4 +317,13 @@
       </article>
     </diagram>
   </body>
+  <script>
+    function onLoad() {
+      renderMathInElement(document.body, {
+        delimiters: [{left: '$', right: '$', display: false}],
+        throwOnError: false,
+        trust: true,
+      })
+    }
+  </script>
 </html>

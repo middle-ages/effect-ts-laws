@@ -1,7 +1,3 @@
-:root {
-  --leading-1: calc(1rex / 4);
-  --leading-2: calc(1rex / 2);
-}
 .enclosing.empty,
 .enclosing.fn {
   & * {
@@ -9,18 +5,15 @@
   }
 }
 .enclosing.fn {
-  --size: calc(1.1 * var(--font-size));
-  margin-right: var(--leading-1);
-  position: relative;
-  top: 0px;
+  margin-right: calc(1rex / 4);
   & * {
     font-family: 'CMU Concrete' !important;
-    font-size: var(--size) !important;
+    font-size: calc(1.1 * var(--font-size)) !important;
     color: #343230;
   }
 }
 .enclosing.empty {
-  margin-right: var(--leading-2);
+  margin-right: calc(1rex / 2);
   & * {
     font-family: Symbola !important;
   }

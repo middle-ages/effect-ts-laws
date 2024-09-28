@@ -84,6 +84,7 @@ export {Contravariant} from './laws/typeclass/parameterized/Contravariant.js'
 export {Covariant} from './laws/typeclass/parameterized/Covariant.js'
 export {Invariant} from './laws/typeclass/parameterized/Invariant.js'
 export {Monad} from './laws/typeclass/parameterized/Monad.js'
+export {SemiAlternative} from './laws/typeclass/parameterized/SemiAlternative.js'
 export {Traversable} from './laws/typeclass/parameterized/Traversable.js'
 
 export type {MonoidTypeLambda} from './laws/typeclass/concrete/Monoid.js'
@@ -92,4 +93,5 @@ export type {BicovariantTypeLambda} from './laws/typeclass/parameterized/Bicovar
 export type {ContravariantTypeLambda} from './laws/typeclass/parameterized/Contravariant.js'
 export type {CovariantTypeLambda} from './laws/typeclass/parameterized/Covariant.js'
 export type {InvariantTypeLambda} from './laws/typeclass/parameterized/Invariant.js'
+export type {SemiAlternativeTypeLambda} from './laws/typeclass/parameterized/SemiAlternative.js'
 export type {TraversableTypeLambda} from './laws/typeclass/parameterized/Traversable.js'
