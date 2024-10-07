@@ -6,7 +6,7 @@ import {
   MonoidXor,
 } from '@effect/typeclass/data/Boolean'
 import {pipe} from 'effect'
-import {testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws'
+import {testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws/vitest'
 import {Equivalence, Order} from 'effect/Boolean'
 import fc from 'fast-check'
 

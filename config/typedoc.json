@@ -4,7 +4,8 @@
     "../src/arbitrary.ts",
     "../src/compose.ts",
     "../src/law.ts",
-    "../src/laws.ts"
+    "../src/laws.ts",
+    "../src/vitest.ts"
   ],
   "out": "../../effect-ts-laws-docs",
   "readme": "../README.md",
@@ -16,13 +17,16 @@
   "cleanOutputDir": false,
   "navigation": {
     "includeCategories": true,
-    "includeFolders": true
+    "includeGroups": false,
+    "includeFolders": false
   },
-  "visibilityFilters": {},
+  "visibilityFilters": {
+    "@internal": false
+  },
+  "sourceLinkExternal": true,
   "projectDocuments": [
     "../src/arbitrary/README.md",
     "../src/laws/typeclass/concrete/README.md",
-    "../src/laws/typeclass/parameterized/README.md",
-    "../tests/laws/typeclass/README.md"
+    "../src/laws/typeclass/parameterized/README.md"
   ]
 }

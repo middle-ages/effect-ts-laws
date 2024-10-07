@@ -1,10 +1,10 @@
-import {LiftArbitrary} from '#arbitrary'
-import {LiftEquivalence} from '#law'
+import {LiftArbitrary} from '../../../arbitrary.js'
 import {Equivalence as EQ} from 'effect'
 import {constant} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {GivenConcerns} from '../../parameterized/given.js'
+import {LiftEquivalence} from '../../../law.js'
+import {GivenConcerns} from '../parameterized/harness/given.js'
 import {Mono, monoArbitrary, monoEquivalence} from './helpers.js'
 
 /**

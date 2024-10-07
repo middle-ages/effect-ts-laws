@@ -1,7 +1,7 @@
 import {pipe} from 'effect'
 import * as EF from 'effect/Effect'
 import fc from 'fast-check'
-import {Monad as arbitraryMonad} from './instances.js'
+import {Monad as arbitraryMonad} from './monad.js'
 import {LiftArbitrary} from './types.js'
 
 const {map} = arbitraryMonad

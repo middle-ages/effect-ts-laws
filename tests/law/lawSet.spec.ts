@@ -8,8 +8,8 @@ import {
   lawSetTests,
   lawTests,
   negateLaw,
-  testLaws,
 } from 'effect-ts-laws'
+import {testLaws} from 'effect-ts-laws/vitest'
 import fc from 'fast-check'
 
 const tinyPositive = fc.integer({min: 1, max: 100})

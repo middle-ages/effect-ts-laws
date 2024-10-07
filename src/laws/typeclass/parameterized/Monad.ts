@@ -1,15 +1,15 @@
-import {Law, LawSet} from '#law'
 import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {Covariant} from './Covariant.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
+import {Law, LawSet} from '../../../law.js'
+import {covariantLaws} from './Covariant.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Monad`.
  * @category typeclass laws
  */
-export const Monad = <
+export const monadLaws = <
   F extends TypeLambda,
   A,
   B = A,
@@ -23,7 +23,7 @@ export const Monad = <
   const {a, F, fa, equalsFa, equalsFb, equalsFc, ab, afb, bfc} =
     unfoldGiven(given)
 
-  return LawSet(Covariant(given))(
+  return LawSet(covariantLaws(given))(
     'Monad',
     Law(
       'left identity',
@@ -70,7 +70,7 @@ export interface MonadTypeLambda extends TypeLambda {
   readonly type: MD.Monad<this['Target'] & TypeLambda>
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ParameterizedLambdas {
     Monad: MonadTypeLambda
   }

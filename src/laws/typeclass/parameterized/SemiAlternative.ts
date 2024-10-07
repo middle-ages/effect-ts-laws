@@ -1,15 +1,15 @@
-import {addLawSet, Law, lawTests} from '#law'
 import {SemiAlternative as SA} from '@effect/typeclass'
 import {pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {Covariant} from './Covariant.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
+import {Law, addLawSet, lawTests} from '../../../law.js'
+import {covariantLaws} from './Covariant.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
 
 /**
  * Test typeclass laws for `SemiAlternative`.
  * @category typeclass laws
  */
-export const SemiAlternative = <
+export const semiAlternativeLaws = <
   F extends TypeLambda,
   A,
   B = A,
@@ -20,7 +20,10 @@ export const SemiAlternative = <
 >(
   given: Given<SemiAlternativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
 ) =>
-  pipe(buildLaws('SemiAlternative', given), pipe(given, Covariant, addLawSet))
+  pipe(
+    buildLaws('SemiAlternative', given),
+    pipe(given, covariantLaws, addLawSet),
+  )
 
 const buildLaws = <
   F extends TypeLambda,
@@ -76,7 +79,7 @@ export interface SemiAlternativeTypeLambda extends TypeLambda {
   readonly type: SA.SemiAlternative<this['Target'] & TypeLambda>
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ParameterizedLambdas {
     SemiAlternative: SemiAlternativeTypeLambda
   }

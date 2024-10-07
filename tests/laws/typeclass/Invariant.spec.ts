@@ -1,7 +1,8 @@
 import {Invariant as IN} from '@effect/typeclass'
 import {Invariant as arrayInvariant} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, Invariant, testLaws, tinyInteger} from 'effect-ts-laws'
+import {checkLaws, invariantLaws, tinyInteger} from 'effect-ts-laws'
+import {testLaws} from 'effect-ts-laws/vitest'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
 import fc from 'fast-check'
@@ -10,7 +11,7 @@ type Instance = IN.Invariant<ReadonlyArrayTypeLambda>
 
 const instance = arrayInvariant,
   laws = (instance: Instance) =>
-    Invariant({
+    invariantLaws({
       F: instance,
       a: tinyInteger,
       b: tinyInteger,

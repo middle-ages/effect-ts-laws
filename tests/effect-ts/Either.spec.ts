@@ -12,8 +12,8 @@ import {
   LiftArbitrary,
   LiftEquivalence,
   monoEquivalence,
-  testTypeclassLaws,
 } from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {EitherTypeLambda} from 'effect/Either'
 import fc from 'fast-check'
 

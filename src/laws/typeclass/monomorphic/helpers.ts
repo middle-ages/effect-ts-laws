@@ -1,8 +1,8 @@
-import {testUnaryEquivalence, tinyInteger} from '#arbitrary'
 import {Semigroup as SG} from '@effect/typeclass'
 import {getSemigroup as arraySemigroup} from '@effect/typeclass/data/Array'
 import {Array as AR, Equivalence as EQ, Number as NU, Order as OD} from 'effect'
 import fc from 'fast-check'
+import {testUnaryEquivalence, tinyInteger} from '../../../arbitrary.js'
 
 /**
  * The underlying type used for monomorphic typeclass law tests.
@@ -14,7 +14,7 @@ import fc from 'fast-check'
 export type Mono = readonly number[]
 
 /**
- * The equivalence used for {@link testTypeclassLaws}.
+ * The equivalence used for {@link vitest.testTypeclassLaws}.
  * @category monomorphic
  */
 export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
@@ -23,7 +23,7 @@ export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
 
 /**
  * An arbitrary for the underlying type of the
- * {@link testTypeclassLaws} unit under test.
+ * {@link vitest.testTypeclassLaws} unit under test.
  * @category monomorphic
  */
 export const monoArbitrary: fc.Arbitrary<Mono> = fc.array(tinyInteger, {
@@ -32,13 +32,13 @@ export const monoArbitrary: fc.Arbitrary<Mono> = fc.array(tinyInteger, {
 })
 
 /**
- * The order used to {@link testTypeclassLaws}.
+ * The order used for {@link vitest.testTypeclassLaws}.
  * @category monomorphic
  */
 export const monoOrder: OD.Order<Mono> = AR.getOrder(NU.Order)
 
 /**
- * The semigroup used to {@link testTypeclassLaws}.
+ * The semigroup used for {@link vitest.testTypeclassLaws}.
  * @category monomorphic
  */
 export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()

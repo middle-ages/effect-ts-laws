@@ -1,18 +1,18 @@
 :root {
-  --delta-1: 8px;
-  --delta-2: 6px;
-  --gap-height: calc(var(--separator-height-half) + var(--vpad-laws));
-  --gap-line-height: calc(var(--gap-height) + var(--line-height) + var(--stroke));
-  --gap-line-height-2: calc(var(--gap-line-height) * 2 + var(--gap-height));
-  --height-3: calc(var(--gap-line-height) + var(--line-height) + var(--radius-1));
-  --height-5: calc(var(--gap-line-height) + var(--line-height-half));
-  --height-9: calc(var(--gap-line-height) + 5 * var(--line-height-half));
-  --height-13: calc(var(--gap-line-height-2) + 6 * var(--line-height) + var(--radius-1) - var(--stroke));
-  --height-15: calc(3 * (var(--gap-line-height) + 3 * var(--line-height)) + var(--arrow-height) - var(--stroke));
+  --stroke-line: calc(var(--line-height) - var(--stroke-half));
+  --gap-height: calc(var(--separator-half) + var(--gap));
+  --gap-1x: calc(var(--gap-height) + var(--line-height) + 0.5px);
+  --gap-1x-bottom: calc(var(--gap-1x) - var(--arrow-half) - var(--stroke-half));
+  --gap-1x-p1: calc(var(--gap-1x) + var(--line-height-half));
+  --gap-1x-p2: calc(var(--gap-1x) + 5 * var(--line-height-half));
+  --gap-3x: calc(3 * var(--gap-1x));
+  --gap-3x-top: calc(var(--gap-3x) - var(--arrow-half) - var(--stroke-half));
+  --gap-3x-p6: calc(var(--gap-3x) + 6 * var(--line-height) - 0.5px);
+  --gap-4x-p8: calc(var(--gap-3x-p6) + 7 * var(--line-height-half) - 1px);
   --line-middle: calc(50% - var(--stroke-half));
-  --radius-1: calc(var(--gap-line-height) - var(--arrow-height));
-  --radius-2: calc(var(--radius-1) + var(--delta-1));
-  --radius-3: calc(var(--radius-1) + var(--delta-1) + var(--delta-2) + 8px);
+  --radius-1: calc(var(--gap-1x) - var(--arrow-half) - var(--pad-half));
+  --radius-2: calc(var(--radius-1) + var(--line-delta-1));
+  --radius-3: calc(var(--radius-2) + var(--line-delta-2));
 }
 line-top-up,
 line-bottom-down,
@@ -24,10 +24,9 @@ line-middle-down-double,
 line-bottom-down-double,
 line-top-up-triple,
 line-bottom-down-triple {
-  display: block;
   position: absolute;
-  right: 2px;
-  height: var(--gap-line-height);
+  right: 1px;
+  height: var(--gap-1x);
   width: var(--line-width);
   border-left: var(--line);
 }
@@ -35,11 +34,11 @@ line-top-up-double,
 line-middle-up-double,
 line-middle-down-double,
 line-bottom-down-double {
-  width: calc(var(--line-width) + var(--delta-1));
+  width: var(--line-width-2);
 }
 line-top-up-triple,
 line-bottom-down-triple {
-  width: calc(var(--line-width) + var(--delta-1) + var(--delta-2) + var(--stroke));
+  width: var(--line-width-3);
 }
 line-top-up,
 line-middle-up,
@@ -59,6 +58,7 @@ line-top-up-double {
 line-top-up-triple {
   border-bottom-left-radius: var(--radius-3);
 }
+line.middle.down,
 line-middle-down,
 line-bottom-down,
 line-middle-down-double,
@@ -66,6 +66,7 @@ line-bottom-down-double,
 line-bottom-down-triple {
   border-top: var(--line);
 }
+line.middle.down,
 line-middle-down,
 line-bottom-down {
   border-top-left-radius: var(--radius-1);
@@ -81,6 +82,7 @@ line-middle-up,
 line-middle-up-double {
   bottom: var(--line-middle);
 }
+line.middle.down,
 line-middle-down,
 line-middle-down-double {
   top: var(--line-middle);
@@ -88,18 +90,17 @@ line-middle-down-double {
 line-top-up,
 line-top-up-double,
 line-top-up-triple {
-  bottom: calc(var(--gap-line-height) + var(--stroke-half));
+  bottom: calc(50% + var(--arrow-half) - var(--stroke-half));
 }
 line-top-up {
   height: var(--height-3);
 }
 line-top-up-double {
-  height: calc(var(--height-3) + var(--line-height-half));
+  height: calc(var(--height-3) + var(--line-height-half) + var(--stroke));
 }
 line-bottom-down,
 line-bottom-down-double,
 line-bottom-down-triple {
-  --arrow-stroke: calc(var(--arrow-height-half) - var(--stroke-half));
-  top: calc(50% + var(--arrow-stroke));
-  height: calc(var(--gap-line-height) - var(--arrow-stroke));
+  top: calc(50% + var(--arrow-half) - var(--stroke-half));
+  height: var(--gap-1x-bottom);
 }

@@ -1,4 +1,3 @@
-import {Law} from '#law'
 import {Boolean as BO, Equivalence as EQ} from 'effect'
 import {
   greaterThan,
@@ -8,13 +7,14 @@ import {
   OrderTypeLambda,
 } from 'effect/Order'
 import fc from 'fast-check'
-import {ConcreteGiven, concreteLaws} from './given.js'
+import {Law} from '../../../law.js'
+import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Order`.
  * @category typeclass laws
  */
-export const Order = <A>({
+export const orderLaws = <A>({
   F,
   a,
   equalsA,
@@ -35,21 +35,21 @@ export const Order = <A>({
     a,
   )((a, b) => BO.implies(lte(a, b) && gte(a, b), equalsA(a, b)))
 
-  return concreteLaws('Order', consistencyLaw)(
+  return defineConcreteLaws('Order', consistencyLaw)(
     suffix,
     build('≤', lte, gt),
     build('≥', gte, lt),
   )
 }
 
-export const buildLaws =
+const buildLaws =
   <A>(a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>
   (
     sym: string,
     op: (a: A, b: A) => boolean,
     complement: (a: A, b: A) => boolean,
   ) =>
-    concreteLaws(
+    defineConcreteLaws(
       'Order',
       Law(
         'transitivity',
@@ -83,7 +83,7 @@ export const buildLaws =
       )((a, b) => BO.implies(op(a, b), !complement(a, b))),
     )(sym)
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ConcreteLambdas {
     Order: OrderTypeLambda
   }

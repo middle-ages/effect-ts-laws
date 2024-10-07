@@ -1,14 +1,15 @@
 import {Monoid as MO} from '@effect/typeclass'
 import {getMonoid} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, Monoid, testLaws, tinyInteger} from 'effect-ts-laws'
+import {checkLaws, monoidLaws, tinyInteger} from 'effect-ts-laws'
+import {testLaws} from 'effect-ts-laws/vitest'
 import fc from 'fast-check'
 
 const intArray = fc.array(tinyInteger),
   instance = getMonoid<number>(),
   equalsA = AR.getEquivalence(NU.Equivalence),
   laws = (instance: MO.Monoid<readonly number[]>) =>
-    Monoid({F: instance, equalsA, a: intArray})
+    monoidLaws({F: instance, equalsA, a: intArray})
 
 describe('Monoid laws self-test', () => {
   pipe(instance, laws, testLaws)

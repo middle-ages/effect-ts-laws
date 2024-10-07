@@ -3,12 +3,12 @@ import {
   IdentityTypeLambda,
 } from '@effect/typeclass/data/Identity'
 import {identity, Number as NU} from 'effect'
+import {tinyInteger} from 'effect-ts-laws'
 import {
   testConcreteTypeclassLaw,
   testConcreteTypeclassLaws,
   testParameterizedTypeclassLaws,
-  tinyInteger,
-} from 'effect-ts-laws'
+} from 'effect-ts-laws/vitest'
 
 describe('typeclass test runners', () => {
   describe('testConcreteTypeclassLaw', () => {
@@ -26,7 +26,7 @@ describe('typeclass test runners', () => {
     )
   })
 
-  describe('testParametricTypeclassLaws', () => {
+  describe('testParametrizedTypeclassLaws', () => {
     testParameterizedTypeclassLaws<IdentityTypeLambda, number>()(
       {Covariant: identityCovariant},
       {

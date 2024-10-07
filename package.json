@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.1.14",
+  "version": "1.1.18",
   "description": "Law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -26,47 +26,47 @@
     "typecheck": "pnpm typecheck-src && pnpm typecheck-tests",
     "test": "vitest -c config/vitest.config.ts --reporter=verbose",
     "coverage": "vitest -c config/vitest.config.ts run --reporter=verbose --coverage",
+    "circular": "madge --extensions ts --circular src",
     "test-run": "vitest -c config/vitest.config.ts run",
     "build": "tsc --project config/tsconfig.build.json",
     "build-tests": "tsc --project tests/tsconfig.json",
+    "build-latex": "dev/build-latex",
+    "build-docs": "dev/build-docs",
     "prepare-stryker": "dev/prepare-stryker",
     "ls-deps": "pnpm ls --prod",
     "ls-deps-dev": "pnpm ls --dev",
-    "build-docs": "typedoc --options config/typedoc.json",
     "publish-docs": "dev/publish-docs",
     "npm": "dev/publish"
   },
   "devDependencies": {
-    "@eslint/js": "^9.11.1",
+    "@eslint/js": "^9.12.0",
     "@fast-check/vitest": "^0.1.3",
-    "@stryker-mutator/core": "^8.5.0",
-    "@stryker-mutator/typescript-checker": "^8.5.0",
-    "@stryker-mutator/vitest-runner": "^8.5.0",
+    "@stryker-mutator/core": "^8.6.0",
+    "@stryker-mutator/typescript-checker": "^8.6.0",
+    "@stryker-mutator/vitest-runner": "^8.6.0",
     "@tsconfig/node-lts": "^20.1.3",
     "@tsconfig/strictest": "^2.0.5",
     "@types/eslint__eslintrc": "^2.1.2",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.7.3",
-    "@vitest/coverage-v8": "^2.1.1",
-    "@vitest/ui": "^2.1.1",
-    "eslint": "^9.11.1",
+    "@types/node": "^22.7.6",
+    "@vitest/coverage-v8": "^2.1.3",
+    "@vitest/ui": "^2.1.3",
+    "eslint": "^9.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "fast-check": "^3.22.0",
-    "i": "^0.3.7",
     "madge": "^8.0.0",
-    "p": "^0.2.0",
     "prettier": "^3.3.3",
     "tsx": "^4.19.1",
-    "typedoc": "^0.26.7",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.7.0",
-    "vite": "^5.4.8",
-    "vitest": "^2.1.1"
+    "typedoc": "^0.26.10",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.9.0",
+    "vite": "^5.4.9",
+    "vitest": "^2.1.3"
   },
   "dependencies": {
-    "@effect/typeclass": "^0.27.4",
-    "effect": "^3.8.4"
+    "@effect/typeclass": "^0.28.2",
+    "effect": "^3.9.2"
   },
   "peerDependencies": {
     "@effect/typeclass": "workspace:^",
@@ -96,6 +96,12 @@
         "import": "./index.js"
       }
     },
+    "./vitest": {
+      "import": {
+        "types": "./src/vitest.d.ts",
+        "import": "./src/vitest.js"
+      }
+    },
     "./law": {
       "import": {
         "types": "./src/law.d.ts",
@@ -116,14 +122,9 @@
     },
     "./laws": {
       "import": {
-        "types": "./src/law.d.ts",
-        "import": "./src/law.js"
+        "types": "./src/laws.d.ts",
+        "import": "./src/laws.js"
       }
     }
-  },
-  "imports": {
-    "#law": "effect-ts-laws/law",
-    "#arbitrary": "effect-ts-laws/arbitrary",
-    "#compose": "effect-ts-laws/compose"
   }
 }

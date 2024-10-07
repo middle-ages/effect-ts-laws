@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+  font-family: Inter, system-ui;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+}
+@font-face {
+  font-family: 'CMU Concrete';
+  font-style: italic;
+  font-weight: normal;
+  src:
+    local('CMU Concrete'),
+    url('CMUConcrete.woff') format('woff');
+}
+@font-face {
+  font-family: 'Symbola';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local('Symbola'),
+    url('Symbola.ttf') format('ttf');
+}
+h1,
+c {
+  text-wrap: nowrap;
+}
+h1 {
+  font-size: var(--font-size-title);
+  font-weight: 450;
+}
+h1,
+a:has(#link-home) {
+  line-height: var(--line-height-title);
+}
+a:has(#link-home) {
+  font-size: var(--font-size-link);
+}
+.enclosing.fn {
+  margin-right: calc(1rex / 4);
+  * {
+    font-family: 'CMU Concrete' !important;
+    font-size: var(--font-size-tex) !important;
+    color: var(--color-fn);
+  }
+}
+.enclosing.empty {
+  margin-right: calc(1rex / 2);
+  & * {
+    font-family: Symbola !important;
+  }
+}
+.flow,
+.pipe {
+  span > span {
+    position: relative;
+    top: calc(-1rex / 12);
+  }
+}

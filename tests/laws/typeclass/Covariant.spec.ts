@@ -1,7 +1,8 @@
 import {Covariant as CO} from '@effect/typeclass'
 import {Covariant as arrayCovariant} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, Covariant, testLaws, tinyInteger} from 'effect-ts-laws'
+import {checkLaws, covariantLaws, tinyInteger} from 'effect-ts-laws'
+import {testLaws} from 'effect-ts-laws/vitest'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
 import fc from 'fast-check'
@@ -10,7 +11,7 @@ type Instance = CO.Covariant<ReadonlyArrayTypeLambda>
 
 const instance = arrayCovariant,
   laws = (instance: Instance) =>
-    Covariant({
+    covariantLaws({
       F: instance,
       a: tinyInteger,
       b: tinyInteger,

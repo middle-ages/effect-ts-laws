@@ -1,8 +1,8 @@
-import {LiftArbitrary} from '#arbitrary'
-import {LiftEquivalence} from '#law'
 import {getMonoid} from '@effect/typeclass/data/Array'
 import {TypeLambda} from 'effect/HKT'
-import {GivenConcerns} from '../../parameterized/given.js'
+import {LiftArbitrary} from '../../../arbitrary.js'
+import {LiftEquivalence} from '../../../law.js'
+import {GivenConcerns} from '../parameterized/harness/given.js'
 import {Mono, monoArbitrary, monoEquivalence} from './helpers.js'
 
 /**

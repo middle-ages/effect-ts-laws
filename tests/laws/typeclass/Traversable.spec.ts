@@ -1,13 +1,9 @@
 import {Applicative as AP, Traversable as TA} from '@effect/typeclass'
 import {Traversable as optionTraversable} from '@effect/typeclass/data/Option'
 import {Number as NU, Option as OP, pipe} from 'effect'
-import {
-  checkLaws,
-  option,
-  testLaws,
-  tinyInteger,
-  Traversable,
-} from 'effect-ts-laws'
+import {checkLaws, option, tinyInteger, traversableLaws} from 'effect-ts-laws'
+
+import {testLaws} from 'effect-ts-laws/vitest'
 import {dual} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {
@@ -20,7 +16,7 @@ type Instance = TA.Traversable<OptionTypeLambda>
 const a = tinyInteger,
   instance = optionTraversable,
   laws = (instance: Instance) =>
-    Traversable({
+    traversableLaws({
       F: instance,
       a,
       b: a,

@@ -7,8 +7,8 @@ import {
   getMonoUnaryEquivalence,
   Mono,
   predicate,
-  testLawSets,
 } from 'effect-ts-laws'
+import {testLawSets} from 'effect-ts-laws/vitest'
 import {dual, flow, pipe, tupled} from 'effect/Function'
 import {Kind} from 'effect/HKT'
 import {PredicateTypeLambda} from 'effect/Predicate'

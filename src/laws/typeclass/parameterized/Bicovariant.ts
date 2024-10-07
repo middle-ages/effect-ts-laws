@@ -2,15 +2,15 @@ import {Bicovariant as BI, Covariant as CO} from '@effect/typeclass'
 import {identity, pipe} from 'effect'
 import {dual} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {LawSet} from '#law'
-import {Covariant} from './Covariant.js'
-import {ParameterizedGiven as Given} from './given.js'
+import {LawSet} from '../../../law.js'
+import {covariantLaws} from './Covariant.js'
+import {ParameterizedGiven as Given} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Bicovariant`.
  * @category typeclass laws
  */
-export const Bicovariant = <
+export const bicovariantLaws = <
   F extends TypeLambda,
   A,
   B = A,
@@ -39,8 +39,8 @@ export const Bicovariant = <
   return pipe(
     'Bicovariant',
     LawSet(
-      Covariant({...given, F: first}, '₁'),
-      Covariant({...given, F: second}, '₂'),
+      covariantLaws({...given, F: first}, '₁'),
+      covariantLaws({...given, F: second}, '₂'),
     ),
   )
 }
@@ -53,10 +53,10 @@ export interface BicovariantTypeLambda extends TypeLambda {
   readonly type: BI.Bicovariant<this['Target'] & TypeLambda>
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ParameterizedLambdas {
     Bicovariant: BicovariantTypeLambda
   }
 }
 
-export type Pair<A> = [A, A]
+type Pair<A> = [A, A]

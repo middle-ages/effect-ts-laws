@@ -1,18 +1,18 @@
-import {Law} from '#law'
 import {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
-import {ConcreteGiven, concreteLaws} from './given.js'
+import {Law} from '../../../law.js'
+import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Semigroup`.
  * @category typeclass laws
  */
-export const Semigroup = <A>({
+export const semigroupLaws = <A>({
   F,
   equalsA,
   a,
   suffix,
 }: ConcreteGiven<SemigroupTypeLambda, A>) =>
-  concreteLaws(
+  defineConcreteLaws(
     'Semigroup',
     Law(
       'associativity',
@@ -35,7 +35,7 @@ export const Semigroup = <A>({
     ),
   )(suffix)
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ConcreteLambdas {
     Semigroup: SemigroupTypeLambda
   }

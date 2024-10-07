@@ -1,9 +1,7 @@
 *.log
 .buildinfo
 .dev
-dist
 node_modules
 tmp
 .npmrc
 docs/api
-pnpm-lock.yaml

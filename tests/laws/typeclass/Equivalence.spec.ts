@@ -1,10 +1,11 @@
 import {Equivalence as EQ, Number as NU, pipe} from 'effect'
-import {checkLaws, Equivalence, testLaws, tinyInteger} from 'effect-ts-laws'
+import {checkLaws, equivalenceLaws, tinyInteger} from 'effect-ts-laws'
+import {testLaws} from 'effect-ts-laws/vitest'
 
 const instance = NU.Equivalence
 
 const laws = (instance: EQ.Equivalence<number>) =>
-  Equivalence({F: instance, equalsA: instance, a: tinyInteger})
+  equivalenceLaws({F: instance, equalsA: instance, a: tinyInteger})
 
 describe('Equivalence laws self-test', () => {
   pipe(instance, laws, testLaws)

@@ -10,7 +10,7 @@ import {
 } from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {Monad as arbitraryMonad} from './instances.js'
+import {Monad as arbitraryMonad} from './monad.js'
 import {LiftArbitrary} from './types.js'
 
 const {map, flatMap} = arbitraryMonad

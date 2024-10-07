@@ -1,0 +1,43 @@
+header {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: var(--line-height-title);
+  color: var(--color-header);
+  h1 {
+    text-align: center;
+    max-width: min-content;
+    margin: 0 auto 0 auto;
+  }
+  link-to {
+    opacity: 0;
+    --width: calc(var(--px-width) + var(--pad-2));
+    --delta: calc(var(--underline-offset) + var(--outline-width) / 2);
+    position: absolute;
+    top: calc(var(--delta) - 1px);
+    left: max(
+      calc(50% + var(--px-title) / 2),
+      calc(100% - var(--px-width) - var(--pad))
+    );
+    max-width: calc(50% - var(--px-title) / 2);
+  }
+  a {
+    --line-height-delta: calc(
+      (var(--line-height-title) - var(--line-height)) / 2
+    );
+    --offset: calc(var(--underline-offset) + 2 * var(--outline-width));
+    min-width: 0;
+    svg {
+      top: calc(var(--offset) - 2px);
+      right: 0;
+      width: 100%;
+      rect {
+        width: calc(100% - 2 * var(--outline-width));
+        height: calc(var(--font-size) * 1.5);
+      }
+    }
+    span {
+      padding: 0 var(--pad) 0 var(--pad);
+    }
+  }
+}

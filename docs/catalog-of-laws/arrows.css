@@ -1,12 +1,14 @@
 :root {
-  --middle: calc(50% - var(--arrow-height-half));
+  --middle: calc(50% - var(--arrow-half));
 }
-arrow-head-middle,
+arrow-head-middle {
+  top: var(--middle);
+}
 arrow-tail-middle {
   top: var(--middle);
 }
 arrow-tail-top {
-  bottom: calc(50% + var(--stroke-half));
+  bottom: 50%;
 }
 arrow-head-bottom {
   bottom: calc(50% - var(--arrow-height));
@@ -19,12 +21,13 @@ arrow-head-bottom {
   width: var(--arrow-width);
   height: var(--arrow-height);
   position: absolute;
-  right: 0;
   background-repeat: no-repeat;
   background: var(--color-line);
+  right: -1px;
 }
 arrow-head-middle,
 arrow-head-bottom {
+  transform: scale(1.2);
   mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><path d="M 6,6 C 6,6.1 5.9,6.2 5.7,6.3 3.5,7.3 1.8,8.3 0.9,11.8 0.9,11.9 0.7,12 0.5,12 0.2,12 0,11.9 0,11.7 0.4,9.5 1.7,7.8 3.4,6.5 v -1 C 0.8,3.7 0,0.9 0,0.3 0,0.1 0.1,0 0.4,0 0.7,0 0.9,0.1 0.9,0.2 1.6,2.2 2.9,4.8 5.7,5.7 5.9,5.8 6,5.9 6,6 Z"/></svg>');
 }
 arrow-tail-top,

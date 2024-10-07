@@ -2,7 +2,7 @@ import {Bounded as BU} from '@effect/typeclass'
 import {DateTime as DT, Duration as DU, pipe} from 'effect'
 import fc from 'fast-check'
 import {tinyInteger} from './data.js'
-import {Monad as arbitraryMonad} from './instances.js'
+import {Monad as arbitraryMonad} from './monad.js'
 
 const {flatMap, map} = arbitraryMonad
 

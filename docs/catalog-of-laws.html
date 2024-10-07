@@ -1,9 +1,8 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <title>Book of Laws</title>
     <meta charset="utf-8" />
-    <meta name="color-scheme" content="light dark" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
@@ -18,308 +17,289 @@
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
       integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
-      crossorigin="anonymous"
-      onload="onLoad()"></script>
+      crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="catalog-of-laws/index.css" />
   </head>
   <body>
-    <macro>$\global\def\({\big(}$</macro>
-    <macro>$\global\def\){\big)}$</macro>
-    <macro>$\global\def\▹{\,\:\htmlClass{pipe}{\footnotesize{▹}}\,\,}$</macro>
-    <macro>$\global\def\∘{\:\htmlClass{flow}{\scriptsize{∘}}\,}$</macro>
-    <macro>$\global\def\∅{\htmlClass{empty}{\varnothing}}$</macro>
-    <macro>$\global\def\fn#1{\htmlClass{fn}{#1}}$</macro>
-    <macro>$\global\def\minBound{\fn{minBound}}$</macro>
-    <macro>$\global\def\maxBound{\fn{maxBound}}$</macro>
-    <macro>$\global\def\imap{\fn{imap}}$</macro>
-    <macro>$\global\def\map{\fn{map}}$</macro>
-    <macro>$\global\def\coproduct{\fn{coproduct}}$</macro>
-    <macro>$\global\def\coproductMany{\fn{coproductMany}}$</macro>
-    <macro>$\global\def\coproductAll{\fn{coproductAll}}$</macro>
-    <macro>$\global\def\combineMany{\fn{combineMany}}$</macro>
-    <macro>$\global\def\flatMap{\fn{flatMap}}$</macro>
-    <macro>$\global\def\contramap{\fn{contramap}}$</macro>
-    <macro>$\global\def\of{\fn{of}}$</macro>
-    <macro>$\global\def\ap{\fn{ap}}$</macro>
-    <macro>$\global\def\id{\fn{id}}$</macro>
-    <macro>$\global\def\product{\fn{product}}$</macro>
-    <macro>$\global\def\traverse{\fn{traverse}}$</macro>
-    <macro>$\global\def\apply{\fn{apply}}$</macro>
-    <macro>$\global\def\compose{\fn{compose}}$</macro>
-    <macro>$\global\def\F{\mathrm{F}}$</macro>
-    <macro>$\global\def\G{\mathrm{G}}$</macro>
-    <macro>$\global\def\H{\mathrm{H}}$</macro>
-    <macro>$\global\def\GH{\mathrm{GH}}$</macro>
-    <macro>$\global\def\Id{\mathrm{Id}}$</macro>
-    <diagram>
-      <header>
-        <h1>Typeclass Laws</h1>
-        <a class="home" href="https://github.com/middle-ages/effect-ts-laws"
-          >⚖ effect-ts-laws</a
-        >
-      </header>
-      <article>
-        <div class="header">
-          <d title="Typeclass “extends” relation.">Is a</d>
-          <d title="Typeclass name in “effect-ts” source.">Typeclass</d>
-          <d title="Law name.">Law</d>
-          <d style="grid-column: span 3" title="Law predicate.">Predicate</d>
-        </div>
-        <laws>
-          <d></d>
-          <e>Equivalence</e>
+    <header>
+      <h1 id="title">Typeclass Laws</h1>
+      <link-to
+        href="https://github.com/middle-ages/effect-ts-laws"
+        title="effect-ts-laws github project"
+        span="link-home"
+        >⚖ effect-ts-laws</link-to
+      >
+    </header>
+    <article>
+      <scroll-box>
+        <table-header>
+          <c></c>
+          <c>Typeclass</c>
+          <c>Law</c>
+          <c>Predicate</c>
+        </table-header>
+        <table-body>
+          <typeclass-laws>
+            <c></c>
+            <link-to href="effect/src/Equivalence.ts">Equivalence</link-to>
 
-          <d>transitivity</d>
-          <d>$a=b ∧ b=c$</d><d>$⇒$</d><d>$a=c$</d>
+            <c>transitivity</c><c>$a=b ∧ b=c$</c><c>$⇒$</c><c>$a=c$</c>
 
-          <d>symmetry</d>
-          <d>$a=b$</d><d>$⇔$</d><d>$b=a$</d>
+            <c>symmetry</c>
+            <c>$a=b$</c><c>$⇔$</c><c>$b=a$</c>
 
-          <d>reflexivity</d><d>$a$</d><d>$=$</d><d>$a$</d>
-        </laws>
+            <c>reflexivity</c><c>$a$</c><c>$=$</c><c>$a$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c></c>
+            <link-to href="effect/src/Order.ts">Order</link-to>
 
-        <laws>
-          <d></d>
-          <e>Order</e>
+            <c>transitivity</c><c>$a≤b ∧ b≤c$</c><c>$⇒$</c><c>$a≤c$</c>
 
-          <d>transitivity</d>
-          <d>$a≤b ∧ b≤c$</d><d>$⇒$</d><d>$a≤c$</d>
+            <c>connectivity</c><c>$a≤b$</c><c>$∨$</c><c>$b≤a$</c>
 
-          <d>connectivity</d>
-          <d>$a≤b$</d><d>$∨$</d><d>$b≤a$</d>
+            <c>reflexivity</c><c>$a$</c><c>$≤$</c><c>$a$</c>
 
-          <d>reflexivity</d>
-          <d>$a$</d><d>$≤$</d><d>$a$</d>
+            <c>complement consistency</c>
+            <c>$a≤b$</c>
+            <c>$⇒$</c>
+            <c>$a \ngtr b$</c>
 
-          <d>complement consistency</d>
-          <d>$a≤b$</d><d>$⇒$</d><d>$a \ngtr b$</d>
+            <c>equivalence consistency</c>
+            <c>$a≤b ∧ b≤a$</c>
+            <c>$⇒$</c>
+            <c>$a=b$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c></c>
+            <link-to href="typeclass/src/Bounded.ts">Bounded</link-to>
 
-          <d>equivalence consistency</d>
-          <d>$a≤b ∧ b≤a$</d><d>$⇒$</d><d>$a=b$</d>
-        </laws>
+            <c>lower bounded</c>
+            <c>$a$</c><c>$≥$</c>
+            <c>$\minBound$</c>
 
-        <laws>
-          <d></d>
-          <e>Bounded</e>
+            <c>upper bounded</c>
+            <c>$a$</c>
+            <c>$≤$</c>
+            <c>$\maxBound$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c title="Semigroup 𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑 𝑏𝑦 Monoid">
+              <arrow-head-middle></arrow-head-middle>
+              <line-middle-down></line-middle-down>
+            </c>
+            <link-to href="typeclass/src/Semigroup.ts">Semigroup</link-to>
 
-          <d>lower bounded</d>
-          <d>$a$</d><d>$≥$</d><d>$\minBound$</d>
+            <c>associativity</c>
+            <c>$(a ⊕ b) ⊕ c$</c>
+            <c>$=$</c>
+            <c>$a ⊕ (b ⊕ c)$</c>
 
-          <d>upper bounded</d>
-          <d>$a$</d><d>$≤$</d><d>$\maxBound$</d>
-        </laws>
+            <c>combineMany associativity</c>
+            <c>$\combineMany(a, [b, c])$</c>
+            <c>$=$</c>
+            <c>$a ⊕ (b ⊕ c)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c title="Monoid 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Semigroup"
+              ><line-middle-up></line-middle-up>
+              <arrow-tail-middle></arrow-tail-middle>
+            </c>
+            <link-to href="typeclass/src/Monoid.ts">Monoid</link-to>
+            <c>left identity</c><c>$∅ ⊕ a$</c><c>$=$</c><c>$a$</c>
 
-        <laws>
-          <div>
-            <line-middle-down></line-middle-down>
-            <arrow-head-middle></arrow-head-middle>
-          </div>
-          <e>Semigroup</e>
+            <c>right identity</c><c>$a ⊕ ∅$</c><c>$=$</c><c>$a$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c title="Invariant 𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑 𝑏𝑦 Covariant 𝑎𝑛𝑑 Contravariant">
+              <arrow-head-middle></arrow-head-middle>
+              <line-middle-down></line-middle-down>
+              <line-middle-down-double></line-middle-down-double>
+            </c>
+            <link-to href="typeclass/src/Invariant.ts">Invariant</link-to>
 
-          <d>associativity</d>
-          <d>$(a ⊕ b) ⊕ c$</d><d>$=$</d><d>$a ⊕ (b ⊕ c)$</d>
+            <c>identity</c><c>$\imap\left(\id, \id\right)$</c><c>$=$</c
+            ><c>$\id$</c>
 
-          <d>combineMany associativity</d>
-          <d>$\combineMany(a, [b, c])$</d>
-          <d>$=$</d>
-          <d>$a ⊕ (b ⊕ c)$</d>
-        </laws>
+            <c>composition</c>
+            <c>$\imap(ab, ba) \∘ \imap(bc, cb)$</c>
+            <c>$=$</c>
+            <c>$\imap(bc \∘ ab, ba \∘ cb)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws style="z-index: 5">
+            <c title="Contravariant 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Invariant">
+              <line-middle-up></line-middle-up>
+              <arrow-tail-middle></arrow-tail-middle>
+            </c>
+            <link-to href="typeclass/src/Contravariant.ts"
+              >Contravariant</link-to
+            >
 
-        <laws>
-          <div>
-            <line-middle-up></line-middle-up>
-            <arrow-tail-middle></arrow-tail-middle>
-          </div>
-          <e>Monoid</e>
+            <c>identity</c><c>$\contramap(\id)$</c><c>$=$</c><c>$\id$</c>
 
-          <d>left identity</d>
-          <d>$\∅ ⊕ a$</d><d>$=$</d><d>$a$</d>
+            <c>composition</c>
+            <c>$\contramap(ba) \∘ \contramap(cb)$</c>
+            <c>$=$</c>
+            <c>$\contramap(ba \∘ cb)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c
+              title="Covariant 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Invariant&#013;Covariant 𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑 𝑏𝑦 Applicative, Monad 𝑎𝑛𝑑 SemiAlternative">
+              <arrow-tail-top></arrow-tail-top>
+              <arrow-head-bottom></arrow-head-bottom>
+              <line-top-up-double
+                style="height: var(--gap-3x-top)"></line-top-up-double>
+              <line-bottom-down></line-bottom-down>
+              <line-bottom-down-double></line-bottom-down-double>
+              <line-bottom-down-triple></line-bottom-down-triple>
+            </c>
+            <link-to href="typeclass/src/Covariant.ts">Covariant</link-to>
 
-          <d>right identity</d>
-          <d>$a ⊕ \∅$</d><d>$=$</d><d>$a$</d>
-        </laws>
+            <c>identity</c><c>$\map(\id)$</c><c>$=$</c><c>$\id$</c>
 
-        <laws>
-          <div>
-            <line-middle-down-double></line-middle-down-double>
-            <line-middle-down></line-middle-down>
-            <arrow-head-middle></arrow-head-middle>
-          </div>
-          <e>Invariant</e>
+            <c>composition</c>
+            <c>$\map(ab) \∘ \map(bc)$</c>
+            <c>$=$</c>
+            <c>$\map(bc \∘ ab)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws style="z-index: 7">
+            <c title="Applicative 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Covariant">
+              <line-middle-up style="height: var(--gap-1x-p2)"></line-middle-up>
+              <arrow-tail-middle></arrow-tail-middle>
+            </c>
+            <link-to href="typeclass/src/Applicative.ts">Applicative</link-to>
 
-          <d>identity</d><d>$\imap(\id, \id)$</d><d>$=$</d>
-          <d>$\id$</d>
+            <c>identity</c><c>$\id \▹ \of \▹ \ap(a)$</c><c>$=$</c><c>$a$</c>
 
-          <d>composition</d>
-          <d>$\imap(ab, ba) \∘ \imap(bc, cb)$</d>
-          <d>$=$</d>
-          <d>$\imap(bc \∘ ab, ba \∘ cb)$</d>
-        </laws>
+            <c>homomorphism</c>
+            <c>$ab \▹ \of \▹ (a \▹ \of \▹ \ap)$</c>
+            <c>$=$</c>
+            <c>$a \▹ ab \▹ \of$</c>
 
-        <laws>
-          <div>
-            <line-middle-up></line-middle-up>
-            <arrow-tail-middle></arrow-tail-middle>
-          </div>
-          <e>Contravariant</e>
+            <c>associative composition</c>
+            <c>$\fbc \▹ \map(\compose) \▹ \ap(\fab) \▹ \ap(\fa)$</c>
+            <c>$=$</c>
+            <c>$\fbc \▹ \ap\(\fab \▹ \ap(\fa))$</c>
 
-          <d>identity</d>
-          <d>$\contramap(\id)$</d><d>$=$</d><d>$\id$</d>
+            <c>interchange</c>
+            <c>$\fab \▹ \ap\(\of(a)\)$</c>
+            <c>$=$</c>
+            <c>$a \▹ \apply \▹ \of \▹ \ap(\fab)$</c>
 
-          <d>composition</d>
-          <d>$\contramap(ba) \∘ \contramap(cb)$</d>
-          <d>$=$</d>
-          <d>$\contramap(ba \∘ cb)$</d>
-        </laws>
+            <c>map consistency</c>
+            <c>$\fa \▹ \map(ab)$</c>
+            <c>$=$</c>
+            <c>$ab \▹ \of \▹ \ap(\fa)$</c>
 
-        <laws>
-          <div>
-            <line-top-up-double></line-top-up-double>
-            <line-bottom-down></line-bottom-down>
-            <line-bottom-down-double></line-bottom-down-double>
-            <line-bottom-down-triple></line-bottom-down-triple>
-            <arrow-tail-top></arrow-tail-top>
-            <arrow-head-bottom></arrow-head-bottom>
-          </div>
-          <e>Covariant</e>
+            <c>product consistency</c>
+            <c>$\fab \▹ \ap(\fa)$</c>
+            <c>$=$</c>
+            <c>$\product(\fab, \fa) \▹ \map\(([ab, a]) ⇒ ab(a)\)$</c>
 
-          <d>identity</d><d>$\map(\id)$</d><d>$=$</d><d>$\id$</d>
+            <c>flatMap consistency</c>
+            <c>$\ap(\fa)$</c>
+            <c>$=$</c>
+            <c>$\flatMap\(ab ⇒ \!\map(\fa, ab)\)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws style="z-index: 6">
+            <c title="Monad 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Covariant">
+              <line-middle-up-double
+                style="height: var(--gap-3x-p6)"></line-middle-up-double>
+              <arrow-tail-middle></arrow-tail-middle>
+            </c>
+            <link-to href="typeclass/src/Monad.ts">Monad</link-to>
 
-          <d>composition</d>
-          <d>$\map(ab) \∘ \map(bc)$</d>
-          <d>$=$</d>
-          <d>$\map(bc \∘ ab)$</d>
-        </laws>
+            <c>left identity</c>
+            <c>$\of \∘ \flatMap(\afb)$</c>
+            <c>$=$</c>
+            <c>$\afb$</c>
 
-        <laws>
-          <div>
-            <line-middle-up style="height: var(--height-9)"></line-middle-up>
-            <arrow-tail-middle></arrow-tail-middle>
-          </div>
-          <e>Applicative</e>
+            <c>right identity</c><c>$\flatMap(\of)$</c><c>$=$</c><c>$\id$</c>
 
-          <d>identity</d>
-          <d>$\id \▹ \of \▹ \ap(a)$</d><d>$=$</d><d>$a$</d>
+            <c>associativity</c>
+            <c>$\flatMap(\afb) \∘ \flatMap(\bfc)$</c>
+            <c>$=$</c>
+            <c>$\flatMap\(\flatMap(\bfc) \∘ \afb\)$</c>
 
-          <d>homomorphism</d>
-          <d>$ab \▹ \of \▹ (a \▹ \of \▹ \ap)$</d>
-          <d>$=$</d>
-          <d>$a \▹ ab \▹ \of$</d>
+            <c>map consistency</c>
+            <c>$\map(ab)$</c>
+            <c>$=$</c>
+            <c>$\flatMap(\of \∘ ab)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws style="z-index: 4">
+            <c
+              title="SemiAlternative 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Covariant&#013;SemiAlternative 𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑 𝑏𝑦 Alternative">
+              <arrow-tail-top></arrow-tail-top>
+              <arrow-head-bottom></arrow-head-bottom>
+              <line-top-up-triple
+                style="height: var(--gap-4x-p8)"></line-top-up-triple>
+              <line-bottom-down></line-bottom-down>
+            </c>
+            <link-to href="typeclass/src/SemiAlternative.ts"
+              >SemiAlternative</link-to
+            >
 
-          <d>associative composition</d>
-          <d>$fbc \▹ \map(\compose) \▹ \ap(f\!ab) \▹ \ap(f\!a)$</d>
-          <d>$=$</d>
-          <d>$fbc \▹ \ap\(f\!ab \▹ \ap(f\!a)\)$</d>
+            <c>associativity</c>
+            <c>$(\fa_1 ⊕ \fa_2) ⊕ \fa_3$</c>
+            <c>$=$</c><c>$\fa_1 ⊕ (\fa_2 ⊕ \fa_3)$</c>
 
-          <d>interchange</d>
-          <d>$f\!ab \▹ \ap\(\of(a)\)$</d>
-          <d>$=$</d>
-          <d>$a \▹ \apply \▹ \of \▹ \ap(f\!ab)$</d>
+            <c>coproductMany associativity</c>
+            <c>$\coproductMany(\fa_1, [\fa_2, \fa_3])$</c>
+            <c>$=$</c><c>$\fa_1 ⊕ (\fa_2 ⊕ \fa_3)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c title="Alternative 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 SemiAlternative">
+              <line-middle-up style="height: var(--gap-1x-p1)"></line-middle-up>
+              <arrow-tail-middle></arrow-tail-middle>
+            </c>
+            <link-to href="typeclass/src/Alternative.ts">Alternative</link-to>
 
-          <d>map consistency</d>
-          <d>$f\!a \▹ \map(ab)$</d>
-          <d>$=$</d>
-          <d>$ab \▹ \of \▹ \ap(f\!a)$</d>
+            <c>left identity</c><c>$∅ ⊕ \fa$</c><c>$=$</c><c>$\fa$</c>
 
-          <d>product consistency</d>
-          <d>$f\!ab \▹ \ap(f\!a)$</d>
-          <d>$=$</d>
-          <d>$\product(f\!ab, f\!a) \▹ \map\(([ab, a]) ⇒ ab(a)\)$</d>
+            <c>right identity</c>
+            <c>$\fa ⊕ ∅$</c>
+            <c>$=$</c>
+            <c>$\fa$</c>
 
-          <d>flatMap consistency</d>
-          <d>$\ap(f\!a)$</d>
-          <d>$=$</d>
-          <d>$\flatMap\(ab ⇒ \!\map(f\!a, ab)\)$</d>
-        </laws>
+            <c>coproductAll zero</c>
+            <c>$\coproductAll\:\!\raisebox{0.5pt}{([\,])}$</c>
+            <c>$=$</c>
+            <c>$∅$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c></c>
+            <link-to href="typeclass/src/Traversable.ts">Traversable</link-to>
 
-        <laws>
-          <div>
-            <line-middle-up-double
-              style="height: var(--height-13)"></line-middle-up-double>
-            <arrow-tail-middle></arrow-tail-middle>
-          </div>
-          <e>Monad</e>
+            <c>identity</c><c>$\Id.\traverse(\id)$</c><c>$=$</c><c>$\id$</c>
 
-          <d>left identity</d><d>$\of \∘ \flatMap(a\!f\!b)$</d><d>$=$</d
-          ><d>$a\!f\!b$</d>
+            <c>composition</c>
+            <c>$\G.\map\(\H.\traverse(bhc)\) \∘ \G.\traverse(agb)$</c>
+            <c>$=$</c>
+            <c>$\GH.\traverse\(\G.\map(bhc) \∘ agb\)$</c>
 
-          <d>right identity</d><d>$\flatMap(\of)$</d><d>$=$</d><d>$\id$</d>
-
-          <d>associativity</d>
-          <d>$\flatMap(a\!f\!b) \∘ \flatMap(b\!f\!c)$</d>
-          <d>$=$</d>
-          <d>$\flatMap\(\flatMap(b\!f\!c) \∘ a\!f\!b\)$</d>
-
-          <d>map consistency</d>
-          <d>$\map(ab)$</d>
-          <d>$=$</d>
-          <d>$\flatMap(\of \∘ ab)$</d>
-        </laws>
-
-        <laws>
-          <d>
-            <arrow-tail-top></arrow-tail-top>
-            <arrow-head-bottom></arrow-head-bottom>
-            <line-top-up-triple
-              style="height: var(--height-15)"></line-top-up-triple>
-            <line-bottom-down></line-bottom-down>
-          </d>
-          <e>SemiAlternative</e>
-
-          <d>associativity</d>
-          <d>$(f\!a_1 ⊕ f\!a_2) ⊕ f\!a_3$</d>
-          <d>$=$</d><d>$f\!a_1 ⊕ (f\!a_2 ⊕ f\!a_3)$</d>
-
-          <d>coproductMany associativity</d>
-          <d>$\coproductMany(f\!a_1, [f\!a_2, f\!a_3])$</d>
-          <d>$=$</d><d>$f\!a_1 ⊕ (f\!a_2 ⊕ f\!a_3)$</d>
-        </laws>
-
-        <laws>
-          <d>
-            <line-middle-up style="height: var(--height-5)"></line-middle-up>
-            <arrow-tail-middle></arrow-tail-middle>
-          </d>
-          <e>Alternative</e>
-
-          <d>left identity</d><d>$\∅ ⊕ f\!a$</d> <d>$=$</d><d>$f\!a$</d>
-
-          <d>right identity</d><d>$f\kern{-1pt}a ⊕ \∅$</d> <d>$=$</d
-          ><d>$f\!a$</d>
-
-          <d>coproductAll zero</d
-          ><d>$\coproductAll\:\!\raisebox{0.5pt}{([\,])}$</d> <d>$=$</d
-          ><d>$\∅$</d>
-        </laws>
-
-        <laws>
-          <d></d>
-          <e>Traversable</e>
-
-          <d>identity</d><d>$\Id.\traverse(\id)$</d><d>$=$</d><d>$\id$</d>
-
-          <d>composition</d>
-          <d>$\G.\map\(\H.\traverse(bhc)\) \∘ \G.\traverse(agb)$</d>
-          <d>$=$</d>
-          <d>$\GH.\traverse\(\G.\map(bhc) \∘ agb\)$</d>
-
-          <d>map consistency</d>
-          <d>$\F.\map(ab)$</d>
-          <d>$=$</d>
-          <d>$\Id.\traverse(ab)$</d>
-        </laws>
-      </article>
-    </diagram>
+            <c>map consistency</c>
+            <c>$\F.\map(ab)$</c>
+            <c>$=$</c>
+            <c>$\Id.\traverse(ab)$</c>
+          </typeclass-laws>
+        </table-body>
+      </scroll-box>
+    </article>
+    <info-footer></info-footer>
   </body>
-  <script>
-    function onLoad() {
-      renderMathInElement(document.body, {
-        delimiters: [{left: '$', right: '$', display: false}],
-        throwOnError: false,
-        trust: true,
-      })
-    }
-  </script>
+  <script src="catalog-of-laws/index.js" type="module"></script>
 </html>

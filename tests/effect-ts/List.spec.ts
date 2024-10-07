@@ -1,10 +1,7 @@
 /** Typeclass law tests for the `effect-ts` liked-list type. */
 import {Covariant as CO, Monad as MD} from '@effect/typeclass'
-import {
-  list as getArbitrary,
-  monoEquivalence,
-  testTypeclassLaws,
-} from 'effect-ts-laws'
+import {list as getArbitrary, monoEquivalence} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {TypeLambda} from 'effect/HKT'
 import {List, flatMap, getEquivalence, map, of} from 'effect/List'
 

@@ -1,7 +1,8 @@
 import {Monad as MD} from '@effect/typeclass'
 import {Monad as arrayMonad} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, Monad, testLaws, tinyInteger} from 'effect-ts-laws'
+import {checkLaws, monadLaws, tinyInteger} from 'effect-ts-laws'
+import {testLaws} from 'effect-ts-laws/vitest'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual, flow} from 'effect/Function'
 import fc from 'fast-check'
@@ -10,7 +11,7 @@ type Instance = MD.Monad<ReadonlyArrayTypeLambda>
 
 const instance = arrayMonad,
   laws = (instance: Instance) =>
-    Monad({
+    monadLaws({
       F: instance,
       a: tinyInteger,
       b: tinyInteger,

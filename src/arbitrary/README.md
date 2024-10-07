@@ -1,35 +1,90 @@
-<h1 style='text-align:center'>Arbitrary</h1>
+# `arbitrary`
 
-`fast-check` arbitraries and combinators for `effect-ts` datatypes.
+`fast-check` utilities and arbitraries for `effect-ts` datatypes.
 
-## [Data](./data.ts)
+1. [Importing](#importing)
+2. [Modules](#modules)
+   1. [monad](#monad)
+   2. [data](#data)
+   3. [time](#time)
+   4. [function](#function)
+   5. [effect](#effect)
 
-| Name             | Signature                                           |                                           |                           |
-| ---------------- | --------------------------------------------------- | ----------------------------------------- | ------------------------- |
-| tinyInteger      |                                                     |                                           | `Arbitrary<number>`       |
-| tinyArray        | `<A>(a: Arbitrary<A>)`                              | <span style='font-family: serif'>⇒</span> | `Arbitrary<A[]>`          |
-| tinyIntegerArray |                                                     |                                           | `Arbitrary<number[]>`     |
-| option           | `<A>(a: Arbitrary<A>)`                              | <span style='font-family: serif'>⇒</span> | `Arbitrary<Option<A>>`    |
-| either           | `<A, E>(e: Arbitrary<E>, a: Arbitrary<A>)`          | <span style='font-family: serif'>⇒</span> | `Arbitrary<Either<A, E>>` |
-| error            | `(m: Arbitrary<string>)`                            | <span style='font-family: serif'>⇒</span> | `Arbitrary<Error>`        |
-| list             | `<A>(a: Arbitrary<A>)`                              | <span style='font-family: serif'>⇒</span> | `Arbitrary<List<A>>`      |
-| cause            | `<E>(e: Arbitrary<E>, defect?: Arbitrary<unknown>)` | <span style='font-family: serif'>⇒</span> | `Arbitrary<Cause<E>>`     |
+## Importing
 
-## [Time](./time.ts)
+Every type and function below can be imported directly from
+`effect-ts-laws/arbitrary`.
 
-| Name           | Signature                            |                                           |                                       |
-| -------------- | ------------------------------------ | ----------------------------------------- | ------------------------------------- |
-| offsetTimezone |                                      |                                           | `Arbitrary<DateTime.Timezone.Offset>` |
-| duration       | `(constraints?: IntegerConstraints)` | <span style='font-family: serif'>⇒</span> | `Arbitrary<Duration>`                 |
-| utc            | `(constraints: DateConstraints<E>)`  | <span style='font-family: serif'>⇒</span> | `Arbitrary<DateTime.Utc>`             |
-| zoned          | `(constraints: DateConstraints<E>)`  | <span style='font-family: serif'>⇒</span> | `Arbitrary<DateTime.Zones>`           |
+<details><summary>Example</summary>
 
-## [Function](./function.ts)
+---
 
-| Name          | Signature                                                                      |                                           |                             |
-| ------------- | ------------------------------------------------------------------------------ | ----------------------------------------- | --------------------------- |
-| unary         | `<A>() ⇒ (b: Arbitrary<B>)`                                                    | <span style='font-family: serif'>⇒</span> | `Arbitrary<(a: A) ⇒ B>`     |
-| unaryToKind   | `<A>() ⇒ <F extends λ>(getArbitrary: LiftArbitrary<F>) ⇒ <B>(b: Arbitrary<B>)` | <span style='font-family: serif'>⇒</span> | `Arbitrary<(a: A) ⇒ F<B>>`  |
-| unaryFromKind | `<A, F extends λ>() ⇒ <B>(b: Arbitrary<B>)`                                    | <span style='font-family: serif'>⇒</span> | `Arbitrary<(fa: F<A>) ⇒ B>` |
-| unaryInKind   | `<A>() ⇒ <F extends λ>(of: <T>(t: T) ⇒ F<T>) ⇒ <B>(b: Arbitrary<B>)`           | <span style='font-family: serif'>⇒</span> | `Arbitrary<F<(a: A) ⇒ B>>`  |
-| predicate     | `<A>()`                                                                        | <span style='font-family: serif'>⇒</span> | `Arbitrary<Predicate<A>>`   |
+Importing arbitraries from this package:
+
+```ts
+import {Option as OP, pipe} from 'effect'
+import {tinyArray, tinyInteger, option} from 'effect-ts-laws/arbitrary'
+import fc from 'fast-check'
+
+const arbitrary: fc.Arbitrary<OP.Option<number>[]> = pipe(
+  tinyInteger,
+  option,
+  tinyArray
+)
+```
+
+</details>
+
+## Modules
+
+### [monad](https://github.com/middle-ages/effect-ts-laws/tree/main/src/arbitrary/monad.ts)
+
+[Monad](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/src/Monad.ts)
+instance for the [fast-check](https://fast-check.dev/) `Arbitrary` type, and a
+[type lambda](https://effect.website/docs/other/behaviour/hkt#type-lambdas) for
+the type.
+
+<details><summary>Example</summary>
+
+---
+Using the `flatMap` function:
+
+```ts
+import {Effect as EF, flow, pipe} from 'effect'
+import {Monad} from 'effect-ts-laws/arbitrary'
+import fc from 'fast-check'
+
+const greaterThanOne = (i: number): EF.Effect<string, Error> =>
+  i > 1 ? EF.succeed('OK') : EF.fail(new Error('KO'))
+
+const oneThirdFail: fc.Arbitrary<EF.Effect<string, Error>> = pipe(
+  fc.integer({min: 1, max: 3}),
+  Monad.flatMap(flow(greaterThanOne, fc.constant)),
+)
+```
+
+</details>
+
+### [data](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/data.ts)
+
+Arbitraries for some basic `effect-ts` datatypes.
+
+<img src="docs/data.svg" title="data.ts" alt="data arbitraries">
+
+### [time](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/time.ts)
+
+Arbitraries for `effect-ts` temporal types.
+
+<img src="docs/time.svg" title="time.ts" alt="time arbitraries">
+
+### [function](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/function.ts)
+
+Function arbitraries.
+
+<img src="docs/function.svg" title="function.ts" alt="function arbitraries">
+
+### [effect](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/effect.ts)
+
+Arbitraries for the `Effect` type.
+
+<img src="docs/effect.svg" title="effect.ts" alt="effect arbitraries">

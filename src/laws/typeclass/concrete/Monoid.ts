@@ -1,17 +1,17 @@
-import {Law} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
-import {ConcreteGiven, concreteLaws} from './given.js'
-import {Semigroup} from './Semigroup.js'
+import {Law} from '../../../law.js'
+import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
+import {semigroupLaws} from './Semigroup.js'
 
 /**
  * Test typeclass laws for `Monoid` and its requirement `Semigroup` laws.
  * @category typeclass laws
  */
-export const Monoid = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
+export const monoidLaws = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
   const {F, equalsA, a, suffix} = given
 
-  return concreteLaws(
+  return defineConcreteLaws(
     'Monoid',
     Law(
       'left identity',
@@ -24,7 +24,7 @@ export const Monoid = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
       'a = a ⊕ ∅',
       a,
     )((a: A) => equalsA(F.combine(a, F.empty), a)),
-  )(suffix, Semigroup(given))
+  )(suffix, semigroupLaws(given))
 }
 
 /**
@@ -35,7 +35,7 @@ export interface MonoidTypeLambda extends TypeLambda {
   readonly type: MO.Monoid<this['Target']>
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ConcreteLambdas {
     Monoid: MonoidTypeLambda
   }

@@ -1,13 +1,13 @@
-import {Law} from '#law'
 import {BoundedTypeLambda} from '@effect/typeclass/Bounded'
 import {Order as OD} from 'effect'
-import {ConcreteGiven, concreteLaws} from './given.js'
+import {Law} from '../../../law.js'
+import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Bounded`.
  * @category typeclass laws
  */
-export const Bounded = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {
+export const boundedLaws = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {
   const {F, a, suffix} = given
   const order: OD.Order<A> = F.compare
   const [lte, gte] = [
@@ -15,14 +15,14 @@ export const Bounded = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {
     OD.lessThanOrEqualTo(order),
   ]
 
-  return concreteLaws(
+  return defineConcreteLaws(
     'Bounded',
     Law('lower bounded', 'a ≥ minBound ', a)(a => gte(a, F.minBound)),
     Law('upper bounded', 'a ≤ maxBound ', a)(a => lte(a, F.maxBound)),
   )(suffix)
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ConcreteLambdas {
     Bounded: BoundedTypeLambda
   }

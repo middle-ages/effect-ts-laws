@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+cd src/arbitrary/docs
+
+for file in *.api.tex; do
+  base=${file%.api.tex}
+  latexmk -cd -output-format=dvi -dvi -rc-report- $file
+  dvisvgm --bbox=min --exact-bbox --optimize=all --precision=3 \
+          --relative --font-format=woff,autohint --output=$base.svg $base.api.dvi
+  rm *.aux *.log *.dvi *.fls *.out *.fdb_latexmk
+  rm -f *.pdf
+done

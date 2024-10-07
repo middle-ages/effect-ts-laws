@@ -1,16 +1,36 @@
 import {Array as AR, Option as OP, pipe, Tuple as TU} from 'effect'
-import {describe} from 'vitest'
-import {checkLaw, Law, Overrides, testLaw} from './law.js'
+import {checkLaw, Law, ParameterOverrides} from './law.js'
 
 /**
  * A `LawSet` is a recursive data structure with an array of {@link Law}s
  * and an array of base `LawSet`s that models the laws required
  * by some function or datatype. The `LawSet` passes only if all its
- * `LawSet`s and all its own laws pass. A `LawSet` can be tested
- * by calling `testLaws(lawSet)` inside a `vitest` suite, and will
- * appear in the test results as a list of tests grouped inside a
- * `describe()` block, if it has a name, or as a flat list
- * of test blocks if it does not.
+ * `LawSet`s and all its own laws pass.
+ *
+ * You can try to find counterexamples to a set of laws using the functions
+ * {@link checkLaw} and {@link checkLaws}.
+ *
+ * Functions in the `ts-effect-laws/test` entry point will try to find
+ * counterexamples as part of a [vitest](https://vitest.dev/) test.
+ *
+ * Laws will be deduplicated in the scope of a run of `checkLaw` and
+ * `checkLaws`, so that the same law will not run more than once per
+ * datatype.
+ *
+ * This is required because typeclass laws are arranged in a parallel `extends`
+ * hierarchy to the typeclasses themselves, so that a law could appear multiple
+ * times in a test.
+ *
+ * Consider for example the law tests for `Array`. It has instances we wish to
+ * check both for `Applicative` and for `Monad`. In `effect-ts`, both extend
+ * `Covariant`. Thus testing the `Array` instance for `Applicative` will run the
+ * laws for `Covariant`. But testing for the `Monad` laws will run the
+ * `Covariant` law tests _again_. Deduplication avoids this issue.
+ *
+ * A `LawSet` can be tested by calling `testLaws(lawSet)` inside a `vitest`
+ * suite, and will appear in the test results as a list of tests grouped inside
+ * a `describe()` block, if it has a name, or as a flat list of test blocks if
+ * it does not. The function must be imported from `effect-ts-laws/vitest`.
  * @category model
  */
 export interface LawSet {
@@ -34,15 +54,26 @@ export interface LawSet {
 }
 
 /**
- * Assemble a set of laws for some unit under test. You can run them with the
- * function {@link testLaws}.
+ * Assemble a set of laws for some unit under test. You can check them using the
+ * functions {@link checkLaw} and {@link checkLaws }. They can be tested in a
+ * [vitest](https://vitest.dev/) test suite using the
+ * [testLaw](https://middle-ages.github.io/effect-ts-laws-docs/functions/vitest.testLaw.html)
+ * and
+ * [testLaw](https://middle-ages.github.io/effect-ts-laws-docs/functions/vitest.testLaw.html)
+ * functions.
  * @example
  * ```ts
  * // A pair of laws with no law sets.
  * const setA: LawSet = LawSet()(
- *   'some unit under test',
+ *   'some feature under test',
  *   Law('law₁', '∀n ∈ ℕ: n = n', tinyPositive)(x => x === x),
  *   Law('law₂', '∀n ∈ ℕ: n ≤ n', tinyPositive)(x => x <= x),
+ * )
+ *
+ * // Another that will run “setA” _before_ its own laws
+ * const setA: LawSet = LawSet(setA)(
+ *   'another feature under test',
+ *   Law('law₁', '∀n ∈ ℕ: n - n = 0', tinyPositive)(x => x - x === 0),
  * )
  * ```
  * @param sets - Requirements for the new `LawSet`.
@@ -103,78 +134,13 @@ export const addLawSet =
   })
 
 /**
- * Attempts to find a counter example for a set of {@link Law}s.
- *
- * Meant to be called from inside a `vitest` test suite, perhaps inside some
- * `describe()` block, but _not_ inside a `test()` or `it()` block.
- *
- * Test results will be shown grouped under the given `LawSet.name`.
- * Laws found in the `sets` field will be shown under their own names as
- * children.
- *
- * Entries in the optional configuration will override any `fast-check`
- * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html)
- * found in the laws.
- * @param lawSet - Laws to test.
- * @param parameters - Optional runtime `fast-check` parameters.
- * @category harness
- */
-export const testLaws = (
-  {name = '', sets, laws}: LawSet,
-  parameters: Overrides = {},
-): void => {
-  if (laws.length === 0 && sets.length === 0) return
-
-  const run = () => {
-    for (const lawSet of sets) testLaws(lawSet, parameters)
-    for (const law of laws)
-      testLaw({...law, parameters: {...law.parameters, ...parameters}})
-  }
-
-  if (name === '') run()
-  else describe(name, run)
-}
-
-/**
- * Test a list of `LawSet`s. This is exactly like `testLaws` but accepts
- * a list of `LawSet`s rather than a single one.
- * @param parameters - Optional runtime `fast-check` parameters.
- * @category harness
- */
-export const testLawSets =
-  (parameters: Overrides = {}) =>
-  (
-    /**
-     * The law sets to test.
-     */
-    ...sets: LawSet[]
-  ): void => {
-    testLaws(lawSetTests(...sets), parameters)
-  }
-
-/**
- * Just like {@link testLaws} but in _verbose_ mode.
- * @category harness
- * @param lawSet - Laws to test.
- * @param parameters - Optional runtime `fast-check` parameters.
- * @category harness
- */
-export const verboseLaws = (
-  lawSet: LawSet,
-  parameters: Overrides = {},
-): void => {
-  testLaws(lawSet, {verbose: true, ...parameters})
-}
-
-/**
- * Just like {@link testLaws} but in a pure function: no `vitest` blocks are
- * used.
+ * Test the law set in a pure function with no `vitest` imports involved.
  * @returns Possibly empty array of failure messages.
  * @category harness
  */
 export const checkLaws = (
   {sets, laws}: LawSet,
-  parameters: Overrides = {},
+  parameters: ParameterOverrides = {},
 ): string[] => {
   const ownOptions: OP.Option<string>[] = AR.map(laws, law =>
     checkLaw(law, parameters),
@@ -192,7 +158,7 @@ export const checkLaws = (
  * @category harness
  */
 export const checkLawSets =
-  (parameters: Overrides = {}) =>
+  (parameters: ParameterOverrides = {}) =>
   (
     /**
      * The law sets to test.

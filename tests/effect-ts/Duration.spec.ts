@@ -1,12 +1,8 @@
 /** Typeclass law tests for the `Duration` datatype. */
 import {MonoidMax, MonoidMin, MonoidSum} from '@effect/typeclass/data/Duration'
 import {Duration as DU, pipe} from 'effect'
-import {
-  boundedDuration,
-  duration,
-  testConcreteTypeclassLaws,
-  testMonoids,
-} from 'effect-ts-laws'
+import {boundedDuration, duration} from 'effect-ts-laws'
+import {testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws/vitest'
 import {Equivalence, Order} from 'effect/Duration'
 import fc from 'fast-check'
 

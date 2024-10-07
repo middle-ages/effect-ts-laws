@@ -4,6 +4,7 @@ set -Eeuo pipefail
 
 pnpm clean
 pnpm lint
+pnpm circular
 pnpm test-run
 
 mkdir -p .dev/dist

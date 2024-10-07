@@ -4,7 +4,9 @@ import {
   Product,
 } from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {Applicative, checkLaws, testLaws, tinyInteger} from 'effect-ts-laws'
+
+import {testLaws} from 'effect-ts-laws/vitest'
+import {applicativeLaws, checkLaws, tinyInteger} from 'effect-ts-laws'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import fc from 'fast-check'
 
@@ -13,7 +15,7 @@ type Instance = AP.Applicative<ReadonlyArrayTypeLambda>
 const a = tinyInteger,
   instance = arrayApplicative,
   laws = (instance: Instance) =>
-    Applicative({
+    applicativeLaws({
       F: instance,
       a,
       b: a,

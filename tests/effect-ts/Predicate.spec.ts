@@ -7,13 +7,8 @@ import {
   getMonoidXor,
 } from '@effect/typeclass/data/Predicate'
 import {Boolean as BO, pipe} from 'effect'
-import {
-  getMonoUnaryEquivalence,
-  Mono,
-  predicate,
-  testMonoids,
-  testTypeclassLaws,
-} from 'effect-ts-laws'
+import {getMonoUnaryEquivalence, Mono, predicate} from 'effect-ts-laws'
+import {testMonoids, testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {PredicateTypeLambda} from 'effect/Predicate'
 
 const Arbitrary = predicate<Mono>()

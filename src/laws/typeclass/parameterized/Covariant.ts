@@ -1,20 +1,17 @@
-import {addLawSet, Law, lawTests} from '#law'
 import {Covariant as CO} from '@effect/typeclass'
 import {Covariant as optionCovariant} from '@effect/typeclass/data/Option'
 import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
-import {Invariant} from './Invariant.js'
-import {
-  ParameterizedGiven as Given,
-  unfoldGiven,
-  withOuterOption,
-} from './given.js'
+import {addLawSet, Law, lawTests} from '../../../law.js'
+import {invariantLaws} from './Invariant.js'
+import {withOuterOption} from './harness/compose.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Covariant`.
  * @category typeclass laws
  */
-export const Covariant = <
+export const covariantLaws = <
   F extends TypeLambda,
   A,
   B = A,
@@ -28,7 +25,7 @@ export const Covariant = <
 ) =>
   pipe(
     buildLaws(`Covariant${suffix ?? ''}`, given),
-    pipe(given, Invariant, addLawSet),
+    pipe(given, invariantLaws, addLawSet),
     addLawSet(
       buildLaws(...withOuterOption('Covariant', given, optionCovariant)),
     ),
@@ -77,7 +74,7 @@ export interface CovariantTypeLambda extends TypeLambda {
   readonly type: CO.Covariant<this['Target'] & TypeLambda>
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ParameterizedLambdas {
     Covariant: CovariantTypeLambda
   }

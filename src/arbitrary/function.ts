@@ -8,7 +8,7 @@ import {
 import {constFalse, constTrue} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {Monad as arbitraryMonad} from './instances.js'
+import {Monad as arbitraryMonad} from './monad.js'
 import {LiftArbitrary} from './types.js'
 
 const {map} = arbitraryMonad
@@ -71,7 +71,7 @@ export const unaryFromKind = <
  */
 export const unaryInKind =
   <A>() =>
-  <F extends TypeLambda, In1, Out2, Out1>(
+  <F extends TypeLambda, In1 = never, Out2 = unknown, Out1 = unknown>(
     of: <T>(t: T) => Kind<F, In1, Out2, Out1, T>,
   ): (<B>(
     b: fc.Arbitrary<B>,
@@ -114,6 +114,7 @@ export const sampleUnaryEquivalence =
     that: typeof self,
   ): OP.Option<A> => {
     const samples: A[] = fc.sample(a, parameters)
+    /* v8 ignore next 1 */
     if (samples.length === 0) throw new Error('Empty sample.')
     for (const a of samples) if (!equalsB(self(a), that(a))) return OP.some(a)
     return OP.none()

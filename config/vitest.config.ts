@@ -16,7 +16,8 @@ export default defineConfig({
       exclude: [
         '.dev',
         'dev',
-        'conf',
+        'config',
+        'docs',
         'src/dev',
         'tests',
       ],

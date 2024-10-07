@@ -1,4 +1,3 @@
-import {addLawSet, Law, lawTests} from '#law'
 import {
   Applicative as AP,
   Monad as MD,
@@ -9,19 +8,17 @@ import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {Equivalence as EQ, identity, pipe} from 'effect'
 import {apply, compose} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {Monoid} from '../concrete/Monoid.js'
-import {Covariant} from './Covariant.js'
-import {
-  ParameterizedGiven as Given,
-  unfoldGiven,
-  withOuterOption,
-} from './given.js'
+import {addLawSet, Law, lawTests} from '../../../law.js'
+import {monoidLaws} from '../concrete/Monoid.js'
+import {covariantLaws} from './Covariant.js'
+import {withOuterOption} from './harness/compose.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Applicative`.
  * @category typeclass laws
  */
-export const Applicative = <
+export const applicativeLaws = <
   F extends TypeLambda,
   A,
   B = A,
@@ -48,14 +45,14 @@ export const Applicative = <
               Kind<F, In1, Out2, Out1, A>
             >,
           },
-          Monoid,
+          monoidLaws,
           addLawSet,
         )
       : identity
 
   return pipe(
     buildLaws('Applicative', given),
-    pipe(given, Covariant, addLawSet),
+    pipe(given, covariantLaws, addLawSet),
     addMonoidLaws,
     addLawSet(
       buildLaws(...withOuterOption('Applicative', given, optionApplicative)),
@@ -182,7 +179,7 @@ export interface ApplicativeTypeLambda extends TypeLambda {
   readonly type: AP.Applicative<this['Target'] & TypeLambda>
 }
 
-declare module './given.js' {
+declare module './harness/given.js' {
   interface ParameterizedLambdas {
     Applicative: ApplicativeTypeLambda
   }

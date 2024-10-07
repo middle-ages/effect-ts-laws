@@ -1,7 +1,6 @@
 import {Option as OP, Predicate as PR} from 'effect'
 import {tupled} from 'effect/Function'
 import fc from 'fast-check'
-import {assert, test} from 'vitest'
 
 /**
  * A paper-thin wrapper over a fast-check property and its runtime
@@ -53,7 +52,7 @@ export interface Law<Ts extends UnknownArgs> {
 
   /**
    * `fast-check` configuration
-   * [parameters](https://fast-check.dev/api/v2/interfaces/fc.Parameters.html).
+   * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
    */
   parameters?: fc.Parameters<[Ts]>
 }
@@ -62,7 +61,7 @@ export interface Law<Ts extends UnknownArgs> {
  * Build a law from a name, a predicate, an optional note, an arbitrary for the
  * predicate arguments, and optional `fast-check` runtime parameters.
  * The runtime parameters are
- * [documented here](https://fast-check.dev/api/v2/interfaces/fc.Parameters.html).
+ * [documented here](https://fast-check.dev/api-reference/interfaces/Parameters.html).
  * @example
  * ```ts
  * import fc from 'fast-check'
@@ -123,44 +122,13 @@ export const negateLaw = <Ts extends UnknownArgs>({
 }: Law<Ts>): Law<Ts> => ({...law, predicate: PR.not(predicate)})
 
 /**
- * Attempts to find a counter example for the single given {@link Law}.
- *
- * Meant to be called from inside a `vitest` test suite, perhaps inside some
- * `describe()` block, but _not_ inside a `test()`/`it()` block. For example:
- * @example
- * ```ts
- * import fc from 'fast-check'
- * import { Law, testLaw } from 'effect-ts-laws'
- * const myLaw = Law(
- *   'law name',
- *   'law note',
- *   fc.integer()
- * )((a: number) => a === a)
- * describe('testLaw', () => { testLaw(myLaw) })
- * // testLaw
- * // ✓ law name: law note
- * ```
- * @category harness
- */
-export const testLaw = <Ts extends UnknownArgs>(law: Law<Ts>): void => {
-  const {note, parameters} = law
-
-  const suffix =
-    (parameters?.verbose ?? false) && note !== '' ? `: ${note}` : ''
-
-  test(law.name + suffix, () => {
-    asAssert(law)()
-  })
-}
-
-/**
  * Run the law and return either `None` on pass or `Some<string>` with the error
  * report on fail.
  * @category harness
  */
 export const checkLaw = <Ts extends UnknownArgs>(
   law: Law<Ts>,
-  parameters: Overrides = {},
+  parameters: ParameterOverrides = {},
 ): OP.Option<string> => {
   let failMessage: string | undefined = undefined
 
@@ -175,7 +143,11 @@ export const checkLaw = <Ts extends UnknownArgs>(
   return OP.fromNullable(failMessage)
 }
 
-const asAssert =
+/**
+ * Convert the law into a `fast-check` assertion.
+ * @category harness
+ */
+export const asAssert =
   <Ts extends UnknownArgs>({
     name,
     note,
@@ -183,18 +155,18 @@ const asAssert =
     arbitrary,
     parameters,
   }: Law<Ts>) =>
-  (overrides: Overrides = {}): void => {
+  (overrides: ParameterOverrides = {}): void => {
     fc.assert(
       fc.property<[Ts]>(arbitrary, (args: Ts) => {
         if (predicate(args)) return true
-        assert.fail(`${name}: ${note}`)
+        throw new Error(`${name}: ${note}`)
       }),
       {...parameters, ...overrides},
     )
   }
 
 /**
- * A base type for predicate argument types.
+ * A base type for law predicate argument types.
  * @category model
  * @internal
  */
@@ -207,7 +179,7 @@ export type UnknownArgs = [unknown, ...unknown[]]
  * are omitted here and must be set on individual law tests.
  * @category fast-check
  */
-export type Overrides = Omit<
+export type ParameterOverrides = Omit<
   fc.Parameters,
   'reporter' | 'asyncReporter' | 'examples'
 >

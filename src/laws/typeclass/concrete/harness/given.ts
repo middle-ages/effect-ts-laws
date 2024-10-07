@@ -1,7 +1,7 @@
 import {Equivalence as EQ} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {Law, LawSet, UnknownArgs} from '#law'
+import {Law, LawSet, UnknownArgs} from '../../../../law.js'
 
 /**
  * Common options for testing _concrete type_ typeclass laws. These are
@@ -14,7 +14,7 @@ import {Law, LawSet, UnknownArgs} from '#law'
  * @typeParam A - The datatype under test. For example, when testing
  * `Monoid` laws on `Option<number>`, this would be set to
  * `Option<number>`.
- * @category options
+ * @category harness
  */
 export interface ConcreteGiven<F extends TypeLambda, A> {
   /**
@@ -46,12 +46,13 @@ export interface ConcreteGiven<F extends TypeLambda, A> {
 }
 
 /**
- * Build a set of laws for some typeclass on a concrete type.
- * @param typeclassName - Used as label for vitest `description()` block.
+ * Define a set of laws for some typeclass on a concrete type.
+ * @param typeclassName - Used as label for test `description()` block.
  * @param laws - list of `Law` to test.
  * @returns A set of laws ready to be tested.
+ * @category harness
  */
-export const concreteLaws =
+export const defineConcreteLaws =
   <Ts extends UnknownArgs[]>(
     typeclassName: string,
     ...laws: {[K in keyof Ts]: Law<Ts[K]>}
@@ -82,7 +83,7 @@ export const concreteLaws =
  * concrete types. Use
  * [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
  * to add entries here for a new typeclasses.
- * @category model
+ * @category harness
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+
 export interface ConcreteLambdas {}

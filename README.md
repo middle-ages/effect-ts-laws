@@ -34,7 +34,8 @@ Run all typeclass law tests relevant to the effect-ts `Option` datatype:
 ```ts
 import {Alternative, Applicative, getOptionalMonoid, Monad, Traversable} from '@effect/typeclass/data/Option'
 import {Option as OP} from 'effect'
-import {monoEquivalence, monoOrder, monoSemigroup, option, testTypeclassLaws} from 'effect-ts-laws'
+import {monoEquivalence, monoOrder, monoSemigroup, option} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {OptionTypeLambda} from 'effect/Option'
 
 describe('@effect/typeclass/data/Option', () => {
@@ -71,7 +72,7 @@ import {Array as AR} from 'effect'
 import {dual} from 'effect/Function'
 import {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {testTypeclassLaws} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 
 describe('MyTuple', () => {
   type MyTuple<A> = [A]
@@ -185,6 +186,7 @@ spreadsheet](https://docs.google.com/spreadsheets/d/171O4wzY4TrdRvecFdv83echR7PS
 
 * [API documentation](https://middle-ages.github.io/effect-ts-laws-docs/).
 * [Catalog of laws](https://middle-ages.github.io/effect-ts-laws-docs/catalog-of-laws.html).
+* `README` for the [arbitraries](src/arbitrary/README.md) included.
 * `README` at [the laws for typeclasses](src/laws/typeclass/concrete/README.md) on concrete types.
 * `README` at [the laws for typeclasses](src/laws/typeclass/parameterized/README.md) on parameterized types.
 * `README` at the typeclass laws [self-tests](tests/laws/typeclass/README.md).

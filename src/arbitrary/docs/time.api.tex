@@ -1,0 +1,19 @@
+\documentclass[16pt]{article}
+
+\input{preamble.tex}
+
+\begin{document}
+\setlength\tabcolsep{0pt}
+\setcounter{secnumdepth}{0}
+\section{}
+
+\begin{tabular}{*{4}{K@{}}}
+  \head{Symbol} & \multicolumn{3}{c}{\head{Type}}
+  \\\hline\\[-1em]
+  \fn{boundedDuration} &                                      &     & \Type{Abitrary} \Br{[\ArbT{\a Duration\A}, \Type{Bounded} \Br{\Type{Duration\A}}]}\\
+  \fn{duration}        &                                      &     & \ArbT{Duration}\\
+  \fn{offsetTimezone}  &                                      &     & \ArbT{Timezone.\kern-1ptOffset}\\
+  \fn{utc}             & (\Var{constraints}{DateConstraints}) & \Ar & \ArbT{Utc}\\
+\end{tabular}
+
+\end{document}

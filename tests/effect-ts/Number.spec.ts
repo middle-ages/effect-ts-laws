@@ -6,11 +6,8 @@ import {
   MonoidSum,
 } from '@effect/typeclass/data/Number'
 import {Number as NU, pipe} from 'effect'
-import {
-  testConcreteTypeclassLaws,
-  testMonoids,
-  tinyInteger,
-} from 'effect-ts-laws'
+import {tinyInteger} from 'effect-ts-laws'
+import {testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws/vitest'
 
 describe('@effect/typeclass/data/Number', () => {
   const a = tinyInteger,

@@ -6,7 +6,7 @@ import {
   Traversable,
 } from '@effect/typeclass/data/Identity'
 import {identity as id} from 'effect'
-import {testTypeclassLaws} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 
 describe('@effect/typeclass/data/Identity', () => {
   testTypeclassLaws<IdentityTypeLambda>({getEquivalence: id, getArbitrary: id})(

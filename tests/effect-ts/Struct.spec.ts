@@ -1,11 +1,7 @@
 /** Typeclass law tests for the `Struct` datatype. */
 import {Equivalence as EQ, Order as OD} from 'effect'
-import {
-  Mono,
-  monoEquivalence,
-  monoOrder,
-  testTypeclassLaws,
-} from 'effect-ts-laws'
+import {Mono, monoEquivalence, monoOrder} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {getOrder, getEquivalence as getStructEquivalence} from 'effect/Struct'
 import fc from 'fast-check'

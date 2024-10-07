@@ -7,13 +7,8 @@ import {
   Traversable,
 } from '@effect/typeclass/data/Option'
 import {Option as OP} from 'effect'
-import {
-  monoEquivalence,
-  monoOrder,
-  monoSemigroup,
-  option,
-  testTypeclassLaws,
-} from 'effect-ts-laws'
+import {monoEquivalence, monoOrder, monoSemigroup, option} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {OptionTypeLambda} from 'effect/Option'
 
 describe('@effect/typeclass/data/Option', () => {

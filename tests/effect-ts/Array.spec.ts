@@ -6,13 +6,8 @@ import {
   Traversable,
 } from '@effect/typeclass/data/Array'
 import {Array as AR} from 'effect'
-import {
-  Mono,
-  monoEquivalence,
-  monoOrder,
-  testTypeclassLaws,
-  tinyArray,
-} from 'effect-ts-laws'
+import {Mono, monoEquivalence, monoOrder, tinyArray} from 'effect-ts-laws'
+import {testTypeclassLaws} from 'effect-ts-laws/vitest'
 import {ReadonlyArrayTypeLambda} from 'effect/Array'
 
 describe('@effect/typeclass/data/Array', () => {

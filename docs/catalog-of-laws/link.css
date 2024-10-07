@@ -1,0 +1,58 @@
+a {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  outline: none;
+  text-decoration-line: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: 1.25px;
+  text-decoration-color: #00f0;
+  svg {
+    position: absolute;
+    opacity: var(--svg-opacity);
+    pointer-events: none;
+    stroke-linecap: round;
+    fill: transparent;
+    rect {
+      stroke: currentColor;
+      stroke-dashoffset: var(--link-dash);
+      stroke-width: var(--outline-width);
+      stroke-dasharray: 0.2, 3.25;
+    }
+  }
+  span {
+    padding: 0 var(--pad) 0 var(--pad);
+  }
+  * {
+    transition: all var(--transition-duration) linear;
+  }
+}
+a:hover:link:not(:active) {
+  text-decoration-color: var(--color-href);
+}
+a:hover:visited:not(:active) {
+  text-decoration-color: var(--color-href-visited);
+}
+a:link:not(:active):not(:focus),
+a:hover:link:not(:active):not(:focus) {
+  --link-dash: 0;
+  color: var(--color-href);
+}
+a:visited:not(:active),
+der a:hover:visited:not(:active) {
+  color: var(--color-href-visited);
+}
+a:active {
+  color: var(--color-href-active) !important;
+  text-decoration-color: var(--color-href-active);
+}
+a:active:focus {
+  --link-dash: 2.3rch;
+}
+a:focus {
+  --link-dash: 1.5rch;
+  --svg-opacity: 1;
+}
+link-to {
+  display: block;
+}
