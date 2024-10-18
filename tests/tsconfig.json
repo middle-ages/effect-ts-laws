@@ -1,13 +1,13 @@
 {
   "extends": ["../config/tsconfig.base.json"],
   "compilerOptions": {
-    "baseUrl": "..",
+    "rootDir": "..",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "incremental": true,
-    "composite": true,
-    "outDir": "../.dev/dist/tests",
+    "outDir": "../.dev/tests",
     "types": ["vitest/globals"]
-  }
+  },
+  "include": ["../src", "."]
 }

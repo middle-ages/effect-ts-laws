@@ -2,15 +2,8 @@
 
 set -Eeuo pipefail
 
-pnpm clean
-pnpm lint
-pnpm typecheck
-pnpm circular
-pnpm test-run
-pnpm build
+pnpm build:all
 
-cp package.json README.md .dev/dist
-cp -r docs/ .dev/dist
 cp ~/.npmrc .dev/dist
 
 cd .dev/dist

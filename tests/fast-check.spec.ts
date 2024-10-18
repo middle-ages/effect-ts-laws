@@ -12,8 +12,5 @@ describe('fast-check Arbitrary datatype typeclass laws', () => {
   testTypeclassLaws<ArbitraryTypeLambda>({
     getEquivalence: equalsA => getEquivalence(equalsA),
     getArbitrary: fc.constant,
-  })({
-    Equivalence: getEquivalence(monoEquivalence),
-    Monad,
-  })
+  })({Equivalence: getEquivalence(monoEquivalence), Monad}, {numRuns: 100})
 })

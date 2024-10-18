@@ -25,7 +25,7 @@ describe('law', () => {
     })
   })
 
-  describe('testLaw', () => {
+  suite('testLaw', () => {
     describe('basic', () => {
       testLaw(law)
     })
@@ -35,7 +35,18 @@ describe('law', () => {
     })
 
     describe('negated twice', () => {
-      pipe(law, negateLaw, negateLaw, testLaw)
+      const doubleNegated = pipe(law, negateLaw, negateLaw)
+      testLaw(doubleNegated)
+    })
+
+    describe('All child tests will be skipped', () => {
+      testLaw.skip(law)
+      testLaw.skipIf(true)(law)
+    })
+
+    describe('No child tests will be skipped', () => {
+      testLaw.skipIf(false)(law)
+      testLaw.runIf(true)(law)
     })
   })
 

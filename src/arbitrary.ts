@@ -1,5 +1,6 @@
 export * from './arbitrary/data.js'
 export * from './arbitrary/effect.js'
+export * from './arbitrary/equivalence.js'
 export * from './arbitrary/function.js'
 export * from './arbitrary/instances.js'
 export * from './arbitrary/time.js'

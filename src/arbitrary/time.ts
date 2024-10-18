@@ -1,3 +1,7 @@
+/**
+ * Arbitraries for basic effect-ts temporal datatypes.
+ * @module
+ */
 import {Bounded as BU} from '@effect/typeclass'
 import {DateTime as DT, Duration as DU, pipe} from 'effect'
 import fc from 'fast-check'
@@ -7,12 +11,16 @@ import {Monad as arbitraryMonad} from './instances.js'
 const {flatMap, map} = arbitraryMonad
 
 /**
- * `Duration` arbitrary.
+ * Finite `Duration` arbitrary.
  * @category arbitraries
  */
-export const duration: fc.Arbitrary<DU.Duration> = pipe(
-  tinyInteger,
-  map(i => DU.millis(i)),
+export const duration: fc.Arbitrary<DU.Duration> = fc.oneof(
+  tinyInteger.map(_ => DU.millis(_)),
+  tinyInteger.map(_ => DU.seconds(_)),
+  tinyInteger.map(_ => DU.minutes(_)),
+  tinyInteger.map(_ => DU.hours(_)),
+  tinyInteger.map(_ => DU.days(_)),
+  tinyInteger.map(_ => DU.weeks(_)),
 )
 
 /**

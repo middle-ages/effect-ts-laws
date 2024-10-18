@@ -1,5 +1,9 @@
+/**
+ * @module lawSet The LawSet type and functions for working with_sets_ of laws.
+ */
 import {Array as AR, Option as OP, pipe, Tuple as TU} from 'effect'
-import {checkLaw, Law, ParameterOverrides} from './law.js'
+import type {ParameterOverrides} from './law.js'
+import {checkLaw, Law} from './law.js'
 
 /**
  * A `LawSet` is a recursive data structure with an array of {@link Law}s
@@ -62,7 +66,8 @@ export interface LawSet {
  * [testLaw](https://middle-ages.github.io/effect-ts-laws-docs/functions/vitest.testLaw.html)
  * functions.
  * @example
- * ```ts
+ * import {checkLaws, Law, LawSet, tinyPositive} from 'effect-ts-laws'
+ *
  * // A pair of laws with no law sets.
  * const setA: LawSet = LawSet()(
  *   'some feature under test',
@@ -71,11 +76,13 @@ export interface LawSet {
  * )
  *
  * // Another that will run “setA” _before_ its own laws
- * const setA: LawSet = LawSet(setA)(
+ * const setB: LawSet = LawSet(setA)(
  *   'another feature under test',
  *   Law('law₁', '∀n ∈ ℕ: n - n = 0', tinyPositive)(x => x - x === 0),
  * )
- * ```
+ *
+ * // Will check “setA” as a prerequisite
+ * assert.deepStrictEqual(checkLaws(setB), [])
  * @param sets - Requirements for the new `LawSet`.
  * @category constructors
  */
@@ -103,6 +110,17 @@ export const lawTests = (name = '', ...laws: Law<any>[]): LawSet => ({
 })
 
 /**
+ * Just like {@link lawTests}, but explicitly anonymous.
+ *
+ * Anonymous LawSets do not appear as a distinct group in test results. Instead
+ * they appear right next to their siblings.
+ * @param laws - Laws under test.
+ * @category constructors
+ */
+export const anonymousLawTests = (...laws: Law<any>[]): LawSet =>
+  lawTests('', ...laws)
+
+/**
  * Just like {@link LawSet}, but with an empty list of laws, no
  * name, and the `sets` list is _deduped_ to avoid running
  * the same `LawSet` twice.
@@ -123,24 +141,31 @@ export const addLaws =
   })
 
 /**
- * Adds a required set of laws to the `LawSet`.
+ * Adds a required child LawSets to a parent LawSet.
+ * @param them - Child LawSet that will be added.
+ * @returns Parent LawSet with the child LawSet added.
  * @category combinators
  */
-export const addLawSet =
-  (add: LawSet) =>
-  ({sets, ...rest}: LawSet) => ({
-    ...rest,
-    sets: [...sets, add],
-  })
+export const addLawSets =
+  (...them: LawSet[]): ((lawSet: LawSet) => LawSet) =>
+  /**
+   * Parent LawSet that will get a new child.
+   */
+  self => {
+    const {sets, ...rest} = self
+    return {...rest, sets: [...sets, ...them]}
+  }
 
 /**
  * Test the law set in a pure function with no `vitest` imports involved.
+ *
+ * See also {@link vitest.testLaws | testLaws}.
  * @returns Possibly empty array of failure messages.
  * @category harness
  */
 export const checkLaws = (
   {sets, laws}: LawSet,
-  parameters: ParameterOverrides = {},
+  parameters?: ParameterOverrides,
 ): string[] => {
   const ownOptions: OP.Option<string>[] = AR.map(laws, law =>
     checkLaw(law, parameters),
@@ -158,7 +183,7 @@ export const checkLaws = (
  * @category harness
  */
 export const checkLawSets =
-  (parameters: ParameterOverrides = {}) =>
+  (parameters?: ParameterOverrides) =>
   (
     /**
      * The law sets to test.
@@ -166,6 +191,64 @@ export const checkLawSets =
     ...sets: LawSet[]
   ): string[] =>
     checkLaws(lawSetTests(...sets), parameters)
+
+/**
+ * Filter the laws that are direct children of a LawSet by matching a regular
+ * expression on the law _name_, and return the new filtered LawSet. LawSets
+ * that survive the filter remain untouched.
+ *
+ * Useful when you need to remove from a LawSet laws that are problematic
+ * perhaps because they are slow or difficult to generate.
+ * @example
+ * import {equivalenceLaws, filterLaws, tinyInteger} from 'effect-ts-laws'
+ * import {Number as NU, pipe} from 'effect'
+ *
+ * // Extract reflexivity law from equivalence laws.
+ * const reflexivity = pipe(
+ *   {a: tinyInteger, equalsA: NU.Equivalence, F: NU.Equivalence},
+ *   equivalenceLaws<number>,
+ *   filterLaws(/reflexivity/),
+ * )
+ *
+ * assert.equal(reflexivity.laws.length, 1)
+ * assert.equal(reflexivity.laws[0]?.name, 'reflexivity')
+ * @param re - Regular expression will be matched vs. law name.
+ * @returns Input LawSet, but includes only laws with names matching `re`.
+ * @category combinators
+ */
+export const filterLaws =
+  (re: RegExp) =>
+  /**
+   * LawSet that is parent of laws to be filtered.
+   */
+  ({laws, ...rest}: LawSet): LawSet => ({
+    ...rest,
+    laws: laws.filter(({name}) => re.test(name)),
+  })
+
+/**
+ * Just like `filterLaws` but recursive.
+ * @param re - Regular expression will be matched vs. law name.
+ * @returns Input LawSet, but includes only laws with names matching `re`, with
+ * all required LawSets also filtered.
+ * @category combinators
+ */
+export const filterLawsDeep =
+  (re: RegExp) =>
+  /**
+   * LawSet to filter.
+   */
+  ({laws, sets, ...rest}: LawSet): LawSet => ({
+    ...rest,
+    laws: laws.filter(({name}) => re.test(name)),
+    sets: sets.map(filterLawsDeep(re)),
+  })
+
+/**
+ * The anonymous empty LawSet.
+ * @category constructors
+ */
+export const emptyLawSet: LawSet = anonymousLawTests()
 
 // Rebuilds the tree filtering out LawSets so that LawSet.name is unique
 const dedupe = (

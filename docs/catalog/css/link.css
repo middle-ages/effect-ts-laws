@@ -1,0 +1,74 @@
+a {
+  display: block;
+  text-decoration-color: transparent;
+  line-height: var(--line-height);
+  min-height: var(--line-height);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  outline: none;
+  text-decoration-line: underline;
+  text-underline-offset: var(--underline-offset);
+  text-decoration-thickness: 1.25px;
+  text-decoration-color: #00f0;
+  svg.frame {
+    position: absolute;
+    opacity: var(--svg-opacity);
+    pointer-events: none;
+    stroke-linecap: round;
+    fill: transparent;
+    rect {
+      stroke: currentColor;
+      stroke-width: var(--outline-width);
+    }
+  }
+  > span {
+    padding: 0 var(--pad) 0 var(--pad);
+  }
+  * {
+    transition:
+      all 400ms,
+      color 50ms !important;
+  }
+}
+a:not(:visited):not(:hover):not(:active) {
+  color: var(--color-href);
+}
+a:visited:not(:hover):not(:active) {
+  color: var(--color-href-visited);
+}
+a:not(:visited):hover:not(:active) {
+  color: var(--color-href-hover);
+  text-decoration-color: var(--color-href-hover);
+}
+a:visited:hover:not(:active) {
+  color: var(--color-href-visited-hover);
+  text-decoration-color: var(--color-href-visited-hover);
+}
+a.keydown,
+a:active {
+  color: var(--color-href-active) !important;
+  text-decoration-color: var(--color-href-active) !important;
+}
+a:not(:active):not(:focus) {
+  svg.frame {
+    rect {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+a:focus {
+  --svg-opacity: 1;
+  svg.frame {
+    rect {
+      stroke-dashoffset: 14px;
+    }
+  }
+}
+
+a:active:focus {
+  svg.frame {
+    rect {
+      stroke-dashoffset: 24px;
+    }
+  }
+}

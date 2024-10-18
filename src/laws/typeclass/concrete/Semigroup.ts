@@ -1,9 +1,10 @@
-import {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
+import type {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
 import {Law} from '../../../law.js'
-import {ConcreteGiven, defineConcreteLaws} from './given.js'
+import type {ConcreteGiven} from './given.js'
+import {defineConcreteLaws} from './given.js'
 
 /**
- * Test typeclass laws for `Semigroup`.
+ * Build typeclass laws for `Semigroup`.
  * @category typeclass laws
  */
 export const semigroupLaws = <A>({

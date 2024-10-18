@@ -4,9 +4,10 @@ import {
   SemiApplicative as SE,
 } from '@effect/typeclass'
 import {pipe} from 'effect'
-import {TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '../../../law.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
+import type {TypeLambda} from 'effect/HKT'
+import {addLawSets, Law, lawTests} from '../../../law.js'
+import type {ParameterizedGiven as Given} from './given.js'
+import {unfoldGiven} from './given.js'
 import {semiAlternativeLaws} from './SemiAlternative.js'
 
 /**
@@ -18,15 +19,15 @@ export const alternativeLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: Given<AlternativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<AlternativeTypeLambda, F, A, B, C, R, O, E>,
 ) =>
   pipe(
     buildLaws('Alternative', given),
-    pipe(given, semiAlternativeLaws, addLawSet),
+    pipe(given, semiAlternativeLaws, addLawSets),
   )
 
 const buildLaws = <
@@ -34,12 +35,12 @@ const buildLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   name: string,
-  given: Given<AlternativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<AlternativeTypeLambda, F, A, B, C, R, O, E>,
 ) => {
   const {F, equalsFa, fa} = unfoldGiven(given),
     {coproduct, coproductAll} = F
@@ -76,11 +77,11 @@ const buildApplicativeLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: Given<AlternativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<AlternativeTypeLambda, F, A, B, C, R, O, E>,
 ) => {
   const {F, equalsFb, fa, ab, fabOf} = unfoldGiven(given),
     {coproduct, map} = F

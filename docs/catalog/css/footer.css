@@ -1,0 +1,17 @@
+info-footer {
+  font-size: var(--font-size-footer);
+  overflow: hidden;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-top: var(--table-line-dark);
+  min-height: var(--line-height-footer);
+  line-height: calc(var(--footer-height) - var(--table-border-width));
+  margin-right: max(var(--pad), calc(var(--footer-delta)));
+  margin-left: max(var(--pad), calc(var(--footer-delta)));
+  padding: var(--footer-vpad) 0 var(--footer-vpad) 0;
+  text-overflow: ellipsis;
+  z-index: 5;
+  color: var(--color-footer);
+}

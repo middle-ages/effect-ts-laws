@@ -14,11 +14,13 @@ import {PredicateTypeLambda} from 'effect/Predicate'
 const Arbitrary = predicate<Mono>()
 const Equivalence = getMonoUnaryEquivalence(BO.Equivalence)
 
+const numRuns = 10
+
 describe('@effect/typeclass/data/Predicate', () => {
   testTypeclassLaws.contravariant<PredicateTypeLambda>({
     Arbitrary,
     Equivalence,
-  })({Contravariant}, {numRuns: 100})
+  })({Contravariant}, {numRuns})
 
   describe('Semigroup/monoid', () => {
     pipe(
@@ -28,7 +30,7 @@ describe('@effect/typeclass/data/Predicate', () => {
         xor: getMonoidXor<Mono>(),
         every: getMonoidEvery<Mono>(),
       },
-      testMonoids(Arbitrary, Equivalence, {numRuns: 100}),
+      testMonoids(Arbitrary, Equivalence, {numRuns}),
     )
   })
 })

@@ -1,60 +1,116 @@
 import {Monoid as MO} from '@effect/typeclass'
-import {Equivalence as EQ, pipe} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
+import {Equivalence as EQ, Option as OP, pipe, Predicate as PR} from 'effect'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
+import type {LiftArbitrary} from '../../../arbitrary.js'
 import {
+  binary,
   liftArbitraries,
-  LiftArbitrary,
+  option,
   unary,
   unaryToKind,
 } from '../../../arbitrary.js'
-import {LiftEquivalence, liftEquivalences} from '../../../law.js'
+import type {LiftEquivalence} from '../../../law.js'
+import {liftEquivalences} from '../../../law.js'
 
 /**
  * Options for testing
  * [parameterized-type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
  * typeclasses. All the typeclass laws here expect their arguments to be of
  * this type.
- * @typeParam Class - The type lambda of the typeclass under tests.
- * @typeParam F - The type lambda of the datatype under test.
+ * @typeParam Typeclass - The type lambda of the typeclass under tests. For
+ * example when testing an instance of `Covariant<Array<string>>`, `Typeclass`
+ * would be the type lambda of the higher-kinded type `Covariant`.
+ * @typeParam F - The type lambda of the datatype under test. For example when
+ * testing an instance of `Covariant<Array<string>>`, `F` would be the
+ * type lambda of the higher-kinded type `Array`.
  * @category harness
  */
 export interface ParameterizedGiven<
-  Class extends TypeLambda,
+  Typeclass extends TypeLambda,
   F extends TypeLambda,
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> extends GivenConcerns<F, A, B, C, In1, Out2, Out1> {
+  R = never,
+  O = unknown,
+  E = unknown,
+> extends GivenConcerns<F, A, B, C, R, O, E> {
   /**
-   * The higher-kinded type `Class<F>` is the typeclass instance under
-   * test. For example when testing the `Monad` laws on an
-   * `Either<number, string>`, this would be `Monad<Either>`.
+   * The higher-kinded type `Typeclass<F>` is the typeclass instance under test.
+   * For example when testing the `Monad` laws on an `Either<number, string>`,
+   * this would be `Monad<Either>`.
    */
-  F: Kind<Class, In1, Out2, Out1, F>
+  F: Kind<Typeclass, R, O, E, F>
 }
 
 /**
- * Unfold a {@link ParameterizedGiven} into an equivalence and arbitrary
- * required by typeclass tests.
+ * Unfolded requirements for testing parameterized typeclass laws.
+ * @typeParam Typeclass - The type lambda of the typeclass under tests. For
+ * example when testing an instance of `Covariant<Array<string>>`, `Typeclass`
+ * would be the type lambda of the higher-kinded type `Covariant`.
+ * @typeParam F - The type lambda of the datatype under test. For example when
+ * testing an instance of `Covariant<Array<string>>`, `F` would be the
+ * type lambda of the higher-kinded type `Array`.
+ */
+export interface UnfoldedGiven<
+  Typeclass extends TypeLambda,
+  F extends TypeLambda,
+  A,
+  B = A,
+  C = A,
+  R = never,
+  O = unknown,
+  E = unknown,
+> extends ParameterizedGiven<Typeclass, F, A, B, C, R, O, E> {
+  equalsFa: EQ.Equivalence<Kind<F, R, O, E, A>>
+  equalsFb: EQ.Equivalence<Kind<F, R, O, E, B>>
+  equalsFc: EQ.Equivalence<Kind<F, R, O, E, C>>
+
+  fa: fc.Arbitrary<Kind<F, R, O, E, A>>
+  fb: fc.Arbitrary<Kind<F, R, O, E, B>>
+  fc: fc.Arbitrary<Kind<F, R, O, E, C>>
+
+  endoA: fc.Arbitrary<(a: A) => A>
+  ab: fc.Arbitrary<(a: A) => B>
+  bc: fc.Arbitrary<(a: B) => C>
+  ba: fc.Arbitrary<(a: B) => A>
+  cb: fc.Arbitrary<(a: C) => B>
+
+  bab: fc.Arbitrary<(b: B, a: A) => B>
+
+  afb: fc.Arbitrary<(a: A) => Kind<F, R, O, E, B>>
+  bfc: fc.Arbitrary<(b: B) => Kind<F, R, O, E, C>>
+
+  aob: fc.Arbitrary<(a: A) => OP.Option<B>>
+  boc: fc.Arbitrary<(a: B) => OP.Option<C>>
+
+  fabOf: (
+    of: <T>(a: T) => Kind<F, R, O, E, T>,
+  ) => fc.Arbitrary<Kind<F, R, O, E, (a: A) => B>>
+  fbcOf: (
+    of: <T>(a: T) => Kind<F, R, O, E, T>,
+  ) => fc.Arbitrary<Kind<F, R, O, E, (a: B) => C>>
+}
+
+/**
+ * Unfold a {@link ParameterizedGiven} into all arguments required by predicates
+ * of parameterized typeclass laws.
  * @param given - The options to unfold.
  * @category harness
  */
 export const unfoldGiven = <
-  Class extends TypeLambda,
+  Typeclass extends TypeLambda,
   F extends TypeLambda,
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: ParameterizedGiven<Class, F, A, B, C, In1, Out2, Out1>,
-) => {
+  given: ParameterizedGiven<Typeclass, F, A, B, C, R, O, E>,
+): UnfoldedGiven<Typeclass, F, A, B, C, R, O, E> => {
   const {a, b, c, equalsA, equalsB, equalsC, getArbitrary, getEquivalence} =
       given,
     [equalsFa, equalsFb, equalsFc] = liftEquivalences(getEquivalence)(
@@ -63,6 +119,7 @@ export const unfoldGiven = <
       equalsC,
     ),
     [fa, fb, fc] = liftArbitraries(getArbitrary)(a, b, c),
+    endoA = unary<A>()(a),
     ab = unary<A>()(b),
     bc = unary<B>()(c),
     ba = unary<B>()(a),
@@ -79,85 +136,23 @@ export const unfoldGiven = <
     fb,
     fc,
 
+    endoA,
     ab,
     bc,
     ba,
     cb,
 
+    bab: binary<B, A>()(b),
+
     afb: pipe(b, unaryToKind<A>()(getArbitrary)),
     bfc: pipe(c, unaryToKind<B>()(getArbitrary)),
 
-    fabOf: (of: <T>(a: T) => Kind<F, In1, Out2, Out1, T>) => ab.map(of),
-    fbcOf: (of: <T>(a: T) => Kind<F, In1, Out2, Out1, T>) => bc.map(of),
+    aob: pipe(b, option, unary<A>()),
+    boc: pipe(c, option, unary<B>()),
+
+    fabOf: (of: <T>(a: T) => Kind<F, R, O, E, T>) => ab.map(of),
+    fbcOf: (of: <T>(a: T) => Kind<F, R, O, E, T>) => bc.map(of),
   }
-}
-
-/**
- * The _equivalence_ concern of typeclass test options.
- * @category model
- */
-export interface GivenEquivalence<
-  F extends TypeLambda,
-  A,
-  B,
-  C,
-  In1,
-  Out2,
-  Out1,
-> {
-  /** An equivalence for the underlying type `A`. */
-  equalsA: EQ.Equivalence<A>
-  /** An equivalence for the underlying type `B`. */
-  equalsB: EQ.Equivalence<B>
-  /** An equivalence for the underlying type `C`. */
-  equalsC: EQ.Equivalence<C>
-  /**
-   * A function that will get an equivalence for the type under test from an
-   * equivalence for the underlying type.
-   */
-  getEquivalence: LiftEquivalence<F, In1, Out2, Out1>
-}
-
-/**
- * The _arbitrary_ concern of typeclass test options.
- * @category model
- */
-export interface GivenArbitraries<
-  F extends TypeLambda,
-  A,
-  B,
-  C,
-  In1,
-  Out2,
-  Out1,
-> {
-  /** An equivalence for the underlying type `A`. */
-  a: fc.Arbitrary<A>
-  /** An equivalence for the underlying type `B`. */
-  b: fc.Arbitrary<B>
-  /** An equivalence for the underlying type `C`. */
-  c: fc.Arbitrary<C>
-  /**
-   * A function that will get an equivalence for the type under test from an
-   * equivalence for the underlying type.
-   */
-  getArbitrary: LiftArbitrary<F, In1, Out2, Out1>
-}
-
-/**
- * The _equivalence_ and _arbitrary_ concerns of typeclass test options, and an
- * optional `Monoid` for the underlying type `A`. Everything required to build
- * laws for a typeclass except the instances under test.
- * @category model
- */
-export interface GivenConcerns<F extends TypeLambda, A, B, C, In1, Out2, Out1>
-  extends GivenArbitraries<F, A, B, C, In1, Out2, Out1>,
-    GivenEquivalence<F, A, B, C, In1, Out2, Out1> {
-  /**
-   * Optional `Monoid` for the underlying type `A`, useful for typeclasses
-   * like `Applicative` that can build their own `Monoid` instance from it.
-   */
-  Monoid?: MO.Monoid<A>
 }
 
 /**
@@ -168,3 +163,72 @@ export interface GivenConcerns<F extends TypeLambda, A, B, C, In1, Out2, Out1>
  * @category model
  */
 export interface ParameterizedLambdas {}
+
+/**
+ * The _equivalence_ and _arbitrary_ concerns of typeclass test options,
+ * together with an optional `Monoid` for the underlying type `A`
+ *
+ * Everything required to build laws for a typeclass except the instances under
+ * test.
+ * @category model
+ */
+export interface GivenConcerns<
+  F extends TypeLambda,
+  A,
+  B = A,
+  C = A,
+  R = never,
+  O = unknown,
+  E = unknown,
+> extends GivenArbitraries<F, A, B, C, R, O, E>,
+    GivenEquivalence<F, A, B, C, R, O, E>,
+    GivenPredicates<A, B, C> {
+  /**
+   * Required `Monoid` for the underlying type `A`, useful for typeclasses
+   * like `Applicative` that can build their own `Monoid` instance from it.
+   */
+  Monoid: MO.Monoid<A>
+}
+
+// The _equivalence_ concern of typeclass test options.
+// @category model
+interface GivenEquivalence<F extends TypeLambda, A, B, C, R, O, E> {
+  /** An equivalence for the underlying type `A`. */
+  equalsA: EQ.Equivalence<A>
+  /** An equivalence for the underlying type `B`. */
+  equalsB: EQ.Equivalence<B>
+  /** An equivalence for the underlying type `C`. */
+  equalsC: EQ.Equivalence<C>
+  /**
+   * A function that will get an equivalence for the type under test from an
+   * equivalence for the underlying type.
+   */
+  getEquivalence: LiftEquivalence<F, R, O, E>
+}
+
+// The _arbitrary_ concern of typeclass test options.
+// @category model
+export interface GivenArbitraries<F extends TypeLambda, A, B, C, R, O, E> {
+  /** An equivalence for the underlying type `A`. */
+  a: fc.Arbitrary<A>
+  /** An equivalence for the underlying type `B`. */
+  b: fc.Arbitrary<B>
+  /** An equivalence for the underlying type `C`. */
+  c: fc.Arbitrary<C>
+  /**
+   * A function that will get an equivalence for the type under test from an
+   * equivalence for the underlying type.
+   */
+  getArbitrary: LiftArbitrary<F, R, O, E>
+}
+
+// The _predicate_ concern of typeclass test options. For each of the three
+// underlying types, an arbitrary for its predicate.
+interface GivenPredicates<A, B, C> {
+  /** Predicate for values of type `A`. */
+  predicateA: fc.Arbitrary<PR.Predicate<A>>
+  /** Predicate for values of type `B`. */
+  predicateB: fc.Arbitrary<PR.Predicate<B>>
+  /** Predicate for values of type `C`. */
+  predicateC: fc.Arbitrary<PR.Predicate<C>>
+}

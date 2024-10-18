@@ -1,12 +1,13 @@
 import {SemiAlternative as SA} from '@effect/typeclass'
 import {pipe} from 'effect'
-import {TypeLambda} from 'effect/HKT'
-import {Law, addLawSet, lawTests} from '../../../law.js'
+import {Law, addLawSets, lawTests} from '../../../law.js'
 import {covariantLaws} from './Covariant.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
+import {unfoldGiven} from './given.js'
+import type {ParameterizedGiven as Given} from './given.js'
+import type {TypeLambda} from 'effect/HKT'
 
 /**
- * Test typeclass laws for `SemiAlternative`.
+ * Typeclass laws for `SemiAlternative`.
  * @category typeclass laws
  */
 export const semiAlternativeLaws = <
@@ -14,15 +15,15 @@ export const semiAlternativeLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: Given<SemiAlternativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<SemiAlternativeTypeLambda, F, A, B, C, R, O, E>,
 ) =>
   pipe(
     buildLaws('SemiAlternative', given),
-    pipe(given, covariantLaws, addLawSet),
+    pipe(given, covariantLaws, addLawSets),
   )
 
 const buildLaws = <
@@ -30,12 +31,12 @@ const buildLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   name: string,
-  given: Given<SemiAlternativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<SemiAlternativeTypeLambda, F, A, B, C, R, O, E>,
 ) => {
   const {F, equalsFa, fa} = unfoldGiven(given),
     {coproduct, coproductMany} = F

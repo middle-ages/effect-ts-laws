@@ -1,33 +1,18 @@
 import {Applicative as AP, Traversable as TA} from '@effect/typeclass'
 import {Traversable as optionTraversable} from '@effect/typeclass/data/Option'
-import {Number as NU, Option as OP, pipe} from 'effect'
-import {checkLaws, option, tinyInteger, traversableLaws} from 'effect-ts-laws'
-
+import {Option as OP, pipe} from 'effect'
+import {checkLaws, traversableLaws} from 'effect-ts-laws'
 import {testLaws} from 'effect-ts-laws/vitest'
 import {dual} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {
-  getEquivalence as optionEquivalence,
-  OptionTypeLambda,
-} from 'effect/Option'
+import {OptionTypeLambda} from 'effect/Option'
+import {numericOptionGiven} from './helpers.js'
 
 type Instance = TA.Traversable<OptionTypeLambda>
 
-const a = tinyInteger,
-  instance = optionTraversable,
+const instance = optionTraversable,
   laws = (instance: Instance) =>
-    traversableLaws({
-      F: instance,
-      a,
-      b: a,
-      c: a,
-      equalsA: NU.Equivalence,
-      equalsB: NU.Equivalence,
-      equalsC: NU.Equivalence,
-      getEquivalence: optionEquivalence,
-      getArbitrary: option,
-    })
-
+    traversableLaws({F: instance, ...numericOptionGiven})
 describe('Traversable laws self-test', () => {
   testLaws(laws(instance), {verbose: false})
 

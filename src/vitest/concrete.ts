@@ -1,31 +1,11 @@
-import {Monoid as MO} from '@effect/typeclass'
+import {Monoid as MO, Semigroup as SE} from '@effect/typeclass'
 import {Equivalence as EQ} from 'effect'
-import {TypeLambda} from 'effect/HKT'
+import type {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {ParameterOverrides} from '../law.js'
-import {
-  buildConcreteTypeclassLaw,
-  buildConcreteTypeclassLaws,
-  Concrete,
-  ConcreteClass,
-  ConcreteGiven,
-  ConcreteLambdas,
-} from '../laws/typeclass/harness.js'
-import {testLaws, testLawSets} from './runner.js'
-
-/**
- * Run a single instance through the given typeclass laws.
- * @category vitest
- */
-export const testConcreteTypeclassLaw =
-  <Typeclass extends ConcreteClass>(typeclass: Typeclass) =>
-  <A>(
-    given: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
-    parameters?: ParameterOverrides,
-  ) => {
-    testLaws(buildConcreteTypeclassLaw<Typeclass>(typeclass)(given), parameters)
-  }
-
+import type {ParameterOverrides} from '../law.js'
+import type {Concrete, ConcreteGiven} from '../laws/typeclass/harness.js'
+import {buildConcreteTypeclassLaws} from '../laws/typeclass/harness.js'
+import {testLawSets} from './testLaws.js'
 /**
  * Test [concrete type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)
  * typeclass laws for the given instances of some datatype.
@@ -48,8 +28,37 @@ export const testConcreteTypeclassLaws = <A>(
 }
 
 /**
- * Run the given monoid/semigroup instance through their respective typeclass
- * law tests.
+ * Run the given Semigroup instance through the Semigroup typeclass laws tests.
+ * @param a - An arbitrary for the underlying type `A`.
+ * @param equalsA - Equivalence for the underlying type `A`.
+ * @param parameters - Optional runtime `fast-check` parameters.
+ * @category vitest
+ */
+export const testSemigroup =
+  <A>(
+    a: fc.Arbitrary<A>,
+    equalsA: EQ.Equivalence<A>,
+    parameters?: ParameterOverrides,
+  ) =>
+  (
+    /**
+     * The semigroup under test.
+     */
+    Semigroup: SE.Semigroup<A>,
+    /**
+     * Optional suffix will be added to `description()` block label.
+     */
+    suffix = '',
+  ) => {
+    testConcreteTypeclassLaws(
+      {Semigroup},
+      {suffix, a, equalsA},
+      {verbose: true, ...parameters},
+    )
+  }
+
+/**
+ * Run the given monoid instance through the Monoid typeclass laws tests.
  * @param a - An arbitrary for the underlying type `A`.
  * @param equalsA - Equivalence for the underlying type `A`.
  * @param parameters - Optional runtime `fast-check` parameters.
@@ -63,7 +72,7 @@ export const testMonoid =
   ) =>
   (
     /**
-     * The monoid/semigroup instance under test.
+     * The monoid under test.
      */
     Monoid: MO.Monoid<A>,
     /**

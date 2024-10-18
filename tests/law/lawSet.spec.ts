@@ -1,13 +1,17 @@
-import {pipe} from 'effect'
+import {Number as NU, pipe} from 'effect'
 import {
   addLaws,
-  addLawSet,
+  addLawSets,
   checkLaws,
+  equivalenceLaws,
+  filterLaws,
+  filterLawsDeep,
   Law,
   LawSet,
   lawSetTests,
   lawTests,
   negateLaw,
+  tinyInteger,
 } from 'effect-ts-laws'
 import {testLaws} from 'effect-ts-laws/vitest'
 import fc from 'fast-check'
@@ -44,12 +48,22 @@ describe('lawSet', () => {
     testLaws(setA)
   })
 
+  describe('All child tests will be skipped', () => {
+    testLaws.skip(setA)
+    testLaws.skipIf(true)(setA)
+  })
+
+  describe('No child tests will be skipped', () => {
+    testLaws.skipIf(false)(setA)
+    testLaws.runIf(true)(setA)
+  })
+
   describe('LawSet', () => {
     testLaws(LawSet(setA, setB)('my LawSet', lawA, lawB))
   })
 
   describe('addRequirement', () => {
-    pipe(setB, addLawSet(setA), testLaws)
+    pipe(setB, addLawSets(setA), testLaws)
   })
 
   describe('addLaws', () => {
@@ -71,7 +85,7 @@ describe('lawSet', () => {
   })
 
   test('failed requirement fails law set', () => {
-    expect(checkLaws(addLawSet(failSet)(setB)).length).toBe(1)
+    expect(checkLaws(addLawSets(failSet)(setB)).length).toBe(1)
   })
 
   test('empty LawSet passes, but no tests run', () => {
@@ -81,6 +95,46 @@ describe('lawSet', () => {
   describe('lawSetTests', () => {
     describe('pass', () => {
       testLaws(lawSetTests(setA, setA, lawSetTests(setA, setA)))
+    })
+  })
+
+  describe('filterLaws', () => {
+    const unfiltered = pipe(
+      {a: tinyInteger, equalsA: NU.Equivalence, F: NU.Equivalence},
+      equivalenceLaws<number>,
+    )
+    const filtered = pipe(unfiltered, filterLaws(/reflexivity/)),
+      {laws} = filtered,
+      [law] = laws
+
+    test('single', () => {
+      expect(laws.length).toBe(1)
+    })
+
+    test('correct law', () => {
+      expect(law?.name).toBe('reflexivity')
+    })
+
+    testLaws(filtered)
+
+    describe('deep', () => {
+      const filtered = pipe(
+          unfiltered,
+          filterLawsDeep(/reflexivity/),
+          LawSet,
+        )('parent'),
+        laws = filtered.sets[0]?.laws,
+        [law] = laws ?? []
+
+      test('single', () => {
+        expect(laws?.length).toBe(1)
+      })
+
+      test('correct law', () => {
+        expect(law?.name).toBe('reflexivity')
+      })
+
+      testLaws(filtered)
     })
   })
 })

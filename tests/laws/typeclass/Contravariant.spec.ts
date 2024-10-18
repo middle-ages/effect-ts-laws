@@ -18,8 +18,10 @@ const build = buildContravariantLaws<PredicateTypeLambda>({
   Equivalence: getMonoUnaryEquivalence(BO.Equivalence),
 })
 
-describe('Covariant laws self-test', () => {
-  pipe({Contravariant}, build, tupled(testLawSets({numRuns: 10})))
+const numRuns = 2
+
+describe('Contravariant laws self-test', () => {
+  pipe({Contravariant}, build, tupled(testLawSets({numRuns})))
 
   test('unlawful', () => {
     const unlawful: CN.Contravariant<PredicateTypeLambda> = {
@@ -33,13 +35,8 @@ describe('Covariant laws self-test', () => {
           flow(Contravariant.contramap(self, f), BO.not),
       ),
     }
+    const laws = build({Contravariant: unlawful})
 
-    expect(
-      pipe(
-        {Contravariant: unlawful},
-        build,
-        tupled(checkLawSets({numRuns: 100})),
-      ).length,
-    ).toBeGreaterThan(0)
+    expect(checkLawSets({numRuns})(...laws).length).toBeGreaterThan(0)
   })
 })

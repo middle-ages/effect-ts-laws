@@ -1,0 +1,140 @@
+html[data-theme='light'] {
+  scrollbar-color: var(--color-scrollbar) var(--color-track);
+  /** Backgrounds */
+  --color-bg: #eeeef0;
+  --color-bg-transparent: lab(100% 0 0) / 0;
+  --color-bg-scroll: #f1f1f2;
+  --color-laws: lab(94% 0 0);
+  --color-laws-lines: #f8f8ff;
+  --color-laws-shadow-light: lab(90% 1 -1);
+  --color-laws-shadow-dark: lab(85% 1 -8);
+  --inset-shadow-1: inset 0.5px 1px 3px 1px var(--color-laws-shadow-dark);
+  --inset-shadow-2: inset 1px 1.5px 5px 2px var(--color-laws-shadow-light);
+  /** Link */
+  --color-href: lab(5% 30 -70);
+  --color-href-hover: lab(20% 50 -90);
+  --color-href-active: lab(30% 80 140);
+  --color-href-visited: lab(10% 50 -50);
+  --color-href-visited-hover: lab(35% 70 -70);
+  /** Text */
+  --color-ink: lab(0% 0 0);
+  --color-header: lab(20% 5 -25);
+  --color-eq: lab(55% 0 0);
+  --color-fn: lab(45% 4 -10);
+  --color-footer: lab(25% 5 -25);
+  --color-footer-hover: lab(5% 5 -25);
+  /** Table */
+  --color-table-header: lab(35% 2 -13);
+  --color-scrollbar: lab(70% 2 -3);
+  --color-track: lab(90% 1 -2);
+  --color-table: lab(80% 4 -15);
+  --color-table-very-light: white;
+  --color-table-light: lab(85% 4 -15);
+  --color-table-lighter: lab(91% 4 -15);
+  --table-lines-border-color: lab(85% 20 -60);
+  /** Lines */
+  --color-line: #717079;
+  --color-line-highlight: #10102b;
+  --line: var(--stroke) solid var(--color-line);
+  /** Scroll shadows */
+  --shadow-0: #0009;
+  --shadow-1: #0006;
+  --shadow-2: #00000048;
+  --shadow-3: #0000001a;
+  --shadow-4: #00000006;
+  --shadow-5: #0000;
+  --shadow-6: #fff0;
+
+  toggle-button {
+    .handle {
+      box-shadow:
+        #00000040 1.4px 1.6px 2.8px 1.6px,
+        #00000070 0.5px 0.6px 1.8px 0.8px;
+    }
+    .handle:hover {
+      filter: contrast(150%);
+      box-shadow:
+        #00000080 1.6px 1.8px 3px 1.8px,
+        #000000b0 0.5px 0.7px 1.9px 0.9px;
+    }
+    .handle:active {
+      box-shadow: #000000b0 0.4px 0.5px 1.4px 0.4px;
+      filter: contrast(140%);
+    }
+
+    .knob-o {
+      background: radial-gradient(
+        at top left,
+        #fff 0%,
+        #fff 10%,
+        #888 80%,
+        #444 90%,
+        #222 100%
+      );
+    }
+
+    .ring {
+      background: conic-gradient(
+        #666 0%,
+        #999 20%,
+        #ddd 35%,
+        #444 85%,
+        #666 100%
+      );
+    }
+
+    .moon {
+      background: radial-gradient(at top left, #00c 0%, #006 60%, #001 100%);
+    }
+
+    .sun {
+      background: radial-gradient(at top left, #ccf 0%, #22c 80%, #002 100%);
+    }
+
+    .moon-inner {
+      background: radial-gradient(
+        at bottom right,
+        #00d 0%,
+        #005 60%,
+        #002 100%
+      );
+    }
+
+    .sun-inner {
+      background: radial-gradient(
+        at bottom right,
+        #fe0 0%,
+        #e90 70%,
+        #b30 100%
+      );
+    }
+
+    .moon-inner > svg > path {
+      fill: #ffff55;
+    }
+
+    .base {
+      background: linear-gradient(#777 0%, #888 20%, #aaa 80%, #ccc 100%);
+    }
+
+    .toggle-frame {
+      background: conic-gradient(
+        #ccc 0%,
+        #888 40%,
+        #ccc 80%,
+        #eee 90%,
+        #ccc 100%
+      );
+    }
+
+    .tongue {
+      background: linear-gradient(
+        #808080c0 0%,
+        #a0a0a0e0 15%,
+        #ccc 90%,
+        #ddd 100%
+      );
+      border: 1px solid #b0b0b0df;
+    }
+  }
+}

@@ -3,29 +3,17 @@ import {
   Applicative as arrayApplicative,
   Product,
 } from '@effect/typeclass/data/Array'
-import {Array as AR, Number as NU, pipe} from 'effect'
+import {Array as AR, pipe} from 'effect'
+import {numericGiven} from './helpers.js'
 
+import {applicativeLaws, checkLaws} from 'effect-ts-laws'
 import {testLaws} from 'effect-ts-laws/vitest'
-import {applicativeLaws, checkLaws, tinyInteger} from 'effect-ts-laws'
-import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
-import fc from 'fast-check'
+import {ReadonlyArrayTypeLambda} from 'effect/Array'
 
 type Instance = AP.Applicative<ReadonlyArrayTypeLambda>
 
-const a = tinyInteger,
-  instance = arrayApplicative,
-  laws = (instance: Instance) =>
-    applicativeLaws({
-      F: instance,
-      a,
-      b: a,
-      c: a,
-      equalsA: NU.Equivalence,
-      equalsB: NU.Equivalence,
-      equalsC: NU.Equivalence,
-      getEquivalence,
-      getArbitrary: fc.array,
-    })
+const instance = arrayApplicative,
+  laws = (instance: Instance) => applicativeLaws({F: instance, ...numericGiven})
 
 describe('Applicative laws self-test', () => {
   testLaws(laws(instance), {verbose: false})

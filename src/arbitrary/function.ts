@@ -1,8 +1,11 @@
-import {Equivalence as EQ, Option as OP, pipe, Predicate as PR} from 'effect'
-import {constFalse, constTrue} from 'effect/Function'
-import {Kind, TypeLambda} from 'effect/HKT'
+/**
+ * Arbitraries for various kinds of functions.
+ * @module
+ */
+import {pipe, Predicate as PR} from 'effect'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {LiftArbitrary} from './types.js'
+import type {LiftArbitrary} from './types.js'
 
 // flipped “apply”
 const applyF =
@@ -22,6 +25,23 @@ export const unary: <A>() => <B>(
 ) => fc.Arbitrary<(a: A) => B> = () => b => fc.func(b).map(applyF)
 
 /**
+ * An arbitrary function from `A` to `A`.
+ * @category arbitraries
+ */
+export const endo = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<(a: A) => A> =>
+  fc.func(a).map(applyF)
+
+/**
+ * Build an arbitrary binary function of type `(a: A, b: B) => C` from an
+ * arbitrary of `C`.
+ * @category arbitraries
+ */
+export const binary =
+  <A, B>() =>
+  <C>(c: fc.Arbitrary<C>): fc.Arbitrary<(a: A, b: B) => C> =>
+    fc.func(c).map(f => (a: A, b: B) => f(a, b))
+
+/**
  * An arbitrary for a function from `A` to `F<B>`. Requires an
  * arbitrary of `B`, a function converting arbitraries of `A` to
  * arbitraries of `F<A>`, and the _type_ `A`.
@@ -30,11 +50,9 @@ export const unary: <A>() => <B>(
  */
 export const unaryToKind =
   <A>() =>
-  <F extends TypeLambda, In1, Out2, Out1>(
-    getArbitrary: LiftArbitrary<F, In1, Out2, Out1>,
-  ): (<B>(
-    b: fc.Arbitrary<B>,
-  ) => fc.Arbitrary<(a: A) => Kind<F, In1, Out2, Out1, B>>) =>
+  <F extends TypeLambda, R, O, E>(
+    getArbitrary: LiftArbitrary<F, R, O, E>,
+  ): (<B>(b: fc.Arbitrary<B>) => fc.Arbitrary<(a: A) => Kind<F, R, O, E, B>>) =>
   b =>
     pipe(b, getArbitrary, fc.func).map(applyF)
 
@@ -45,11 +63,9 @@ export const unaryToKind =
  * @category arbitraries
  */
 export const unaryFromKind =
-  <A, F extends TypeLambda, In1 = never, Out2 = unknown, Out1 = unknown>(): (<
-    B,
-  >(
+  <A, F extends TypeLambda, R = never, O = unknown, E = unknown>(): (<B>(
     b: fc.Arbitrary<B>,
-  ) => fc.Arbitrary<(fa: Kind<F, In1, Out2, Out1, A>) => B>) =>
+  ) => fc.Arbitrary<(fa: Kind<F, R, O, E, A>) => B>) =>
   b =>
     fc.func(b).map(applyF)
 
@@ -61,11 +77,9 @@ export const unaryFromKind =
  */
 export const unaryInKind =
   <A>() =>
-  <F extends TypeLambda, In1 = never, Out2 = unknown, Out1 = unknown>(
-    of: <T>(t: T) => Kind<F, In1, Out2, Out1, T>,
-  ): (<B>(
-    b: fc.Arbitrary<B>,
-  ) => fc.Arbitrary<Kind<F, In1, Out2, Out1, (a: A) => B>>) =>
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    of: <T>(t: T) => Kind<F, R, O, E, T>,
+  ): (<B>(b: fc.Arbitrary<B>) => fc.Arbitrary<Kind<F, R, O, E, (a: A) => B>>) =>
   b =>
     unary<A>()(b).map(of)
 
@@ -75,74 +89,3 @@ export const unaryInKind =
  */
 export const predicate = <A>(): fc.Arbitrary<PR.Predicate<A>> =>
   unary<A>()(fc.boolean())
-
-/**
- * Attempt to find an example input where the pair of given unary functions
- * is not equal. Given an arbitrary of `A`, an equivalence for `B` and a
- * pair of functions, check the functions compute the same `B` given the
- * same `A`, for `numRuns` values. Returns none or some value found.
- * @param a - An arbitrary for the function argument type `A`.
- * @param equalsB - Equivalence for the function return value type `B`.
- * @param parameters - Optional [fast-check parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
- * @returns `none` if no counter-example to the equivalence was found, else
- * `some` of the `A` that was found to produce different values.
- * @category arbitraries
- */
-export const sampleUnaryEquivalence =
-  <A, B>(
-    a: fc.Arbitrary<A>,
-    equalsB: EQ.Equivalence<B>,
-    parameters: fc.Parameters<A> = {numRuns: 100},
-  ) =>
-  (
-    /**
-     * First function to sample.
-     */
-    self: (a: A) => B,
-    /**
-     * Second function to sample.
-     */
-    that: typeof self,
-  ): OP.Option<A> => {
-    const samples: A[] = fc.sample(a, parameters)
-    /* v8 ignore next 1 */
-    if (samples.length === 0) throw new Error('Empty sample.')
-    for (const a of samples) if (!equalsB(self(a), that(a))) return OP.some(a)
-    return OP.none()
-  }
-
-/**
- * Attempt to find an example input where the pair of given unary functions
- * is not equal. Given an arbitrary of `A`, an equivalence for `B` and a
- * pair of functions, check the functions compute the same `B` given the
- * same `A`, for `numRuns` values. Returns a boolean flag indicating
- * equivalence.
- * @param a - An arbitrary for the function argument type `A`.
- * @param equalsB - Equivalence for the function return value type `B`.
- * @param parameters - Optional [fast-check parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
- * @returns True if no counter-example found, else false.
- * @category arbitraries
- */
-export const testUnaryEquivalence =
-  <A, B>(
-    a: fc.Arbitrary<A>,
-    equalsB: EQ.Equivalence<B>,
-    parameters?: fc.Parameters<A>,
-  ) =>
-  (
-    /**
-     * First function to sample.
-     */
-    self: (a: A) => B,
-    /**
-     * Second function to sample.
-     */
-    that: typeof self,
-  ): boolean =>
-    pipe(
-      sampleUnaryEquivalence(a, equalsB, parameters)(self, that),
-      OP.match({
-        onNone: constTrue,
-        onSome: constFalse,
-      }),
-    )

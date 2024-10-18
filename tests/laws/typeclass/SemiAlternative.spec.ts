@@ -1,27 +1,16 @@
 import {SemiAlternative as SM} from '@effect/typeclass'
 import {SemiAlternative as optionSemiAlternative} from '@effect/typeclass/data/Option'
-import {Number as NU, Option as OP, pipe} from 'effect'
-
-import {checkLaws, semiAlternativeLaws, tinyInteger} from 'effect-ts-laws'
-import {option as getArbitrary} from 'effect-ts-laws/arbitrary'
+import {Option as OP, pipe} from 'effect'
+import {checkLaws, semiAlternativeLaws} from 'effect-ts-laws'
 import {testLaws} from 'effect-ts-laws/vitest'
 import {constant} from 'effect/Function'
-import {getEquivalence, OptionTypeLambda} from 'effect/Option'
+import {OptionTypeLambda} from 'effect/Option'
+import {numericOptionGiven} from './helpers.js'
 
 type Instance = SM.SemiAlternative<OptionTypeLambda>
 
 const laws = (instance: Instance) =>
-  semiAlternativeLaws({
-    F: instance,
-    a: tinyInteger,
-    b: tinyInteger,
-    c: tinyInteger,
-    equalsA: NU.Equivalence,
-    equalsB: NU.Equivalence,
-    equalsC: NU.Equivalence,
-    getEquivalence,
-    getArbitrary,
-  })
+  semiAlternativeLaws({F: instance, ...numericOptionGiven})
 
 describe('SemiAlternative laws self-test', () => {
   pipe(optionSemiAlternative, laws, testLaws)

@@ -1,26 +1,17 @@
-import fc from 'fast-check'
 import {defineConfig} from 'vitest/config'
-
-fc.configureGlobal({numRuns: 1_000})
 
 export default defineConfig({
   test: {
     globals: true,
-    include: ['./tests/**/*.spec.ts'],
     typecheck: {
       enabled: true,
     },
+    include: ['./tests/**/*.spec.ts'],
+    setupFiles: ['./tests/vitest.setup.ts'],
     coverage: {
       provider: 'v8',
       reportsDirectory: './.dev',
-      exclude: [
-        '.dev',
-        'dev',
-        'config',
-        'docs',
-        'src/dev',
-        'tests',
-      ],
+      exclude: ['.dev', 'dev', 'config', 'docs', 'tests'],
     },
   },
 })

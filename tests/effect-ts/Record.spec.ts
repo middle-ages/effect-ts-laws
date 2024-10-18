@@ -1,8 +1,24 @@
 /** Typeclass law tests for the `Record` datatype. */
-import {Covariant, Traversable} from '@effect/typeclass/data/Record'
+import {
+  Covariant,
+  Filterable,
+  getMonoidUnion,
+  getSemigroupIntersection,
+  Traversable,
+} from '@effect/typeclass/data/Record'
 import {Record as RC} from 'effect'
-import {monoEquivalence, stringKeyRecord} from 'effect-ts-laws'
-import {testTypeclassLaws} from 'effect-ts-laws/vitest'
+import {
+  monoEquivalence,
+  monoMonoid,
+  monoRecordArbitrary,
+  monoRecordEquivalence,
+  stringKeyRecord,
+} from 'effect-ts-laws'
+import {
+  testMonoid,
+  testSemigroup,
+  testTypeclassLaws,
+} from 'effect-ts-laws/vitest'
 import {ReadonlyRecordTypeLambda} from 'effect/Record'
 
 describe('@effect/typeclass/data/Record', () => {
@@ -12,6 +28,17 @@ describe('@effect/typeclass/data/Record', () => {
   })({
     Equivalence: RC.getEquivalence(monoEquivalence),
     Covariant,
+    Filterable,
     Traversable,
   })
+
+  testMonoid(monoRecordArbitrary, monoRecordEquivalence)(
+    getMonoidUnion(monoMonoid),
+    'union',
+  )
+
+  testSemigroup(monoRecordArbitrary, monoRecordEquivalence)(
+    getSemigroupIntersection(monoMonoid),
+    'intersection',
+  )
 })

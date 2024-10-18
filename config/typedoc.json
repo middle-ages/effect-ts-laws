@@ -5,12 +5,14 @@
     "../src/compose.ts",
     "../src/law.ts",
     "../src/laws.ts",
+    "../src/typeclass.ts",
     "../src/vitest.ts"
   ],
   "out": "../../effect-ts-laws-docs",
   "readme": "../README.md",
   "hideGenerator": true,
   "searchInComments": true,
+  "json": "../.dev/typedoc-index.json",
   "searchInDocuments": true,
   "tsconfig": "./tsconfig.build.json",
   "githubPages": true,
@@ -18,13 +20,16 @@
   "navigation": {
     "includeCategories": true,
     "includeGroups": false,
-    "includeFolders": false
+    "includeFolders": true
   },
   "visibilityFilters": {
     "@internal": false
   },
   "sourceLinkExternal": true,
   "projectDocuments": [
+    "../docs/user-guide.md",
+    "../src/README.md",
+    "../src/law/README.md",
     "../src/arbitrary/README.md",
     "../src/laws/typeclass/concrete/README.md",
     "../src/laws/typeclass/parameterized/README.md"

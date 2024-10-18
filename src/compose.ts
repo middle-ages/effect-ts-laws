@@ -1,15 +1,7 @@
-/**
- * Utilities for composing typeclass instances.
- * 1. {@link composeOf}
- * 2. {@link composeInvariant}
- * 3. {@link composeCovariant}
- * 4. {@link composeApplicative}
- * 5. {@link composeTraversable}
- * @module
- */
 import {
   Applicative as AP,
   Covariant as CO,
+  Foldable as FO,
   Invariant as IN,
   Of as OF,
   Traversable as TA,
@@ -23,7 +15,7 @@ import {
 } from '@effect/typeclass/SemiProduct'
 import {traverseComposition} from '@effect/typeclass/Traversable'
 import {dual, pipe} from 'effect/Function'
-import {Kind, TypeLambda} from 'effect/HKT'
+import type {Kind, TypeLambda} from 'effect/HKT'
 
 /**
  * Compose an `Of` instance by nesting a pair of `Of` instances, the
@@ -33,16 +25,14 @@ import {Kind, TypeLambda} from 'effect/HKT'
 export const composeOf = <
   F extends TypeLambda,
   G extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   F: OF.Of<F>,
   G: OF.Of<G>,
-): OF.Of<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
-  of: ofComposition(F, G) as OF.Of<
-    ComposeTypeLambda<F, G, In1, Out2, Out1>
-  >['of'],
+): OF.Of<ComposeTypeLambda<F, G, R, O, E>> => ({
+  of: ofComposition(F, G) as OF.Of<ComposeTypeLambda<F, G, R, O, E>>['of'],
 })
 
 /**
@@ -53,13 +43,13 @@ export const composeOf = <
 export const composeInvariant = <
   F extends TypeLambda,
   G extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   F: IN.Invariant<F>,
   G: IN.Invariant<G>,
-): IN.Invariant<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
+): IN.Invariant<ComposeTypeLambda<F, G, R, O, E>> => ({
   imap: dual(3, imapComposition(F, G)),
 })
 
@@ -71,32 +61,32 @@ export const composeInvariant = <
 export const composeCovariant = <
   F extends TypeLambda,
   G extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   F: CO.Covariant<F>,
   G: CO.Covariant<G>,
-): CO.Covariant<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
+): CO.Covariant<ComposeTypeLambda<F, G, R, O, E>> => ({
   ...composeInvariant(F, G),
   map: dual(2, mapComposition(F, G)),
 })
 
 /**
- * Compose a pair of applicatives. The composition is an applicative of their
+ * Compose a pair of applicatives. Their composition is an applicative of their
  * nested types. Useful when testing traversable composition laws.
  * @category composition
  */
 export const composeApplicative = <
   F extends TypeLambda,
   G extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   F: AP.Applicative<F>,
   G: AP.Applicative<G>,
-): AP.Applicative<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
+): AP.Applicative<ComposeTypeLambda<F, G, R, O, E>> => ({
   ...composeCovariant(F, G),
   ...composeOf(F, G),
   product: productComposition(F, G),
@@ -105,33 +95,62 @@ export const composeApplicative = <
 })
 
 /**
- * Compose a pair of traversables. The composition is a traversable of their
+ * Compose a pair of traversables. Their composition is a traversable of their
  * nested types.
  * @category composition
  */
 export const composeTraversable = <
   F extends TypeLambda,
   G extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   F: TA.Traversable<F>,
   G: TA.Traversable<G>,
-): TA.Traversable<ComposeTypeLambda<F, G, In1, Out2, Out1>> => ({
+): TA.Traversable<ComposeTypeLambda<F, G, R, O, E>> => ({
   traverse: <P extends TypeLambda>(P: AP.Applicative<P>) =>
     dual(2, traverseComposition(F, G)(P)),
 })
 
 /**
- * Create a higher-kinded type that nests a pair of given higher-kinded
- * types. Nests the given type lambdas with the first as the outer layer,
- * and the the second as the inner one. The kind of a nested type lambda
- * is the nesting of the kinds of the given type lambdas. For example:
+ * Compose a pair of foldables. Their composition is a foldable of their
+ * nested types.
+ * @category composition
+ */
+export const composeFoldable = <
+  F extends TypeLambda,
+  G extends TypeLambda,
+  R = never,
+  O = unknown,
+  E = unknown,
+>(
+  F: FO.Foldable<F>,
+  G: FO.Foldable<G>,
+): FO.Foldable<ComposeTypeLambda<F, G>> => ({
+  reduce: dual(
+    3,
+    <A, B>(
+      self: Kind<F, R, O, E, Kind<G, R, O, E, A>>,
+      b: B,
+      f: (b: B, a: A) => B,
+    ): B => FO.reduceComposition(F, G)(self, b, f),
+  ),
+})
+
+/**
+ * A type lambda for a nested pair of type lambdas. Nests the given type lambdas
+ * with the first as the outer layer, and the the second as the inner one. The
+ * kind of a nested type lambda is the nesting of the kinds of the given type
+ * lambdas. For example:
  * @example
- * ```ts
+ * import {ComposeTypeLambda} from 'effect-ts-laws'
+ * import {OptionTypeLambda} from 'effect/Option'
+ * import {Kind} from 'effect/HKT'
+ * import {ReadonlyArrayTypeLambda} from 'effect/Array'
+ *
  * // A type lambda for the higher-kinded type `Option<ReadonlyArray>`:
- * export type OptionArrayLambda = NestTypeLambda<
+ * export type OptionArrayLambda = ComposeTypeLambda<
  *   OptionTypeLambda,
  *   ReadonlyArrayTypeLambda
  * >
@@ -144,7 +163,6 @@ export const composeTraversable = <
  *   number
  * >
  * // NumericOptionArray ≡ Option<ReadonlyArray<number>>
- * ```
  * @category composition
  */
 export interface ComposeTypeLambda<
@@ -159,6 +177,7 @@ export interface ComposeTypeLambda<
 > extends TypeLambda {
   readonly type: Kind<F, R1, O1, E1, Kind<G, R2, O2, E2, this['Target']>>
 }
+
 /**
  * Map of typeclass name to the function that can compose a pair of the
  * typeclass instances to create a new instance of the typeclass.
@@ -169,6 +188,7 @@ export const composeMap = {
   Invariant: composeInvariant,
   Covariant: composeCovariant,
   Applicative: composeApplicative,
+  Foldable: composeFoldable,
   Traversable: composeTraversable,
 }
 

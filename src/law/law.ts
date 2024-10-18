@@ -1,3 +1,6 @@
+/**
+ * @module law The Law type and functions for working with a single law.
+ */
 import {Option as OP, Predicate as PR} from 'effect'
 import {tupled} from 'effect/Function'
 import fc from 'fast-check'
@@ -18,10 +21,11 @@ import fc from 'fast-check'
  *       - The law can also be _checked_, instead of _tested_ using `checkLaw`.
  *         This exactly the same as `testLaw`, except in a pure function that
  *         returns the test results without using any `vitest` blocks.
- * 2. `Law`s can be grouped under a single label into `LawSet` . Useful for
- *    testing units that require multiple laws, for example typeclasses. Besides
- *    its child _laws_, a `LawSet` can includes other `LawSets` as requirements
- *    to be run as a guard before testing its own laws.
+ * 2. One or more Laws can be grouped under a single label into a `LawSet`.
+ *    Useful for testing units that require multiple laws, for example
+ *    typeclasses.  Besides its child _laws_, a `LawSet` can includes other
+ *    `LawSets` as requirements to be run as a guard before testing its own
+ *    laws.
  * 3. A law has a name, just like the `fc.Property` it is wrapping, but also
  *    a field for a note. It is shown only on failure or when the `fast-check`
  *    runtime parameter `verbose` is true.
@@ -37,9 +41,7 @@ export interface Law<Ts extends UnknownArgs> {
    */
   name: string
 
-  /**
-   * A note shown only on failure or in verbose mode.
-   */
+  /** A note shown only on failure or in verbose mode. */
   note: string
 
   /**
@@ -53,8 +55,10 @@ export interface Law<Ts extends UnknownArgs> {
   /**
    * `fast-check` configuration
    * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
+   * This configuration will override global fast-check configuration, but test
+   * parameters may override this configuration.
    */
-  parameters?: fc.Parameters<[Ts]>
+  parameters?: ParameterOverrides
 }
 
 /**
@@ -63,19 +67,21 @@ export interface Law<Ts extends UnknownArgs> {
  * The runtime parameters are
  * [documented here](https://fast-check.dev/api-reference/interfaces/Parameters.html).
  * @example
- * ```ts
- * import fc from 'fast-check'
- * import {Law} from 'effect-ts-laws'
- * const law: Law<[number, number]> = Law(
+ * import {Law, checkLaw, tinyPositive} from 'effect-ts-laws'
+ * import {Option as OP} from 'effect'
+ *
+ * export const law: Law<[number, number]> = Law(
  *   'sum of positives ≥ both',           // • law name
  *   '∀a,b in N, sum=a+b: sum≥a ∧ sum≥b', // • law note
- *   fc.integer(),                        // • list of
- *   fc.integer(),                        //   arbitraries
- * )(                                     //   required for...
- *    (x, y) => x + y >= x && x + y >= y, // • the law predicate
- *    {numRuns: 10_000}                   // • optional runtime config
+ *   tinyPositive,                        // • list of
+ *   tinyPositive,                        //   arbitraries that
+ * )(                                     //   are required for...
+ *   (x, y) => x + y >= x && x + y >= y,  // • the law predicate
+ *   {numRuns: 10_000},                   // • optional runtime config
  * )
- * ```
+ *
+ * assert.equal(law.name, 'sum of positives ≥ both')
+ * assert.deepStrictEqual(checkLaw(law), OP.none())
  * @typeParam Ts -  Argument type of predicate. For example, if the law
  * predicate signature is `Predicate<[a: number, b: string]>`, then `T`
  * would be `[a: number, b: string]`.
@@ -91,20 +97,17 @@ export const Law =
     ...arbitraries: {[K in keyof Ts]: fc.Arbitrary<Ts[K]>}
   ) =>
   (
-    /**
-     * Law predicate. Its argument type is encoded in `Ts`.
-     */
+    /** Law predicate. Its argument type is encoded in `Ts`. */
     predicate: (...args: Ts) => boolean,
-    /**
-     * `fast-check` runtime parameters.
-     */
-    parameters: fc.Parameters<[Ts]> = {},
+    /** `fast-check` runtime parameters. */
+    parameters?: ParameterOverrides,
   ): Law<Ts> => ({
     name,
     note,
     predicate: tupled(predicate),
     arbitrary: fc.tuple<Ts>(...arbitraries),
-    parameters,
+    /* v8 ignore next 1 */
+    ...(parameters !== undefined ? {parameters} : {}),
   })
 
 /**
@@ -124,16 +127,18 @@ export const negateLaw = <Ts extends UnknownArgs>({
 /**
  * Run the law and return either `None` on pass or `Some<string>` with the error
  * report on fail.
+ *
+ * See also {@link vitest.testLaw | testLaw}.
  * @category harness
  */
 export const checkLaw = <Ts extends UnknownArgs>(
   law: Law<Ts>,
-  parameters: ParameterOverrides = {},
+  parameters?: ParameterOverrides,
 ): OP.Option<string> => {
   let failMessage: string | undefined = undefined
 
   try {
-    asAssert(law)(parameters)
+    asAssert(law, parameters)
   } catch (e) {
     /* v8 ignore next 2 */
     if (!(e instanceof Error)) throw new Error(e as string)
@@ -145,25 +150,24 @@ export const checkLaw = <Ts extends UnknownArgs>(
 
 /**
  * Convert the law into a `fast-check` assertion.
+ * @typeParam Ts - Tuple type of law predicate arguments.
  * @category harness
+ * @param law - The law to be converted.
+ * @param overrides - `fast-check` runtime parameters.
+ * @returns A void function that will throw on predicate failure.
  */
-export const asAssert =
-  <Ts extends UnknownArgs>({
-    name,
-    note,
-    predicate,
-    arbitrary,
-    parameters,
-  }: Law<Ts>) =>
-  (overrides: ParameterOverrides = {}): void => {
-    fc.assert(
-      fc.property<[Ts]>(arbitrary, (args: Ts) => {
-        if (predicate(args)) return true
-        throw new Error(`${name}: ${note}`)
-      }),
-      {...parameters, ...overrides},
-    )
-  }
+export const asAssert = <Ts extends UnknownArgs>(
+  {name, note, predicate, arbitrary, parameters}: Law<Ts>,
+  overrides?: ParameterOverrides,
+): void => {
+  fc.assert(
+    fc.property<[Ts]>(arbitrary, (args: Ts) => {
+      if (predicate(args)) return true
+      throw new Error(`${name}: ${note}`)
+    }),
+    {...parameters, ...overrides},
+  )
+}
 
 /**
  * A base type for law predicate argument types.
@@ -181,5 +185,6 @@ export type UnknownArgs = [unknown, ...unknown[]]
  */
 export type ParameterOverrides = Omit<
   fc.Parameters,
+  // These are all fields we must omit from to lose the type parameter.
   'reporter' | 'asyncReporter' | 'examples'
 >

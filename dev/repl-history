@@ -1,0 +1,4 @@
+const EF = await import('effect')
+const ET = await import('@effect/typeclass')
+const L = await import('./src/index.ts')
+const T = await import('./src/typeclass.ts')

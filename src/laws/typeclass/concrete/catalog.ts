@@ -1,17 +1,14 @@
 import {pipe} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {LawSet} from '../../../law.js'
+import type {Kind, TypeLambda} from 'effect/HKT'
+import type {LawSet} from '../../../law.js'
 import {boundedLaws} from './Bounded.js'
 import {equivalenceLaws} from './Equivalence.js'
 import {monoidLaws} from './Monoid.js'
 import {orderLaws} from './Order.js'
 import {semigroupLaws} from './Semigroup.js'
-import {ConcreteGiven, ConcreteLambdas} from './given.js'
+import type {ConcreteGiven, ConcreteLambdas} from './given.js'
 
-/**
- * Map of typeclass name to their laws, for typeclasses of concrete types.
- * @category harness
- */
+/** Maps typeclass name to its laws, for typeclasses of concrete types. */
 export const concreteLaws = {
   Bounded: boundedLaws,
   Equivalence: equivalenceLaws,
@@ -30,10 +27,9 @@ export type ConcreteClass = keyof typeof concreteLaws
  * Maps typeclass name to its instance type. For example to get
  * the type of `Monoid` instance for `readonly number[]`:
  * @example
- * ```ts
- * type MyMonoidInstance = Instances<readonly number[]>['Monoid']
+ * import {Concrete} from 'effect-ts-laws'
+ * type MyMonoidInstance = Concrete<readonly number[]>['Monoid']
  * // MyMonoidInstance ≡ Monoid<readonly number[]>
- * ```
  * @category harness
  */
 export type Concrete<A> = {
@@ -41,27 +37,7 @@ export type Concrete<A> = {
 }
 
 /**
- * Get the typeclass laws for the given typeclass name.
- * @category harness
- */
-export const concreteLawsFor = <const Typeclass extends ConcreteClass>(
-  name: Typeclass,
-) =>
-  concreteLaws[name] as <A>(
-    options: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
-  ) => LawSet
-
-/**
- * Build a `LawSet` for the given concrete typeclass instance.
- * @category harness
- */
-export const buildConcreteTypeclassLaw =
-  <Typeclass extends ConcreteClass>(typeclass: Typeclass) =>
-  <A>(given: ConcreteGiven<ConcreteLambdas[Typeclass], A>): LawSet =>
-    pipe(given, concreteLawsFor(typeclass))
-
-/**
- * Build [concrete type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)
+ * Build [concrete](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)
  * typeclass laws for the given instances of some datatype.
  * @param instances - Instances to test. Key is typeclass name and value is the
  * instance under test. For example, `{ Equivalence: Number.Equivalence }` will run
@@ -79,12 +55,26 @@ export const buildConcreteTypeclassLaws = <A>(
     const typeclass = key as ConcreteClass
 
     results.push(
-      buildConcreteTypeclassLaw(typeclass)({
-        ...given,
-        F: instances[typeclass],
-      } as ConcreteGiven<ConcreteLambdas[typeof typeclass], A>),
+      pipe(
+        {...given, F: instances[typeclass]} as ConcreteGiven<
+          ConcreteLambdas[typeof typeclass],
+          A
+        >,
+        concreteLawsFor(typeclass),
+      ),
     )
   }
 
   return results
 }
+
+/**
+ * Get the typeclass laws for the given typeclass name.
+ * @category harness
+ */
+export const concreteLawsFor = <const Typeclass extends ConcreteClass>(
+  name: Typeclass,
+) =>
+  concreteLaws[name] as <A>(
+    options: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
+  ) => LawSet

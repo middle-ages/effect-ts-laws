@@ -1,10 +1,10 @@
 import {flow, Option as OP, pipe, String as STR} from 'effect'
 import {
-  sampleUnaryEquivalence,
+  findCounterexample,
   tinyInteger,
   unaryFromKind,
   unaryInKind,
-} from 'effect-ts-laws/arbitrary'
+} from 'effect-ts-laws'
 import {constFalse, constTrue} from 'effect/Function'
 import {isNumber} from 'effect/Number'
 import {OptionTypeLambda} from 'effect/Option'
@@ -14,7 +14,7 @@ describe('function', () => {
   describe('sampleUnaryEquivalence', () => {
     test('=', () => {
       expect(
-        sampleUnaryEquivalence(tinyInteger, STR.Equivalence)(
+        findCounterexample(tinyInteger, STR.Equivalence)(
           (a: number) => (a + a).toString(),
           (a: number) => (2 * a).toString(),
         ),
@@ -23,7 +23,7 @@ describe('function', () => {
 
     test('≠', () => {
       const actual = pipe(
-        sampleUnaryEquivalence(tinyInteger, STR.Equivalence, {numRuns: 1_000})(
+        findCounterexample(tinyInteger, STR.Equivalence)(
           (a: number) => (a > 5 ? a : a + a).toString(),
           (a: number) => (2 * a).toString(),
         ),

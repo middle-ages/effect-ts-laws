@@ -14,3 +14,4 @@
        [Typeclassopedia](https://wiki.haskell.org/Typeclassopedia).
     6. [Monad laws](https://wiki.haskell.org/Typeclassopedia#Laws_3).
     7. [Traversable laws](https://wiki.haskell.org/Typeclassopedia#Laws_7).
+    8. [Foldable laws](https://hackage.haskell.org/package/quickcheck-classes-0.6.5.0/docs/Test-QuickCheck-Classes.html#v:foldableLaws)

@@ -14,18 +14,18 @@ import {
   Option as OP,
   pipe,
 } from 'effect'
-import {ReadonlyArrayTypeLambda} from 'effect/Array'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {OptionTypeLambda} from 'effect/Option'
+import type {ReadonlyArrayTypeLambda} from 'effect/Array'
+import type {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
 import {option, unary, unaryToKind} from '../../../arbitrary.js'
 import {composeApplicative} from '../../../compose.js'
-import {addLawSet, Law, lawTests} from '../../../law.js'
-import {ParameterizedGiven as Given} from './given.js'
-import {withOuterOption} from './harness/compose.js'
+import {addLawSets, Law, lawTests} from '../../../law.js'
+import {withOuterOption} from './compose.js'
+import type {ParameterizedGiven as Given} from './given.js'
+import type {Kind, TypeLambda} from 'effect/HKT'
 
 /**
- * Test typeclass laws for `Traversable`.
+ * Typeclass laws for `Traversable`.
  * @category typeclass laws
  */
 export const traversableLaws = <
@@ -33,15 +33,15 @@ export const traversableLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: Given<TraversableTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<TraversableTypeLambda, F, A, B, C, R, O, E>,
 ) =>
   pipe(
     buildLaws('Traversable', given),
-    addLawSet(
+    addLawSets(
       buildLaws(...withOuterOption('Traversable', given, optionTraversable)),
     ),
   )
@@ -51,9 +51,9 @@ const buildLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   name: string,
   {
@@ -66,9 +66,9 @@ const buildLaws = <
     a,
     b,
     c,
-  }: Given<TraversableTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  }: Given<TraversableTypeLambda, F, A, B, C, R, O, E>,
 ) => {
-  type Data<I extends TypeLambda, T> = Kind<I, In1, Out2, Out1, T>
+  type Data<I extends TypeLambda, T> = Kind<I, R, O, E, T>
 
   type G = OptionTypeLambda
   type H = ReadonlyArrayTypeLambda
@@ -96,11 +96,8 @@ const buildLaws = <
       fc.Arbitrary<(a: B) => DataH<C>>,
     ] = [
       unary<A>()(b),
-      pipe(b, unaryToKind<A>()<OptionTypeLambda, In1, Out2, Out1>(option)),
-      pipe(
-        c,
-        unaryToKind<B>()<ReadonlyArrayTypeLambda, In1, Out2, Out1>(fc.array),
-      ),
+      pipe(b, unaryToKind<A>()<OptionTypeLambda, R, O, E>(option)),
+      pipe(c, unaryToKind<B>()<ReadonlyArrayTypeLambda, R, O, E>(fc.array)),
     ]
 
   const equalsGHFc: EQ.Equivalence<OP.Option<readonly DataF<C>[]>> = pipe(

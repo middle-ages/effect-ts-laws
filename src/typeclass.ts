@@ -1,0 +1,8 @@
+export * as Array from './typeclass/data/Array.js'
+export * as Cause from './typeclass/data/Cause.js'
+export * as Endo from './typeclass/data/Endo.js'
+export * as Function from './typeclass/data/Function.js'
+export * as List from './typeclass/data/List.js'
+export * as Option from './typeclass/data/Option.js'
+export * as Dual from './typeclass/Dual.js'
+export * as RightFoldable from './typeclass/RightFoldable.js'

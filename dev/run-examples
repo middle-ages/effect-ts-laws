@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+cp config/docgen.json .
+
+pnpm docgen
+
+rm docgen.json docs/_config.yml docs/index.md docs/modules/index.md
+

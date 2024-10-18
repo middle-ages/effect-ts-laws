@@ -1,11 +1,8 @@
-import {TypeLambda} from 'effect/HKT'
-import {ParameterOverrides} from '../law.js'
-import {
-  buildParameterizedTypeclassLaws,
-  GivenConcerns,
-  Parameterized,
-} from '../laws/typeclass/harness.js'
-import {testLawSets} from './runner.js'
+import type {TypeLambda} from 'effect/HKT'
+import type {ParameterOverrides} from '../law.js'
+import type {GivenConcerns, Parameterized} from '../laws/typeclass/harness.js'
+import {buildParameterizedTypeclassLaws} from '../laws/typeclass/harness.js'
+import {testLawSets} from './testLaws.js'
 
 /**
  * Test [parameterized type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
@@ -19,12 +16,7 @@ import {testLawSets} from './runner.js'
  */
 export const testParameterizedTypeclassLaws =
   <F extends TypeLambda, A, B = A, C = A>() =>
-  <
-    Ins extends Partial<Parameterized<F>>,
-    In1 = never,
-    Out2 = unknown,
-    Out1 = unknown,
-  >(
+  <Ins extends Partial<Parameterized<F>>, R = never, O = unknown, E = unknown>(
     /**
      * Instances to test. Key is typeclass name and value is the
      * instance under test. For example, `{ Monad: Option.Monad }` will run
@@ -34,7 +26,7 @@ export const testParameterizedTypeclassLaws =
     /**
      * Parameterized typeclass test options.
      */
-    given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
+    given: GivenConcerns<F, A, B, C, R, O, E>,
     /**
      * Optional runtime `fast-check` parameters.
      */

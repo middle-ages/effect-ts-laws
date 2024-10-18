@@ -10,11 +10,13 @@
 \begin{tabular}{*{8}{K@{}}}
   \head{Symbol} & \multicolumn{7}{c}{\head{Type}}
   \\\hline\\[-1em]
-  \fn{unary}\AAAA         &           &     &                                                                     &     & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\fnab}\\
-  \fn{unaryToKind}        & \TpA(\,)  & \Ar & \TpF(\Var{getArbitrary}{\Type{LiftArbitrary}\TpA})                  & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\fnaFb}\\
-  \fn{unaryFromKind}\AAAA &           &     & \TpFA(\,)                                                           & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\fnFab}\\
-  \fn{unaryInKind}        & \TpA(\,)  & \Ar & \TpF\A(\Var{of}{\TpT}\A(\Var{t}{\Ge{T}})\X\Ar\X\Ge{F}\X\Br{\Ge{T}}) & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\Ge{F}\X\Br{\fnab}\XX}\\
-  \fn{predicate}          &           &     &                                                                     &     & \TpA(\,)             & \Ar & \ArbOf{\Type{Predicate}\,\Br{\Ge{A}}\XX}\\
+  \fn{unary}              & \TpA(\,)            &     &                                                                     & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\fnab}\\
+  \fn{endo}               & \TpA(\Var{a}\ArbA)  &     &                                                                     &     &                      & \Ar & \ArbOf{\fnaa}\\
+  \fn{binary}             & \TpAB(\,)           &     &                                                                     & \Ar & \TpC(\Var{c}{\ArbC}) & \Ar & \ArbOf{\fnabc}\\
+  \fn{unaryToKind}        & \TpA(\,)            & \Ar & \TpF(\Var{getArbitrary}{\Type{LiftArbitrary}\TpA})                  & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\fnaFb}\\
+  \fn{unaryFromKind}\AAAA &                     &     & \TpFA(\,)                                                           & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\fnFab}\\
+  \fn{unaryInKind}        & \TpA(\,)            & \Ar & \TpF\A(\Var{of}{\TpT}\A(\Var{t}{\Ge{T}})\X\Ar\X\Ge{F}\X\Br{\Ge{T}}) & \Ar & \TpB(\Var{b}{\ArbB}) & \Ar & \ArbOf{\Ge{F}\X\Br{\fnab}\XX}\\
+  \fn{predicate}          & \TpA(\,)            &     &                                                                     &     &                      & \Ar & \ArbOf{\Type{Predicate}\,\Br{\Ge{A}}\XX}\\
 \end{tabular}
 
 \end{document}

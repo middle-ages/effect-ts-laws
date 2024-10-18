@@ -1,8 +1,12 @@
+/**
+ * Arbitraries for effectful datatypes.
+ * @module
+ */
 import {pipe} from 'effect'
 import * as EF from 'effect/Effect'
 import fc from 'fast-check'
 import {Monad as arbitraryMonad} from './instances.js'
-import {LiftArbitrary} from './types.js'
+import type {LiftArbitrary} from './types.js'
 
 const {map} = arbitraryMonad
 

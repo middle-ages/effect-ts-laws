@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "types": ["./poster-elements.d.ts"]
+  },
+
+  "include": ["./*.js"],
+  "exclude": ["./poster-elements.js"]
+}

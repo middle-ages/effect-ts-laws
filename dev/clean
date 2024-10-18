@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-rm -rf .dev >& /dev/null
+rm -rf .dev \
+       docgen.json \
+       docs/_config.yml \
+       docs/index.md \
+       docs/modules >& /dev/null

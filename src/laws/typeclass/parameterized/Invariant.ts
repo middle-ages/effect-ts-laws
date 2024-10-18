@@ -1,13 +1,14 @@
 import {Invariant as IN} from '@effect/typeclass'
 import {Covariant as optionInvariant} from '@effect/typeclass/data/Option'
 import {flow, identity, pipe} from 'effect'
-import {TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '../../../law.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
-import {withOuterOption} from './harness/compose.js'
+import type {TypeLambda} from 'effect/HKT'
+import {addLawSets, Law, lawTests} from '../../../law.js'
+import {withOuterOption} from './compose.js'
+import {unfoldGiven} from './given.js'
+import type {ParameterizedGiven as Given} from './given.js'
 
 /**
- * Test typeclass laws for `Invariant`.
+ * Typeclass laws for `Invariant`.
  * @category typeclass laws
  */
 export const invariantLaws = <
@@ -15,22 +16,22 @@ export const invariantLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: Given<InvariantTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<InvariantTypeLambda, F, A, B, C, R, O, E>,
 ) =>
   pipe(
     buildLaws('Invariant', given),
-    addLawSet(
+    addLawSets(
       buildLaws(...withOuterOption('Invariant', given, optionInvariant)),
     ),
   )
 
-const buildLaws = <F extends TypeLambda, A, B, C, In1, Out2, Out1>(
+const buildLaws = <F extends TypeLambda, A, B, C, R, O, E>(
   name: string,
-  given: Given<InvariantTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<InvariantTypeLambda, F, A, B, C, R, O, E>,
 ) => {
   const {
     F: {imap},

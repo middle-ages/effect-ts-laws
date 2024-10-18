@@ -1,3 +1,7 @@
+/**
+ * Arbitraries for basic effect-ts datatypes.
+ * @module
+ */
 import {
   Array as AR,
   Cause as CA,
@@ -8,10 +12,10 @@ import {
   pipe,
   String as STR,
 } from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
 import {Monad as arbitraryMonad} from './instances.js'
-import {LiftArbitrary} from './types.js'
+import type {LiftArbitrary} from './types.js'
 
 const {map, flatMap} = arbitraryMonad
 
@@ -44,6 +48,15 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
 })
 
 /**
+ * An integer in the range 1…100.
+ * @category arbitraries
+ */
+export const tinyPositive: fc.Arbitrary<number> = fc.integer({
+  min: 1,
+  max: 100,
+})
+
+/**
  * An array of tiny integers with max size fixed at 4.
  * @category arbitraries
  */
@@ -54,35 +67,41 @@ export const tinyArray = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<A[]> =>
  * An array of tiny integers with max size fixed at 4.
  * @category arbitraries
  */
-export const tinyIntegerArray: fc.Arbitrary<number[]> = tinyArray(tinyInteger)
+export const tinyIntegerArray: fc.Arbitrary<readonly number[]> =
+  tinyArray(tinyInteger)
 
 /**
  * Given a {@link LiftArbitrary} function, and 1..n `Arbitrary`s for
  * different types `A₁, A₂, ...Aₙ`, returns the given list except every
  * arbitrary for type `Aᵢ` has been replaced by an arbitrary for type
- * `Kind<F,In1,Out2,Out1,Aᵢ>`. For example:
+ * `Kind<F, R, O, E, Aᵢ>`. For example:
  * @example
- * ```ts
- * const [arbOptionString, arbOptionNumber] = liftArbitraries<OptionTypeLambda>(
- *   Arbitraries.option,
+ * import {option, liftArbitraries, tinyPositive, tinyIntegerArray} from 'effect-ts-laws'
+ * import {OptionTypeLambda} from 'effect/Option'
+ * import fc from 'fast-check'
+ *
+ * const [positive, integerArray] = liftArbitraries<OptionTypeLambda>(
+ *   option,
  * )(
- *   fc.integer(),
- *   fc.string(),
+ *   tinyPositive,
+ *   tinyIntegerArray,
  * )
- * // arbOptionString ≡ fc.Arbitrary<Option<string>>
- * // arbOptionNumber ≡ fc.Arbitrary<Option<number>>
- * ```
+ * // typeof positive     ≡ fc.Arbitrary<Option<number>>
+ * // typeof integerArray ≡ fc.Arbitrary<Option<readonly number[]>>
+ *
+ * console.log(fc.sample(positive, {numRuns: 1}))
+ * console.table(fc.sample(integerArray, {numRuns: 1}))
  * @category lifting
  */
 export const liftArbitraries = <
   F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  liftArbitrary: LiftArbitrary<F, In1, Out2, Out1>,
+  liftArbitrary: LiftArbitrary<F, R, O, E>,
 ) => {
-  type Data<T> = Kind<F, In1, Out2, Out1, T>
+  type Data<T> = Kind<F, R, O, E, T>
 
   return <const Arbs extends fc.Arbitrary<unknown>[]>(...arbs: Arbs) =>
     AR.map(arbs, (arb: fc.Arbitrary<unknown>) => liftArbitrary(arb)) as {

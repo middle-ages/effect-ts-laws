@@ -21,6 +21,9 @@ describe('@effect/typeclass/data/Tuple', () => {
 
   pipe(
     {Bicovariant, Equivalence, Order},
-    testTypeclassLaws<TupleTypeLambda>({getEquivalence, getArbitrary}),
+    testTypeclassLaws<TupleTypeLambda, never, unknown, string>({
+      getEquivalence,
+      getArbitrary,
+    }),
   )
 })

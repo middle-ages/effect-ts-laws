@@ -1,17 +1,18 @@
 import {Boolean as BO, Equivalence as EQ} from 'effect'
+import type {OrderTypeLambda} from 'effect/Order'
 import {
   greaterThan,
   greaterThanOrEqualTo,
   lessThan,
   lessThanOrEqualTo,
-  OrderTypeLambda,
 } from 'effect/Order'
 import fc from 'fast-check'
 import {Law} from '../../../law.js'
-import {ConcreteGiven, defineConcreteLaws} from './given.js'
+import type {ConcreteGiven} from './given.js'
+import {defineConcreteLaws} from './given.js'
 
 /**
- * Test typeclass laws for `Order`.
+ * Build typeclass laws for `Order`.
  * @category typeclass laws
  */
 export const orderLaws = <A>({
@@ -66,7 +67,7 @@ const buildLaws =
         a,
       )((a, b) => BO.implies(op(a, b) && op(b, a), equalsA(a, b))),
 
-      Law('reflexivity', 'a${sym}a', a)((a: A) => op(a, a)),
+      Law('reflexivity', `a${sym}a`, a)((a: A) => op(a, a)),
 
       Law(
         'connectivity',

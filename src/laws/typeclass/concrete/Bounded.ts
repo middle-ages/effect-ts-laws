@@ -1,10 +1,11 @@
-import {BoundedTypeLambda} from '@effect/typeclass/Bounded'
+import type {BoundedTypeLambda} from '@effect/typeclass/Bounded'
 import {Order as OD} from 'effect'
 import {Law} from '../../../law.js'
-import {ConcreteGiven, defineConcreteLaws} from './given.js'
+import {defineConcreteLaws} from './given.js'
+import type {ConcreteGiven} from './given.js'
 
 /**
- * Test typeclass laws for `Bounded`.
+ * Build typeclass laws for `Bounded`.
  * @category typeclass laws
  */
 export const boundedLaws = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {

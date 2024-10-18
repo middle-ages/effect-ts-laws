@@ -1,37 +1,26 @@
-import {TypeLambda} from 'effect/HKT'
+import type {TypeLambda} from 'effect/HKT'
 import {LawSet} from '../../../law.js'
-import {buildTypeclassLawsFor, TypeclassInstances} from '../build.js'
-import {
-  ContravariantGiven,
-  unfoldContravariantGiven,
-} from '../monomorphic/contravariant.js'
-import {Mono} from '../monomorphic/helpers.js'
-import {
-  MonomorphicGiven,
-  unfoldMonomorphicGiven,
-} from '../monomorphic/invariant.js'
-
-export {unfoldContravariantGiven} from '../monomorphic/contravariant.js'
-export type {ContravariantGiven} from '../monomorphic/contravariant.js'
-export {
-  getMonoUnaryEquivalence,
-  monoArbitrary,
-  monoEquivalence,
-  monoOrder,
-  monoSemigroup,
-} from '../monomorphic/helpers.js'
-export type {Mono} from '../monomorphic/helpers.js'
-export {unfoldMonomorphicGiven} from '../monomorphic/invariant.js'
-export type {MonomorphicGiven} from '../monomorphic/invariant.js'
+import {buildTypeclassLawsFor} from '../build.js'
+import type {TypeclassInstances} from '../build.js'
+import type {ContravariantGiven} from './contravariant.js'
+import {unfoldContravariantGiven} from './contravariant.js'
+import {unfoldMonomorphicGiven} from './given.js'
+import type {MonomorphicGivenOf} from './given.js'
+import type {Mono} from './helpers.js'
 
 /**
  * Build typeclass laws for the given instances of some datatype.
  * @param given - Test options for the datatype under test.
+ * @returns Array of LawSets full of typeclass laws for the instance under test.
+ * @property contravariant - Test contravariant typeclass laws on the given
+ * instances.
  * @category harness
  */
 export const buildTypeclassLaws =
-  <F extends TypeLambda>(given: MonomorphicGiven<F>) =>
-  <Ins extends TypeclassInstances<F, Mono, never, unknown, string>>(
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    given: MonomorphicGivenOf<F, Mono, R, O, E>,
+  ) =>
+  <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
     /**
      * Instances to test. Key is typeclass name and value is the
      * instance under test. For example, `{ Monad: Option.Monad }` will run
@@ -39,9 +28,9 @@ export const buildTypeclassLaws =
      */
     instances: Ins,
   ): LawSet[] =>
-    buildTypeclassLawsFor<F, Ins, Mono, Mono, Mono, never, unknown, string>(
+    buildTypeclassLawsFor<F, Ins, Mono, Mono, Mono, R, O, E>(
       instances,
-      unfoldMonomorphicGiven(given),
+      unfoldMonomorphicGiven<F, Mono, R, O, E>(given),
     )
 
 /**
@@ -53,11 +42,15 @@ export const buildTypeclassLaws =
  * for contravariant datatypes.
  * @param given - Contravariant test options for the datatype under
  * test.
+ * @returns Array of LawSets full of contravariant typeclass laws for the
+ * instance under test.
  * @category harness
  */
 export const buildContravariantLaws =
-  <F extends TypeLambda>(given: ContravariantGiven<F>) =>
-  <Ins extends TypeclassInstances<F, Mono, never, unknown, string>>(
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    given: ContravariantGiven<F, R, O, E>,
+  ) =>
+  <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
     /**
      * Instances to test. Key is typeclass name and value is the
      * instance under test. For example, `{ Invariant: Predicate.Invariant }`
@@ -65,9 +58,9 @@ export const buildContravariantLaws =
      */
     instances: Ins,
   ): LawSet[] =>
-    buildTypeclassLawsFor<F, Ins, Mono, Mono, Mono, never, unknown, string>(
+    buildTypeclassLawsFor<F, Ins, Mono, Mono, Mono, R, O, E>(
       instances,
-      unfoldContravariantGiven(given),
+      unfoldContravariantGiven<F, R, O, E>(given),
     )
 
 buildTypeclassLaws.contravariant = buildContravariantLaws

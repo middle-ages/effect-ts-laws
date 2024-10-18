@@ -2,13 +2,16 @@
 
 set -Eeuo pipefail
 
-typedoc --options config/typedoc.json
-cp docs/catalog-of-laws.html ../effect-ts-laws-docs
-cp -r docs/catalog-of-laws ../effect-ts-laws-docs
-cd ../effect-ts-laws-docs
-perl -pi -E 's/<h1> Function/<h1>Function /g' **/*.html
-perl -pi -E 's/<h1> Interface/<h1>Interface /g' **/*.html
-perl -pi -E 's/<h1> Type Alias/<h1>Type Alias /g' **/*.html
-perl -pi -E 's/<h1> Variable/<h1>Variable /g' **/*.html
-perl -pi -E 's/<h1> Module/<h1>Module /g' **/*.html
+mkdir -p .dev
 
+pnpm build:latex
+
+rm -rf ../effect-ts-laws-docs/*
+
+typedoc --options config/typedoc.json
+
+cp -r docs/status.html \
+      docs/catalog-of-laws.html \
+      docs/catalog \
+      docs/resources \
+      ../effect-ts-laws-docs

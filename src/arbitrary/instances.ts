@@ -1,9 +1,13 @@
+/**
+ * `@effect/typeclass` instances for the `fast-check` Arbitrary type.
+ * @module
+ */
 import {Covariant as CO, FlatMap as FL, Monad as MD} from '@effect/typeclass'
 import {Equivalence as EQ} from 'effect'
 import {dual} from 'effect/Function'
-import {TypeLambda} from 'effect/HKT'
+import type {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {testUnaryEquivalence} from './function.js'
+import {testUnaryEquivalence} from './equivalence.js'
 
 /**
  * Type lambda for the `fc.Arbitrary` datatype.
@@ -42,7 +46,7 @@ export const Monad: MD.Monad<ArbitraryTypeLambda> = {
 /**
  * Get an equivalence for `fc.Arbitrary<A>` from an equivalence of `A`.
  * Arbitraries are equal if they produce the same values for the same seeds.
- * Note this only means we were unable to find a counter-example to the
+ * Note this only means we were unable to find a counterexample to the
  * equivalence.
  * @category fast-check
  */
@@ -54,6 +58,7 @@ export const getEquivalence = <A>(
     (arbitrary: fc.Arbitrary<A>) =>
     (seed: number): A => {
       const [result] = fc.sample(arbitrary, {seed, numRuns: 1})
+      /* v8 ignore next 1 */
       if (result === undefined) throw new Error('Could not sample.')
       return result
     }

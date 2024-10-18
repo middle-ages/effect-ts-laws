@@ -1,7 +1,7 @@
 *.log
-.buildinfo
 .dev
 node_modules
 tmp
 .npmrc
-docs/api
+.tsconfig.tsbuildinfo
+docs/modules

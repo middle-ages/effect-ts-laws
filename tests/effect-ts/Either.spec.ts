@@ -2,6 +2,7 @@
 import {
   Applicative,
   Bicovariant,
+  Foldable,
   Monad,
   SemiAlternative,
   Traversable,
@@ -36,6 +37,7 @@ describe('@effect/typeclass/data/Either', () => {
     Applicative,
     Bicovariant,
     Equivalence: getEquivalence(monoEquivalence),
+    Foldable,
     Monad,
     SemiAlternative,
     Traversable,

@@ -1,4 +1,3 @@
-// @ts-check
 import eslint from '@eslint/js'
 import allRecommended from 'eslint-plugin-prettier/recommended'
 import tseslint from 'typescript-eslint'
@@ -20,7 +19,12 @@ export default tseslint.config(
   recommended,
 
   {
-    ignores: ['../node_modules/*', './dependency-cruiser.cjs', '../.dev'],
+    ignores: [
+      '../node_modules/*',
+      './dependency-cruiser.cjs',
+      '../.dev',
+      '../docs/catalog/js/poster-elements.js',
+    ],
   },
 
   {

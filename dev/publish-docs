@@ -2,9 +2,8 @@
 
 set -Eeuo pipefail
 
-pnpm build-docs
-cp docs/catalog-of-laws.html ../effect-ts-laws-docs
-cp -r docs/catalog-of-laws ../effect-ts-laws-docs
+pnpm build:docs
+
 cd ../effect-ts-laws-docs
 git add .
 git commit -m publish

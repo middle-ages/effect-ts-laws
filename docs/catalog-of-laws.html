@@ -3,6 +3,7 @@
   <head>
     <title>Book of Laws</title>
     <meta charset="utf-8" />
+    <meta name="color-scheme" content="light dark" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
@@ -20,22 +21,24 @@
       crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="catalog-of-laws/index.css" />
+    <link rel="stylesheet" href="catalog/css/catalog-of-laws.css" />
+    <link rel="stylesheet" href="catalog/css/poster-elements.css" />
   </head>
   <body>
     <header>
       <h1 id="title">Typeclass Laws</h1>
-      <link-to
+      <icon-link
         href="https://github.com/middle-ages/effect-ts-laws"
         title="effect-ts-laws github project"
-        span="link-home"
-        >⚖ effect-ts-laws</link-to
-      >
+        name="link-home"
+        width="32">
+        <svg xmlns="http://www.w3.org/2000/svg"><path /></svg>
+      </icon-link>
     </header>
     <article>
       <scroll-box>
         <table-header>
-          <c></c>
+          <c>Extends</c>
           <c>Typeclass</c>
           <c>Law</c>
           <c>Predicate</c>
@@ -45,44 +48,49 @@
             <c></c>
             <link-to href="effect/src/Equivalence.ts">Equivalence</link-to>
 
-            <c>transitivity</c><c>$a=b ∧ b=c$</c><c>$⇒$</c><c>$a=c$</c>
+            <law-link href="concrete/Equivalence.ts#L16">transitivity</law-link>
+            <c>$a=b \, ∧ \, b=c$</c><c>$⇒$</c><c>$a=c$</c>
 
-            <c>symmetry</c>
+            <law-link href="concrete/Equivalence.ts#L24">symmetry</law-link>
             <c>$a=b$</c><c>$⇔$</c><c>$b=a$</c>
 
-            <c>reflexivity</c><c>$a$</c><c>$=$</c><c>$a$</c>
+            <law-link href="concrete/Equivalence.ts#L26">reflexivity</law-link>
+            <c>$a$</c><c>$=$</c><c>$a$</c>
           </typeclass-laws>
           <separator></separator>
           <typeclass-laws>
             <c></c>
             <link-to href="effect/src/Order.ts">Order</link-to>
 
-            <c>transitivity</c><c>$a≤b ∧ b≤c$</c><c>$⇒$</c><c>$a≤c$</c>
+            <law-link href="concrete/Order.ts#L54">transitivity</law-link>
+            <c>$a≤b ∧ b≤c$</c><c>$⇒$</c><c>$a≤c$</c>
 
-            <c>connectivity</c><c>$a≤b$</c><c>$∨$</c><c>$b≤a$</c>
+            <law-link href="concrete/Order.ts#L62">antisymmetry</law-link>
+            <c>$a≤b ∧ b≤a$</c><c>$⇒$</c><c>$a=b$</c>
 
-            <c>reflexivity</c><c>$a$</c><c>$≤$</c><c>$a$</c>
+            <law-link href="concrete/Order.ts#L69">reflexivity</law-link>
+            <c>$a$</c><c>$≤$</c><c>$a$</c>
 
-            <c>complement consistency</c>
+            <law-link href="concrete/Order.ts#L71">connectivity</law-link>
+            <c>$a≤b$</c><c>$∨$</c><c>$b≤a$</c>
+
+            <law-link href="concrete/Order.ts#L78"
+              >complement consistency</law-link
+            >
             <c>$a≤b$</c>
             <c>$⇒$</c>
             <c>$a \ngtr b$</c>
-
-            <c>equivalence consistency</c>
-            <c>$a≤b ∧ b≤a$</c>
-            <c>$⇒$</c>
-            <c>$a=b$</c>
           </typeclass-laws>
           <separator></separator>
           <typeclass-laws>
             <c></c>
             <link-to href="typeclass/src/Bounded.ts">Bounded</link-to>
 
-            <c>lower bounded</c>
+            <law-link href="concrete/Bounded.ts#L20">lower bounded</law-link>
             <c>$a$</c><c>$≥$</c>
             <c>$\minBound$</c>
 
-            <c>upper bounded</c>
+            <law-link href="concrete/Bounded.ts#L21">upper bounded</law-link>
             <c>$a$</c>
             <c>$≤$</c>
             <c>$\maxBound$</c>
@@ -95,12 +103,14 @@
             </c>
             <link-to href="typeclass/src/Semigroup.ts">Semigroup</link-to>
 
-            <c>associativity</c>
+            <law-link href="concrete/Semigroup.ts#L17">associativity</law-link>
             <c>$(a ⊕ b) ⊕ c$</c>
             <c>$=$</c>
             <c>$a ⊕ (b ⊕ c)$</c>
 
-            <c>combineMany associativity</c>
+            <law-link href="concrete/Semigroup.ts#L27"
+              >combineMany associativity</law-link
+            >
             <c>$\combineMany(a, [b, c])$</c>
             <c>$=$</c>
             <c>$a ⊕ (b ⊕ c)$</c>
@@ -112,9 +122,12 @@
               <arrow-tail-middle></arrow-tail-middle>
             </c>
             <link-to href="typeclass/src/Monoid.ts">Monoid</link-to>
-            <c>left identity</c><c>$∅ ⊕ a$</c><c>$=$</c><c>$a$</c>
 
-            <c>right identity</c><c>$a ⊕ ∅$</c><c>$=$</c><c>$a$</c>
+            <law-link href="concrete/Monoid.ts#L16">left identity</law-link>
+            <c>$∅ \! ⊕ a$</c><c>$=$</c><c>$a$</c>
+
+            <law-link href="concrete/Monoid.ts#L22">right identity</law-link>
+            <c>$a ⊕ ∅$</c><c>$=$</c><c>$a$</c>
           </typeclass-laws>
           <separator></separator>
           <typeclass-laws>
@@ -125,10 +138,12 @@
             </c>
             <link-to href="typeclass/src/Invariant.ts">Invariant</link-to>
 
-            <c>identity</c><c>$\imap\left(\id, \id\right)$</c><c>$=$</c
-            ><c>$\id$</c>
+            <law-link href="parameterized/Invariant.ts#L48">identity</law-link>
+            <c>$\imap\left(\id, \id\right)$</c><c>$=$</c><c>$\id$</c>
 
-            <c>composition</c>
+            <law-link href="parameterized/Invariant.ts#L54"
+              >composition</law-link
+            >
             <c>$\imap(ab, ba) \∘ \imap(bc, cb)$</c>
             <c>$=$</c>
             <c>$\imap(bc \∘ ab, ba \∘ cb)$</c>
@@ -143,9 +158,14 @@
               >Contravariant</link-to
             >
 
-            <c>identity</c><c>$\contramap(\id)$</c><c>$=$</c><c>$\id$</c>
+            <law-link href="parameterized/Contravariant.ts#L41"
+              >identity</law-link
+            >
+            <c>$\contramap(\id)$</c><c>$=$</c><c>$\id$</c>
 
-            <c>composition</c>
+            <law-link href="parameterized/Contravariant.ts#L47"
+              >composition</law-link
+            >
             <c>$\contramap(ba) \∘ \contramap(cb)$</c>
             <c>$=$</c>
             <c>$\contramap(ba \∘ cb)$</c>
@@ -156,17 +176,19 @@
               title="Covariant 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Invariant&#013;Covariant 𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑 𝑏𝑦 Applicative, Monad 𝑎𝑛𝑑 SemiAlternative">
               <arrow-tail-top></arrow-tail-top>
               <arrow-head-bottom></arrow-head-bottom>
-              <line-top-up-double
-                style="height: var(--gap-3x-top)"></line-top-up-double>
+              <line-top-up-double></line-top-up-double>
               <line-bottom-down></line-bottom-down>
               <line-bottom-down-double></line-bottom-down-double>
               <line-bottom-down-triple></line-bottom-down-triple>
             </c>
             <link-to href="typeclass/src/Covariant.ts">Covariant</link-to>
 
-            <c>identity</c><c>$\map(\id)$</c><c>$=$</c><c>$\id$</c>
+            <law-link href="parameterized/Covariant.ts#L51">identity</law-link>
+            <c>$\map(\id)$</c><c>$=$</c><c>$\id$</c>
 
-            <c>composition</c>
+            <law-link href="parameterized/Covariant.ts#L57"
+              >composition</law-link
+            >
             <c>$\map(ab) \∘ \map(bc)$</c>
             <c>$=$</c>
             <c>$\map(bc \∘ ab)$</c>
@@ -179,34 +201,49 @@
             </c>
             <link-to href="typeclass/src/Applicative.ts">Applicative</link-to>
 
-            <c>identity</c><c>$\id \▹ \of \▹ \ap(a)$</c><c>$=$</c><c>$a$</c>
+            <law-link href="parameterized/Applicative.ts#L83"
+              >identity</law-link
+            >
+            <c>$\id \▹ \of \▹ \ap(a)$</c><c>$=$</c><c>$a$</c>
 
-            <c>homomorphism</c>
+            <law-link href="parameterized/Applicative.ts#L89"
+              >homomorphism</law-link
+            >
             <c>$ab \▹ \of \▹ (a \▹ \of \▹ \ap)$</c>
             <c>$=$</c>
             <c>$a \▹ ab \▹ \of$</c>
 
-            <c>associative composition</c>
+            <law-link href="parameterized/Applicative.ts#L100"
+              >associative composition</law-link
+            >
             <c>$\fbc \▹ \map(\compose) \▹ \ap(\fab) \▹ \ap(\fa)$</c>
             <c>$=$</c>
-            <c>$\fbc \▹ \ap\(\fab \▹ \ap(\fa))$</c>
+            <c>$\fbc \▹ \ap\(\fab \▹ \ap(\fa)\)$</c>
 
-            <c>interchange</c>
+            <law-link href="parameterized/Applicative.ts#L118"
+              >interchange</law-link
+            >
             <c>$\fab \▹ \ap\(\of(a)\)$</c>
             <c>$=$</c>
             <c>$a \▹ \apply \▹ \of \▹ \ap(\fab)$</c>
 
-            <c>map consistency</c>
+            <law-link href="parameterized/Applicative.ts#L128"
+              >map consistency</law-link
+            >
             <c>$\fa \▹ \map(ab)$</c>
             <c>$=$</c>
             <c>$ab \▹ \of \▹ \ap(\fa)$</c>
 
-            <c>product consistency</c>
+            <law-link href="parameterized/Applicative.ts#L135"
+              >product consistency</law-link
+            >
             <c>$\fab \▹ \ap(\fa)$</c>
             <c>$=$</c>
             <c>$\product(\fab, \fa) \▹ \map\(([ab, a]) ⇒ ab(a)\)$</c>
 
-            <c>flatMap consistency</c>
+            <law-link href="parameterized/Applicative.ts#L154"
+              >flatMap consistency</law-link
+            >
             <c>$\ap(\fa)$</c>
             <c>$=$</c>
             <c>$\flatMap\(ab ⇒ \!\map(\fa, ab)\)$</c>
@@ -214,25 +251,29 @@
           <separator></separator>
           <typeclass-laws style="z-index: 6">
             <c title="Monad 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Covariant">
-              <line-middle-up-double
-                style="height: var(--gap-3x-p6)"></line-middle-up-double>
+              <line-middle-up-double></line-middle-up-double>
               <arrow-tail-middle></arrow-tail-middle>
             </c>
             <link-to href="typeclass/src/Monad.ts">Monad</link-to>
 
-            <c>left identity</c>
+            <law-link href="parameterized/Monad.ts#L28">left identity</law-link>
             <c>$\of \∘ \flatMap(\afb)$</c>
             <c>$=$</c>
             <c>$\afb$</c>
 
-            <c>right identity</c><c>$\flatMap(\of)$</c><c>$=$</c><c>$\id$</c>
+            <law-link href="parameterized/Monad.ts#L35"
+              >right identity</law-link
+            >
+            <c>$\flatMap(\of)$</c><c>$=$</c><c>$\id$</c>
 
-            <c>associativity</c>
+            <law-link href="parameterized/Monad.ts#L41">associativity</law-link>
             <c>$\flatMap(\afb) \∘ \flatMap(\bfc)$</c>
             <c>$=$</c>
             <c>$\flatMap\(\flatMap(\bfc) \∘ \afb\)$</c>
 
-            <c>map consistency</c>
+            <law-link href="parameterized/Monad.ts#L54"
+              >map consistency</law-link
+            >
             <c>$\map(ab)$</c>
             <c>$=$</c>
             <c>$\flatMap(\of \∘ ab)$</c>
@@ -243,63 +284,148 @@
               title="SemiAlternative 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 Covariant&#013;SemiAlternative 𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑 𝑏𝑦 Alternative">
               <arrow-tail-top></arrow-tail-top>
               <arrow-head-bottom></arrow-head-bottom>
-              <line-top-up-triple
-                style="height: var(--gap-4x-p8)"></line-top-up-triple>
+              <line-top-up-triple></line-top-up-triple>
               <line-bottom-down></line-bottom-down>
             </c>
             <link-to href="typeclass/src/SemiAlternative.ts"
               >SemiAlternative</link-to
             >
 
-            <c>associativity</c>
+            <law-link href="parameterized/SemiAlternative.ts#L46"
+              >associativity</law-link
+            >
             <c>$(\fa_1 ⊕ \fa_2) ⊕ \fa_3$</c>
             <c>$=$</c><c>$\fa_1 ⊕ (\fa_2 ⊕ \fa_3)$</c>
 
-            <c>coproductMany associativity</c>
+            <law-link href="parameterized/SemiAlternative.ts#L59"
+              >coproductMany associativity</law-link
+            >
             <c>$\coproductMany(\fa_1, [\fa_2, \fa_3])$</c>
             <c>$=$</c><c>$\fa_1 ⊕ (\fa_2 ⊕ \fa_3)$</c>
           </typeclass-laws>
           <separator></separator>
           <typeclass-laws>
             <c title="Alternative 𝑒𝑥𝑡𝑒𝑛𝑑𝑠 SemiAlternative">
-              <line-middle-up style="height: var(--gap-1x-p1)"></line-middle-up>
+              <line-middle-up
+                style="height: var(--gap-1x-p1) !important"></line-middle-up>
               <arrow-tail-middle></arrow-tail-middle>
             </c>
             <link-to href="typeclass/src/Alternative.ts">Alternative</link-to>
 
-            <c>left identity</c><c>$∅ ⊕ \fa$</c><c>$=$</c><c>$\fa$</c>
+            <law-link href="parameterized/Alternative.ts#L52"
+              >left identity</law-link
+            >
+            <c>$∅ ⊕ \fa$</c><c>$=$</c><c>$\fa$</c>
 
-            <c>right identity</c>
+            <law-link href="parameterized/Alternative.ts#L58"
+              >right identity</law-link
+            >
             <c>$\fa ⊕ ∅$</c>
             <c>$=$</c>
             <c>$\fa$</c>
 
-            <c>coproductAll zero</c>
-            <c>$\coproductAll\:\!\raisebox{0.5pt}{([\,])}$</c>
+            <law-link href="parameterized/Alternative.ts#L64"
+              >coproductAll zero</law-link
+            >
+            <c>$\coproductAll\emptyArray$</c>
             <c>$=$</c>
             <c>$∅$</c>
+
+            <law-link href="parameterized/Alternative.ts#L94"
+              >right absorption</law-link
+            >
+            <c>$\ap(\fab, ∅)$</c>
+            <c>$=$</c>
+            <c>$∅$</c>
+
+            <law-link href="parameterized/Alternative.ts#L100"
+              >left distributivity</law-link
+            >
+            <c>$\coproduct(\fa_1, \fa_2) \▹ \map(ab)$</c>
+            <c>$=$</c>
+            <c>$\coproduct\(\map(\fa_1, ab), \map(\fa_2, ab)\)$</c>
+
+            <law-link href="parameterized/Alternative.ts#L114"
+              >right distributivity</law-link
+            >
+            <c>$\coproduct(\fab_1, \fab_2) \▹ \ap(\fa)$</c>
+            <c>$=$</c>
+            <c>$\coproduct\(\ap(\fab_1, fa), \ap(\fab_2, fa)\)$</c>
           </typeclass-laws>
           <separator></separator>
           <typeclass-laws>
             <c></c>
             <link-to href="typeclass/src/Traversable.ts">Traversable</link-to>
 
-            <c>identity</c><c>$\Id.\traverse(\id)$</c><c>$=$</c><c>$\id$</c>
+            <law-link href="parameterized/Traversable.ts#L112"
+              >identity</law-link
+            >
+            <c>$\Id.\traverse(\id)$</c><c>$=$</c><c>$\id$</c>
 
-            <c>composition</c>
-            <c>$\G.\map\(\H.\traverse(bhc)\) \∘ \G.\traverse(agb)$</c>
+            <law-link href="parameterized/Traversable.ts#L118"
+              >composition</law-link
+            >
+            <c>$\G.\map\(\H.\traverse(bhc)\)\x \∘ \G.\traverse(agb)$</c>
             <c>$=$</c>
-            <c>$\GH.\traverse\(\G.\map(bhc) \∘ agb\)$</c>
+            <c>$\GH.\traverse\(\G.\map(bhc)\x \∘ agb\)$</c>
 
-            <c>map consistency</c>
+            <law-link href="parameterized/Traversable.ts#L134"
+              >map consistency</law-link
+            >
             <c>$\F.\map(ab)$</c>
             <c>$=$</c>
             <c>$\Id.\traverse(ab)$</c>
           </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c></c>
+            <link-to href="typeclass/src/Foldable.ts">Foldable</link-to>
+
+            <law-link href="parameterized/Foldable.ts#L59">reduce</law-link>
+            <c>$\reduce(b, bab)$</c><c>$=$</c
+            ><c>$\combineMap\(\a\Monoid\ofEndo\xx)(a ⇒ b ⇒ \bab(b, a)\)$</c>
+
+            <law-link href="parameterized/Foldable.ts#L81">combineMap</law-link>
+            <c>$\reduce(∅, ⊕)$</c><c>$=$</c><c>$\combineMap(monoid\,)(\id)$</c>
+
+            <law-link href="parameterized/RightFoldable.ts#L37"
+              >reduceRight</law-link
+            >
+            <c>$\reduceRight(∅, (p,a) ⇒ aa(a) ⊕ p)$</c>
+            <c>$=$</c>
+            <c>$\combineMap(monoid\,)(aa)$</c>
+
+            <law-link href="parameterized/Foldable.ts#L92">reduceKind</law-link>
+            <c>$\reduceKind(\a\Monad\ofId\xx)$</c>
+            <c>$=$</c>
+            <c>$\reduce$</c>
+
+            <law-link href="parameterized/Foldable.ts#L105">toArray</law-link>
+            <c>$\toArray$</c>
+            <c>$=$</c>
+            <c>$\reduce([\,], \Array\kern-1pt.\append)$</c>
+          </typeclass-laws>
+          <separator></separator>
+          <typeclass-laws>
+            <c></c>
+            <link-to href="typeclass/src/Filterable.ts">Filterable</link-to>
+
+            <law-link href="parameterized/Filterable.ts#L39">identity</law-link>
+            <c>$\filterMap(\Option.\fn{some})$</c><c>$=$</c><c>$\id$</c>
+
+            <law-link href="parameterized/Filterable.ts#L45"
+              >composition</law-link
+            >
+            <c>$\filterMap(boc)\x \∘ \filterMap(aob)$</c><c>$=$</c
+            ><c>$\filterMap\(\x\Option.\flatMap(boc)\x \∘ aob\)$</c>
+          </typeclass-laws>
         </table-body>
       </scroll-box>
     </article>
-    <info-footer></info-footer>
+    <info-footer
+      >🔗<i style="padding-left: 0.25rch">tip</i>: Typeclasses and laws link to
+      their source code.</info-footer
+    >
+    <script src="catalog/js/catalog-of-laws.js" type="module"></script>
   </body>
-  <script src="catalog-of-laws/index.js" type="module"></script>
 </html>

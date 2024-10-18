@@ -10,8 +10,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "strictNullChecks": true,
-    "resolvePackageJsonImports": true,
-    "resolvePackageJsonExports": true,
     "incremental": true,
     "noErrorTruncation": true
   }

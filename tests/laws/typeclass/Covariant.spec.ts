@@ -1,27 +1,28 @@
 import {Covariant as CO} from '@effect/typeclass'
 import {Covariant as arrayCovariant} from '@effect/typeclass/data/Array'
-import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, covariantLaws, tinyInteger} from 'effect-ts-laws'
+import {Array as AR, pipe} from 'effect'
+import {
+  checkLaws,
+  covariantLaws,
+  GivenConcerns,
+  Mono,
+  tinyArray,
+  unfoldMonoGiven,
+} from 'effect-ts-laws'
 import {testLaws} from 'effect-ts-laws/vitest'
-import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
+import {ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
-import fc from 'fast-check'
 
 type Instance = CO.Covariant<ReadonlyArrayTypeLambda>
 
+const given: GivenConcerns<AR.ReadonlyArrayTypeLambda, Mono> = unfoldMonoGiven(
+  AR.getEquivalence,
+  tinyArray,
+)
+
 const instance = arrayCovariant,
   laws = (instance: Instance) =>
-    covariantLaws({
-      F: instance,
-      a: tinyInteger,
-      b: tinyInteger,
-      c: tinyInteger,
-      equalsA: NU.Equivalence,
-      equalsB: NU.Equivalence,
-      equalsC: NU.Equivalence,
-      getEquivalence,
-      getArbitrary: fc.array,
-    })
+    covariantLaws<ReadonlyArrayTypeLambda, Mono>({F: instance, ...given})
 
 describe('Covariant laws self-test', () => {
   pipe(instance, laws, testLaws)

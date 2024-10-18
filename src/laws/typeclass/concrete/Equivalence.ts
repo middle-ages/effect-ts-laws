@@ -1,10 +1,10 @@
 import {Boolean as BO} from 'effect'
-import {EquivalenceTypeLambda} from 'effect/Equivalence'
+import type {EquivalenceTypeLambda} from 'effect/Equivalence'
 import {Law, LawSet, lawTests} from '../../../law.js'
-import {ConcreteGiven} from './given.js'
+import type {ConcreteGiven} from './given.js'
 
 /**
- * Test typeclass laws for `Equivalence`.
+ * Build laws for `Equivalence`.
  * @category typeclass laws
  */
 export const equivalenceLaws = <A>({

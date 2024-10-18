@@ -1,27 +1,16 @@
 import {Invariant as IN} from '@effect/typeclass'
 import {Invariant as arrayInvariant} from '@effect/typeclass/data/Array'
-import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, invariantLaws, tinyInteger} from 'effect-ts-laws'
+import {Array as AR, pipe} from 'effect'
+import {checkLaws, invariantLaws} from 'effect-ts-laws'
 import {testLaws} from 'effect-ts-laws/vitest'
-import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
+import {ReadonlyArrayTypeLambda} from 'effect/Array'
 import {dual} from 'effect/Function'
-import fc from 'fast-check'
+import {numericGiven} from './helpers.js'
 
 type Instance = IN.Invariant<ReadonlyArrayTypeLambda>
 
 const instance = arrayInvariant,
-  laws = (instance: Instance) =>
-    invariantLaws({
-      F: instance,
-      a: tinyInteger,
-      b: tinyInteger,
-      c: tinyInteger,
-      equalsA: NU.Equivalence,
-      equalsC: NU.Equivalence,
-      equalsB: NU.Equivalence,
-      getEquivalence,
-      getArbitrary: fc.array,
-    })
+  laws = (instance: Instance) => invariantLaws({F: instance, ...numericGiven})
 
 describe('Invariant laws self-test', () => {
   pipe(instance, laws, testLaws)

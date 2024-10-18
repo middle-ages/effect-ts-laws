@@ -6,7 +6,7 @@ import {testConcreteTypeclassLaws, testMonoids} from 'effect-ts-laws/vitest'
 import {Equivalence, Order} from 'effect/Duration'
 import fc from 'fast-check'
 
-describe('@effect/typeclass/data/Duration', () => {
+describe('@effect/typeclass/data/Duration (finite)', () => {
   const a = duration,
     equalsA = (a: DU.Duration, b: DU.Duration) =>
       DU.toMillis(a) === DU.toMillis(b)

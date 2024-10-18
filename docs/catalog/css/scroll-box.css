@@ -1,0 +1,99 @@
+#shadow {
+  z-index: 10;
+  display: grid;
+  top: calc(-1 * var(--table-header-height));
+  left: 0;
+  grid-column: 1 / -1;
+  grid-row: 1 / 3;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  clip-path: inset(0 var(--outline-width) 0 0);
+}
+#top-shadow,
+#right-shadow,
+#bottom-shadow,
+#left-shadow {
+  position: sticky;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+#top-shadow,
+#bottom-shadow {
+  width: 100%;
+  height: var(--line-height-2);
+  left: 0;
+}
+#left-shadow,
+#right-shadow {
+  width: var(--line-height-2);
+  height: 100%;
+  top: 0;
+}
+#top-shadow {
+  top: calc(var(--line-height-table-header) + var(--table-border-width));
+  background: linear-gradient(
+    var(--shadow-0) 0,
+    var(--shadow-1) 1px,
+    var(--shadow-2) 2px,
+    var(--shadow-3) 4px,
+    var(--shadow-4) 9px,
+    var(--shadow-5) 13px,
+    var(--shadow-6) 100%
+  );
+}
+#bottom-shadow {
+  top: calc(100% - var(--line-height-2) + 0.5px);
+  background: linear-gradient(
+    0deg,
+    var(--shadow-0) 0px,
+    var(--shadow-1) 1px,
+    var(--shadow-2) 2px,
+    var(--shadow-3) 4px,
+    var(--shadow-4) 7px,
+    var(--shadow-5) 11px,
+    var(--shadow-6) 100%
+  );
+}
+#left-shadow {
+  left: var(--pad-half);
+  background: linear-gradient(
+    90deg,
+    var(--shadow-0) 0,
+    var(--shadow-1) 1.5px,
+    var(--shadow-2) 2.5px,
+    var(--shadow-3) 5px,
+    var(--shadow-4) 9px,
+    var(--shadow-5) 13px,
+    var(--shadow-6) 100%
+  );
+}
+#right-shadow {
+  left: calc(100% - var(--line-height-2));
+  background: linear-gradient(
+    270deg,
+    var(--shadow-0) 0,
+    var(--shadow-1) 1px,
+    var(--shadow-2) 2px,
+    var(--shadow-3) 5px,
+    var(--shadow-4) 9px,
+    var(--shadow-5) 14px,
+    var(--shadow-6) 100%
+  );
+}
+scroll-box {
+  flex: 1;
+  --edge: calc(var(--footer-delta) - var(--pad-half));
+  margin-left: var(--edge);
+  display: grid;
+  overflow: auto;
+  max-width: min-content;
+  min-width: 0;
+  min-height: 100%;
+  grid-template-columns: var(--lines-width) repeat(5, min-content);
+  align-items: baseline;
+  align-content: start;
+  background: var(--color-bg-scroll);
+}

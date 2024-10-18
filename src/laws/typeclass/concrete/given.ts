@@ -1,7 +1,8 @@
 import {Equivalence as EQ} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {Law, LawSet, UnknownArgs} from '../../../law.js'
+import type {Law, UnknownArgs} from '../../../law.js'
+import {LawSet} from '../../../law.js'
 
 /**
  * Common options for testing _concrete type_ typeclass laws. These are
@@ -79,7 +80,7 @@ export const defineConcreteLaws =
     )
 
 /**
- * Type-level map of _typeclass name_ to _type class lambda_ typeclasses on
+ * Type-level map of _typeclass name_ to _type lambda_ for typeclasses on
  * concrete types. Use
  * [module augmentation](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
  * to add entries here for a new typeclasses.

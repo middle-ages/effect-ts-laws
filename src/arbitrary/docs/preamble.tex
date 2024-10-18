@@ -62,12 +62,12 @@
 \newcommand{\AAAA}{\kern8pt}
 
 % • Fonts
-\newcommand{\Ink}{\color{black}}               % black color
-\newcommand{\fn}[1]{\textit{\ttfamily{#1}}}    % function        (mono italic gray)
-\newcommand{\Type}[1]{\text{\scshape{#1}}\X}  % type            (small-caps)
-\newcommand{\builtin}[1]{\XXXX\textsf{ % bold text       (bold-sans-serif)
+\newcommand{\Ink}{\color{black}}             % black color
+\newcommand{\fn}[1]{\textit{\ttfamily{#1}}}  % function        (mono italic gray)
+\newcommand{\Type}[1]{\text{\scshape{#1}}\X} % type            (small-caps)
+\newcommand{\builtin}[1]{\XXXX\textsf{       % bold text       (bold-sans-serif)
 \fontseries{sbc}\selectfont{#1}}}
-\newcommand{\head}[1]{\color{ordGray}          % text            (sans-serif lightest gray)
+\newcommand{\head}[1]{\color{ordGray}        % text            (sans-serif lightest gray)
 \textsf{#1}\Ink}
 
 % • Symbols
@@ -78,6 +78,7 @@
 
 \newcommand{\num}     {\builtin{number}}
 \newcommand{\str}     {\builtin{string}}
+\newcommand{\bool}    {\builtin{boolean}}
 \newcommand{\unknown} {\builtin{unknown}}
 
 \newcommand{\Ge}         [1] {\color{sigGray}{\ensuremath{\mathbf{#1}}}\Ink}
@@ -86,15 +87,19 @@
 \newcommand{\Tpp}        [2] {\Br{\Ge{#1}, \Ge{#2}}}
 \newcommand{\TpA}            {\Tp{A}}
 \newcommand{\TpB}            {\Tp{B}}
+\newcommand{\TpC}            {\Tp{C}}
+\newcommand{\TpAB}           {\Tpp{A}{B}}
 \newcommand{\TpT}            {\Tp{T}}
 \newcommand{\TpF}            {\Br{\Ge{F}\ensuremath{\AA\sqsubsetneq\AA}\Type{TypeLambda}}}
 \newcommand{\TpFA}           {\Br{\Ge{F}\ensuremath{\AA\sqsubsetneq\AA}\Type{TypeLambda}\A, \Ge{A}}}
 
 \newcommand{\ArbOf}      [1] {\Type{Arbitrary}\Br{#1}}
 \newcommand{\ArbsOf}     [1] {\Type{Arbitrary}\Br{#1\Sq}}
+\newcommand{\EqOf}       [1] {\Type{Equivalence}\Br{#1}}
 
 \newcommand{\ArbT}       [1] {\ArbOf{\,\Type{#1}\,}}
 \newcommand{\ArbP}       [1] {\ArbOf{\Ge{#1}}}
+\newcommand{\EqP}        [1] {\EqOf{\Ge{#1}}}
 
 \newcommand{\ArbsT}      [1] {\ArbsOf{\Type{#1}}}
 \newcommand{\ArbsP}      [1] {\ArbsOf{\Ge{#1}}}
@@ -106,6 +111,7 @@
 
 \newcommand{\ArbA}           {\ArbP{A}}
 \newcommand{\ArbB}           {\ArbP{B}}
+\newcommand{\ArbC}           {\ArbP{C}}
 \newcommand{\ArbE}           {\ArbP{E}}
 \newcommand{\ArbsA}          {\ArbsP{A}}
 
@@ -115,9 +121,17 @@
 \newcommand{\EffectArbE}     {\EffectArb{\ensuremath{\bot},\AA}{Error}{}}
 \newcommand{\EffectArbAE}    {\EffectArb{\ensuremath{\Ge{A}},\AA}{Error}{}}
 
+\newcommand{\EqA}            {\EqP{A}}
+\newcommand{\EqB}            {\EqP{B}}
+
+\newcommand{\Option}     [1] {\Type{Option}\Tp{#1}}
 \newcommand{\Either}     [2] {\Type{Either}\Tpp{#1}{#2}}
 \newcommand{\Var}        [2] {\textit{#1} \Co \Type{#2}}
 
-\newcommand{\fnab}           {\ensuremath{(\x\Var{a}{\Ge{A}})\XX\Ar\XX\Ge{B}\,}}
+\newcommand{\OptionA}        {\Option{A}}
+
+\newcommand{\fnab}           {\ensuremath{(\X\Var{a}{\Ge{A}})\XX\Ar\XX\Ge{B}\a}}
+\newcommand{\fnaa}           {\ensuremath{(\x\Var{a}{\Ge{A}})\XX\Ar\XX\Ge{A}\a}}
 \newcommand{\fnaFb}          {\ensuremath{(\x\Var{a}{\Ge{A}})\XX\Ar\XX\Ge{F}\X\Br{\Ge{B}}\XX}}
 \newcommand{\fnFab}          {\ensuremath{(\x\Var{a}{\Ge{F}\X\Br{\Ge{A}}})\XX\Ar\XX\Ge{B}}}
+\newcommand{\fnabc}          {\ensuremath{(\x\Var{a}\A{\Ge{A}}, \Var{b}{\Ge{B}})\XX\Ar\XXX\Ge{C}}}

@@ -1,7 +1,7 @@
 import {Equivalence as EQ} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {LiftEquivalence} from '../law.js'
+import type {LiftEquivalence} from '../law.js'
 
 /**
  * The type of a function that given any arbitrary of type `A`, returns an
@@ -10,16 +10,16 @@ import {LiftEquivalence} from '../law.js'
  */
 export interface LiftArbitrary<
   F extends TypeLambda,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 > {
-  <A>(a: fc.Arbitrary<A>): fc.Arbitrary<Kind<F, In1, Out2, Out1, A>>
+  <A>(a: fc.Arbitrary<A>): fc.Arbitrary<Kind<F, R, O, E, A>>
 }
 
 /**
  * Convert an equivalence of `A` to an arbitrary of `A`.
- * @category mapping
+ * @category lifting
  */
 export type EquivalenceToArbitrary<Eq extends EQ.Equivalence<never>> = (
   eq: Eq,
@@ -27,7 +27,7 @@ export type EquivalenceToArbitrary<Eq extends EQ.Equivalence<never>> = (
 
 /**
  * Convert an arbitrary of `A` to an equivalence of `A`.
- * @category mapping
+ * @category lifting
  */
 export type ArbitraryToEquivalence<Arb extends fc.Arbitrary<never>> = (
   arb: Arb,
@@ -36,13 +36,13 @@ export type ArbitraryToEquivalence<Arb extends fc.Arbitrary<never>> = (
 /**
  * Convert the type of a function that lifts equivalences into one that
  * lifts arbitraries.
- * @category mapping
+ * @category lifting
  */
 export type LiftedEquivalenceToArbitrary<
   F extends TypeLambda,
   Eq extends LiftEquivalence<F, any, any, any>,
 > = (
   eq: Eq,
-) => Eq extends LiftEquivalence<F, infer In1, infer Out2, infer Out1>
-  ? LiftArbitrary<F, In1, Out2, Out1>
+) => Eq extends LiftEquivalence<F, infer R, infer O, infer E>
+  ? LiftArbitrary<F, R, O, E>
   : never

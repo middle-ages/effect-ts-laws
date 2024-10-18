@@ -1,11 +1,12 @@
-import fc from 'fast-check'
 import {defineConfig} from 'vitest/config'
-
-fc.configureGlobal({numRuns: 100})
 
 export default defineConfig({
   test: {
+    typecheck: {
+      enabled: false,
+    },
     globals: true,
     include: ['./tests/**/*.spec.ts'],
+    setupFiles: ['./tests/vitest.setup.ts'],
   },
 })

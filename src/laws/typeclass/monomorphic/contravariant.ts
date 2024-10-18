@@ -1,11 +1,18 @@
 import {Equivalence as EQ} from 'effect'
 import {constant} from 'effect/Function'
-import {Kind, TypeLambda} from 'effect/HKT'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {LiftArbitrary} from '../../../arbitrary.js'
-import {LiftEquivalence} from '../../../law.js'
-import {GivenConcerns} from '../parameterized/given.js'
-import {Mono, monoArbitrary, monoEquivalence} from './helpers.js'
+import type {LiftArbitrary} from '../../../arbitrary.js'
+import type {LiftEquivalence} from '../../../law.js'
+import {monoRecord} from '../../../util.js'
+import type {GivenConcerns} from '../parameterized/given.js'
+import type {Mono} from './helpers.js'
+import {
+  monoArbitrary,
+  monoEquivalence,
+  monoMonoid,
+  monoPredicateArbitrary,
+} from './helpers.js'
 
 /**
  * Options for the monomorphic typeclass test runner on datatypes where
@@ -14,48 +21,54 @@ import {Mono, monoArbitrary, monoEquivalence} from './helpers.js'
  * _typeclass_ tests.
  * @category monomorphic
  */
-export interface ContravariantGiven<F extends TypeLambda> {
-  /**
-   * An arbitrary for the datatype under test of type `F<Mono>`.
-   */
-  Arbitrary: fc.Arbitrary<Kind<F, never, unknown, string, Mono>>
-  /**
-   * Equivalence for the datatype under test of type `F<Mono>`.
-   */
-  Equivalence: EQ.Equivalence<Kind<F, never, unknown, string, Mono>>
+export interface ContravariantGiven<
+  F extends TypeLambda,
+  R = never,
+  O = unknown,
+  E = unknown,
+> {
+  /** An arbitrary for the datatype under test of type `F<Mono>`.  */
+  Arbitrary: fc.Arbitrary<Kind<F, R, O, E, Mono>>
+
+  /** Equivalence for the datatype under test of type `F<Mono>`.  */
+  Equivalence: EQ.Equivalence<Kind<F, R, O, E, Mono>>
 }
 
 /**
  * Unfolds the given `ContravariantGiven` options for testing
  * contravariant datatypes into the `GivenConcerns` required for
  * typeclass law tests.
+ * @param given Test options for contravariant typeclass laws building.
  * @category monomorphic
  */
-export const unfoldContravariantGiven = <F extends TypeLambda>({
+export const unfoldContravariantGiven = <
+  F extends TypeLambda,
+  R = never,
+  O = unknown,
+  E = unknown,
+>({
   Equivalence,
   Arbitrary,
-}: ContravariantGiven<F>): GivenConcerns<
+}: ContravariantGiven<F, R, O, E>): GivenConcerns<
   F,
   Mono,
   Mono,
   Mono,
-  never,
-  unknown,
-  string
+  R,
+  O,
+  E
 > => ({
-  a: monoArbitrary,
-  b: monoArbitrary,
-  c: monoArbitrary,
-  equalsA: monoEquivalence,
-  equalsB: monoEquivalence,
-  equalsC: monoEquivalence,
-  // Only in the monomorphic tests is this maneuver safe.
+  ...monoRecord(monoArbitrary)('a', 'b', 'c'),
+  ...monoRecord(monoEquivalence)('equalsA', 'equalsB', 'equalsC'),
+  ...monoRecord(monoPredicateArbitrary)(
+    'predicateA',
+    'predicateB',
+    'predicateC',
+  ),
+
   // These functions will always be called with a single type: Mono.
-  getEquivalence: constant(Equivalence) as LiftEquivalence<
-    F,
-    never,
-    unknown,
-    string
-  >,
-  getArbitrary: constant(Arbitrary) as LiftArbitrary<F, never, unknown, string>,
+  // Only in the monomorphic tests is this maneuver safe.
+  getEquivalence: constant(Equivalence) as LiftEquivalence<F, R, O, E>,
+  getArbitrary: constant(Arbitrary) as LiftArbitrary<F, R, O, E>,
+  Monoid: monoMonoid,
 })

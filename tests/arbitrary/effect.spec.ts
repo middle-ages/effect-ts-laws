@@ -1,5 +1,5 @@
 import {Effect as EF, flow, pipe} from 'effect'
-import {fail, succeed, sync, tinyInteger} from 'effect-ts-laws/arbitrary'
+import {fail, succeed, sync, tinyInteger} from 'effect-ts-laws'
 import {constant} from 'effect/Function'
 import fc from 'fast-check'
 

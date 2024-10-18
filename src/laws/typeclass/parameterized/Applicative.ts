@@ -7,15 +7,16 @@ import {
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
 import {Equivalence as EQ, identity, pipe} from 'effect'
 import {apply, compose} from 'effect/Function'
-import {Kind, TypeLambda} from 'effect/HKT'
-import {addLawSet, Law, lawTests} from '../../../law.js'
+import {addLawSets, Law, lawTests} from '../../../law.js'
 import {monoidLaws} from '../concrete/Monoid.js'
+import {withOuterOption} from './compose.js'
 import {covariantLaws} from './Covariant.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
-import {withOuterOption} from './harness/compose.js'
+import {unfoldGiven} from './given.js'
+import type {ParameterizedGiven as Given} from './given.js'
+import type {Kind, TypeLambda} from 'effect/HKT'
 
 /**
- * Test typeclass laws for `Applicative`.
+ * Typeclass laws for `Applicative`.
  * @category typeclass laws
  */
 export const applicativeLaws = <
@@ -23,39 +24,29 @@ export const applicativeLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
-  given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<ApplicativeTypeLambda, F, A, B, C, R, O, E>,
 ) => {
   const {Monoid: monoid, F, fa, equalsA, getEquivalence} = unfoldGiven(given)
 
-  // If A is a monoid we can test Monoid laws on the applicative getMonoid()
-  const addMonoidLaws =
-    monoid !== undefined
-      ? pipe(
-          {
-            suffix: 'Applicative.getMonoid()',
-            a: fa,
-            F: AP.getMonoid(F)(monoid) as MO.Monoid<
-              Kind<F, In1, Out2, Out1, A>
-            >,
-            equalsA: getEquivalence(equalsA) as EQ.Equivalence<
-              Kind<F, In1, Out2, Out1, A>
-            >,
-          },
-          monoidLaws,
-          addLawSet,
-        )
-      : identity
-
   return pipe(
     buildLaws('Applicative', given),
-    pipe(given, covariantLaws, addLawSet),
-    addMonoidLaws,
-    addLawSet(
+    pipe(given, covariantLaws, addLawSets),
+    addLawSets(
       buildLaws(...withOuterOption('Applicative', given, optionApplicative)),
+    ),
+    pipe(
+      {
+        suffix: 'Applicative.getMonoid()',
+        a: fa,
+        F: AP.getMonoid(F)(monoid) as MO.Monoid<Kind<F, R, O, E, A>>,
+        equalsA: getEquivalence(equalsA) as EQ.Equivalence<Kind<F, R, O, E, A>>,
+      },
+      monoidLaws,
+      addLawSets,
     ),
   )
 }
@@ -65,12 +56,12 @@ const buildLaws = <
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   name: string,
-  given: Given<ApplicativeTypeLambda, F, A, B, C, In1, Out2, Out1>,
+  given: Given<ApplicativeTypeLambda, F, A, B, C, R, O, E>,
 ) => {
   const {F, a, fa, equalsFa, equalsFb, equalsFc, ab, fabOf, fbcOf} =
     unfoldGiven(given)
@@ -172,7 +163,7 @@ const buildLaws = <
 }
 
 /**
- * Type lambda for the `Applicative` type class.
+ * Type lambda for the `Applicative` typeclass.
  * @category type lambda
  */
 export interface ApplicativeTypeLambda extends TypeLambda {

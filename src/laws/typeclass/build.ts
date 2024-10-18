@@ -1,22 +1,20 @@
 import {Array as AR, pipe, Tuple as TU} from 'effect'
-import {Kind, TypeLambda} from 'effect/HKT'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import {LawSet} from '../../law.js'
-import {
-  buildConcreteTypeclassLaws,
-  Concrete,
-  ConcreteClass,
-} from './concrete/catalog.js'
-import {GivenConcerns} from './parameterized/given.js'
+import type {Concrete, ConcreteClass} from './concrete/catalog.js'
+import {buildConcreteTypeclassLaws} from './concrete/catalog.js'
+import type {
+  Parameterized,
+  ParameterizedClass,
+} from './parameterized/catalog.js'
 import {
   buildParameterizedTypeclassLaws,
   isParameterizedTypeclassName,
-  Parameterized,
-  ParameterizedClass,
-} from './parameterized/harness/catalog.js'
+} from './parameterized/catalog.js'
+import type {GivenConcerns} from './parameterized/given.js'
 
 /**
  * Union of all typeclass names.
- *
  * @category model
  */
 export type Typeclass = ParameterizedClass | ConcreteClass
@@ -30,10 +28,10 @@ export type Typeclass = ParameterizedClass | ConcreteClass
 export type TypeclassInstances<
   F extends TypeLambda,
   A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
-> = Partial<Concrete<Kind<F, In1, Out2, Out1, A>> & Parameterized<F>>
+  R = never,
+  O = unknown,
+  E = unknown,
+> = Partial<Concrete<Kind<F, R, O, E, A>> & Parameterized<F>>
 
 /**
  * Build typeclass laws for the given instances of some datatype.
@@ -41,18 +39,18 @@ export type TypeclassInstances<
  */
 export const buildTypeclassLawsFor = <
   F extends TypeLambda,
-  Ins extends TypeclassInstances<F, A, In1, Out2, Out1>,
+  Ins extends TypeclassInstances<F, A, R, O, E>,
   A,
   B = A,
   C = A,
-  In1 = never,
-  Out2 = unknown,
-  Out1 = unknown,
+  R = never,
+  O = unknown,
+  E = unknown,
 >(
   instances: Ins,
-  given: GivenConcerns<F, A, B, C, In1, Out2, Out1>,
+  given: GivenConcerns<F, A, B, C, R, O, E>,
 ): LawSet[] => {
-  type ConcreteA = Kind<F, In1, Out2, Out1, A>
+  type ConcreteA = Kind<F, R, O, E, A>
 
   type Entry = {
     [K in keyof Ins]: [K & Typeclass, Ins[K]]

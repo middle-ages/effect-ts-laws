@@ -4,16 +4,17 @@
 
 1. [Importing](#importing)
 2. [Modules](#modules)
-   1. [monad](#monad)
+   1. [instances](#instances)
    2. [data](#data)
    3. [time](#time)
    4. [function](#function)
-   5. [effect](#effect)
+   5. [equivalence](#equivalence)
+   6. [effect](#effect)
 
 ## Importing
 
 Every type and function below can be imported directly from
-`effect-ts-laws/arbitrary`.
+`effect-ts-laws`.
 
 <details><summary>Example</summary>
 
@@ -23,7 +24,7 @@ Importing arbitraries from this package:
 
 ```ts
 import {Option as OP, pipe} from 'effect'
-import {tinyArray, tinyInteger, option} from 'effect-ts-laws/arbitrary'
+import {tinyArray, tinyInteger, option} from 'effect-ts-laws'
 import fc from 'fast-check'
 
 const arbitrary: fc.Arbitrary<OP.Option<number>[]> = pipe(
@@ -37,7 +38,7 @@ const arbitrary: fc.Arbitrary<OP.Option<number>[]> = pipe(
 
 ## Modules
 
-### [monad](https://github.com/middle-ages/effect-ts-laws/tree/main/src/arbitrary/monad.ts)
+### [instances](https://github.com/middle-ages/effect-ts-laws/tree/main/src/arbitrary/instances.ts)
 
 [Monad](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/src/Monad.ts)
 instance for the [fast-check](https://fast-check.dev/) `Arbitrary` type, and a
@@ -46,7 +47,7 @@ the type.
 
 There is also an
 [Equivalence](https://github.com/Effect-TS/effect/blob/main/packages/effect/src/Equivalence.ts)
-instance which will try to find counter-examples to the equivalence and return
+instance which will try to find counterexamples to the equivalence and return
 true if none found.
 
 <details><summary>Example</summary>
@@ -56,7 +57,7 @@ Using the `flatMap` function:
 
 ```ts
 import {Effect as EF, flow, pipe} from 'effect'
-import {Monad} from 'effect-ts-laws/arbitrary'
+import {Monad} from 'effect-ts-laws'
 import fc from 'fast-check'
 
 const greaterThanOne = (i: number): EF.Effect<string, Error> =>
@@ -70,7 +71,7 @@ const oneThirdFail: fc.Arbitrary<EF.Effect<string, Error>> = pipe(
 
 </details>
 
-<img src="docs/instances.svg" title="instances.ts" alt="fast-check effect-ts instances" style="min-width:730pt">
+<img src="docs/instances.svg" title="instances.ts" alt="fast-check effect-ts instances" style="min-width:731pt">
 
 ### [data](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/data.ts)
 
@@ -88,10 +89,16 @@ Arbitraries for `effect-ts` temporal types.
 
 Function arbitraries.
 
-<img src="docs/function.svg" title="function.ts" alt="function arbitraries" style="min-width:866pt">
+<img src="docs/function.svg" title="function.ts" alt="function arbitraries" style="min-width:974pt">
+
+### [equivalence](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/equivalence.ts)
+
+Helpers for sampling equivalence between functions.
+
+<img src="docs/equivalence.svg" title="equivalence.ts" alt="equivalence of functions" style="min-width:980">
 
 ### [effect](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/effect.ts)
 
 Arbitraries for the `Effect` type.
 
-<img src="docs/effect.svg" title="effect.ts" alt="effect arbitraries" style="min-width:589pt">
+<img src="docs/effect.svg" title="effect.ts" alt="effect arbitraries" style="min-width:590pt">

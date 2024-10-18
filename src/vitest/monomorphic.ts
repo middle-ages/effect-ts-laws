@@ -1,55 +1,52 @@
+import {getMonoid} from '@effect/typeclass/data/Array'
 import {pipe} from 'effect'
-import {TypeLambda} from 'effect/HKT'
-import {ParameterOverrides} from '../law.js'
+import type {TypeLambda} from 'effect/HKT'
+import type {ParameterOverrides} from '../law.js'
+import type {
+  MonomorphicGiven,
+  TypeclassInstances,
+} from '../laws/typeclass/harness.js'
 import {
   buildContravariantLaws,
   buildTypeclassLaws,
-  TypeclassInstances,
 } from '../laws/typeclass/harness.js'
-import {ContravariantGiven} from '../laws/typeclass/monomorphic/contravariant.js'
-import {Mono} from '../laws/typeclass/monomorphic/helpers.js'
-import {MonomorphicGiven} from '../laws/typeclass/monomorphic/invariant.js'
-import {testLawSets} from './runner.js'
+import type {ContravariantGiven} from '../laws/typeclass/monomorphic/contravariant.js'
+import type {Mono} from '../laws/typeclass/monomorphic/helpers.js'
+import {
+  monoArbitrary,
+  monoEquivalence,
+} from '../laws/typeclass/monomorphic/helpers.js'
+import {testLawSets} from './testLaws.js'
 
 /**
  * Test typeclass laws for the given instances of some datatype.
- * This is just like {@link testTypeclassLawsFor}, but with all
- * functions monomorphic on an underlying type of `readonly number[]`.
- * At the `contravariant` key of this function, you will find the
+ * All functions monomorphic on an underlying type of `readonly number[]`.
+ * At_the `contravariant` key of this function, you will find the
  * version of this function for contravariant datatypes.
- * @example
- * ```ts
- * // Test “Traversable” typeclass laws on “Identity” datatype.
- * import {
- *   IdentityTypeLambda,
- *   Traversable
- * } from '@effect/typeclass/data/Identity'
- * import {identity as id} from 'effect'
- * import {testTypeclassLaws, predicate} from 'effect-ts-laws'
- * testTypeclassLaws<IdentityTypeLambda>({
- *   getEquivalence: identity,
- *   getArbitrary: identity,
- * })({ Traversable })
- * ```
  * @param given - Test options for the datatype under test.
  * @category vitest
  */
 export const testTypeclassLaws =
-  <F extends TypeLambda>(given: MonomorphicGiven<F>) =>
-  <Ins extends TypeclassInstances<F, Mono, never, unknown, string>>(
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    given: MonomorphicGiven<F, R, O, E>,
+  ) =>
+  <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
     /**
      * Instances to test. Key is typeclass name and value is the
      * instance under test. For example, `{ Monad: Option.Monad }` will run
      * the monad typeclass laws on `Option`.
      */
     instances: Ins,
-    /**
-     * Optional runtime `fast-check` parameters.
-     */
+    /** Optional runtime `fast-check` parameters. */
     parameters?: ParameterOverrides,
   ) => {
     testLawSets({verbose: true, ...parameters})(
-      ...buildTypeclassLaws(given)(instances),
+      ...buildTypeclassLaws<F, R, O, E>({
+        a: monoArbitrary,
+        equalsA: monoEquivalence,
+        Monoid: getMonoid<number>(),
+        ...given,
+      })(instances),
     )
   }
 
@@ -65,17 +62,17 @@ export const testTypeclassLaws =
  * @category vitest
  */
 export const testContravariantLaws =
-  <F extends TypeLambda>(given: ContravariantGiven<F>) =>
-  <Ins extends TypeclassInstances<F, Mono, never, unknown, string>>(
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    given: ContravariantGiven<F, R, O, E>,
+  ) =>
+  <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
     /**
      * Instances to test. Key is typeclass name and value is the
      * instance under test. For example, `{ Invariant: Predicate.Invariant }`
      * will run the Invariant typeclass laws on the datatype `Predicate`.
      */
     instances: Ins,
-    /**
-     * Optional runtime `fast-check` parameters.
-     */
+    /** Optional runtime `fast-check` parameters. */
     parameters?: ParameterOverrides,
   ) => {
     testLawSets(parameters)(...pipe(instances, buildContravariantLaws(given)))
