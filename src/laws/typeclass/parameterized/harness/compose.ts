@@ -5,7 +5,7 @@ import fc from 'fast-check'
 import {LiftArbitrary, option} from '../../../../arbitrary.js'
 import {ComposeKey, composeMap, ComposeTypeLambda} from '../../../../compose.js'
 import {LiftEquivalence} from '../../../../law.js'
-import {ParameterizedGiven} from './given.js'
+import {ParameterizedGiven} from '../given.js'
 
 /**
  * Convert the `LawSet` options of a typeclass test into the options

@@ -15,7 +15,7 @@ import {
   GivenConcerns,
   ParameterizedGiven,
   ParameterizedLambdas,
-} from './given.js'
+} from '../given.js'
 
 /**
  * Map of typeclass name to their laws, for typeclasses of parameterized

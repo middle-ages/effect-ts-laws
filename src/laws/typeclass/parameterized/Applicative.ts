@@ -11,8 +11,8 @@ import {Kind, TypeLambda} from 'effect/HKT'
 import {addLawSet, Law, lawTests} from '../../../law.js'
 import {monoidLaws} from '../concrete/Monoid.js'
 import {covariantLaws} from './Covariant.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 import {withOuterOption} from './harness/compose.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Applicative`.
@@ -179,7 +179,7 @@ export interface ApplicativeTypeLambda extends TypeLambda {
   readonly type: AP.Applicative<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     Applicative: ApplicativeTypeLambda
   }

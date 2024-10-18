@@ -1,7 +1,7 @@
 import {Monoid as MO} from '@effect/typeclass'
 import {TypeLambda} from 'effect/HKT'
 import {Law} from '../../../law.js'
-import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
+import {ConcreteGiven, defineConcreteLaws} from './given.js'
 import {semigroupLaws} from './Semigroup.js'
 
 /**
@@ -35,7 +35,7 @@ export interface MonoidTypeLambda extends TypeLambda {
   readonly type: MO.Monoid<this['Target']>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ConcreteLambdas {
     Monoid: MonoidTypeLambda
   }

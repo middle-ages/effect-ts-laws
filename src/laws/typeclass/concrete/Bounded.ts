@@ -1,7 +1,7 @@
 import {BoundedTypeLambda} from '@effect/typeclass/Bounded'
 import {Order as OD} from 'effect'
 import {Law} from '../../../law.js'
-import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
+import {ConcreteGiven, defineConcreteLaws} from './given.js'
 
 /**
  * Test typeclass laws for `Bounded`.
@@ -22,7 +22,7 @@ export const boundedLaws = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {
   )(suffix)
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ConcreteLambdas {
     Bounded: BoundedTypeLambda
   }

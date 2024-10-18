@@ -7,8 +7,8 @@ import {
   LiftArbitrary,
   unary,
   unaryToKind,
-} from '../../../../arbitrary.js'
-import {LiftEquivalence, liftEquivalences} from '../../../../law.js'
+} from '../../../arbitrary.js'
+import {LiftEquivalence, liftEquivalences} from '../../../law.js'
 
 /**
  * Options for testing

@@ -2,7 +2,7 @@ import {Bounded as BU} from '@effect/typeclass'
 import {DateTime as DT, Duration as DU, pipe} from 'effect'
 import fc from 'fast-check'
 import {tinyInteger} from './data.js'
-import {Monad as arbitraryMonad} from './monad.js'
+import {Monad as arbitraryMonad} from './instances.js'
 
 const {flatMap, map} = arbitraryMonad
 
@@ -19,7 +19,6 @@ export const duration: fc.Arbitrary<DU.Duration> = pipe(
  * Arbitrary for a duration and its bounds.
  * @category arbitraries
  */
-
 export const boundedDuration: fc.Arbitrary<
   [fc.Arbitrary<DU.Duration>, BU.Bounded<DU.Duration>]
 > = pipe(

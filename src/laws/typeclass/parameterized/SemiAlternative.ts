@@ -3,7 +3,7 @@ import {pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {Law, addLawSet, lawTests} from '../../../law.js'
 import {covariantLaws} from './Covariant.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 
 /**
  * Test typeclass laws for `SemiAlternative`.
@@ -79,7 +79,7 @@ export interface SemiAlternativeTypeLambda extends TypeLambda {
   readonly type: SA.SemiAlternative<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     SemiAlternative: SemiAlternativeTypeLambda
   }

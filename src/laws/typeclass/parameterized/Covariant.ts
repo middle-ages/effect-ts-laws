@@ -4,8 +4,8 @@ import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {addLawSet, Law, lawTests} from '../../../law.js'
 import {invariantLaws} from './Invariant.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 import {withOuterOption} from './harness/compose.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Covariant`.
@@ -74,7 +74,7 @@ export interface CovariantTypeLambda extends TypeLambda {
   readonly type: CO.Covariant<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     Covariant: CovariantTypeLambda
   }

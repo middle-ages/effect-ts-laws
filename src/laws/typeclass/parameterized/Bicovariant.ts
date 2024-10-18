@@ -4,7 +4,7 @@ import {dual} from 'effect/Function'
 import {Kind, TypeLambda} from 'effect/HKT'
 import {LawSet} from '../../../law.js'
 import {covariantLaws} from './Covariant.js'
-import {ParameterizedGiven as Given} from './harness/given.js'
+import {ParameterizedGiven as Given} from './given.js'
 
 /**
  * Test typeclass laws for `Bicovariant`.
@@ -53,7 +53,7 @@ export interface BicovariantTypeLambda extends TypeLambda {
   readonly type: BI.Bicovariant<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     Bicovariant: BicovariantTypeLambda
   }

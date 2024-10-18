@@ -6,7 +6,7 @@ import {
 import {pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {addLawSet, Law, lawTests} from '../../../law.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 import {semiAlternativeLaws} from './SemiAlternative.js'
 
 /**
@@ -135,7 +135,7 @@ export interface AlternativeTypeLambda extends TypeLambda {
   readonly type: AL.Alternative<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     Alternative: AlternativeTypeLambda
   }

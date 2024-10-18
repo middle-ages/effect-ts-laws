@@ -1,11 +1,11 @@
 import {pipe} from 'effect'
 import {Kind, TypeLambda} from 'effect/HKT'
-import {LawSet} from '../../../../law.js'
-import {boundedLaws} from '../Bounded.js'
-import {equivalenceLaws} from '../Equivalence.js'
-import {monoidLaws} from '../Monoid.js'
-import {orderLaws} from '../Order.js'
-import {semigroupLaws} from '../Semigroup.js'
+import {LawSet} from '../../../law.js'
+import {boundedLaws} from './Bounded.js'
+import {equivalenceLaws} from './Equivalence.js'
+import {monoidLaws} from './Monoid.js'
+import {orderLaws} from './Order.js'
+import {semigroupLaws} from './Semigroup.js'
 import {ConcreteGiven, ConcreteLambdas} from './given.js'
 
 /**

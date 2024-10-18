@@ -1,7 +1,7 @@
 import {Boolean as BO} from 'effect'
 import {EquivalenceTypeLambda} from 'effect/Equivalence'
 import {Law, LawSet, lawTests} from '../../../law.js'
-import {ConcreteGiven} from './harness/given.js'
+import {ConcreteGiven} from './given.js'
 
 /**
  * Test typeclass laws for `Equivalence`.
@@ -26,7 +26,7 @@ export const equivalenceLaws = <A>({
     Law('reflexivity', 'a=a', a)((a: A) => F(a, a)),
   )
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ConcreteLambdas {
     Equivalence: EquivalenceTypeLambda
   }

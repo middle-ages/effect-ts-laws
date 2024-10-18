@@ -18,10 +18,11 @@ and the laws are
    2. [Overview](#overview)
 2. [Usage](#usage)
 3. [Project](#project)
-   1. [Status](#status)
-   2. [More Information](#more-information)
-   3. [Open Questions](#open-questions)
-   4. [Roadmap](#roadmap)
+   1. [Play](#play)
+   2. [Status](#status)
+   3. [More Information](#more-information)
+   4. [Open Questions](#open-questions)
+   5. [Roadmap](#roadmap)
 4. [See Also](#see-also)
    1. [Based On](#based-on)
 
@@ -120,6 +121,9 @@ The implementation features:
   * Serves as an excellent _self-test_ suite and as an example for testing your
     own instances.
   * See [status](https://docs.google.com/spreadsheets/d/171O4wzY4TrdRvecFdv83echR7PSal0gejmEqLZWUB6w/edit?usp=sharing) for details on what is ready.
+* [Typeclass instances](./src/arbitrary/instances.ts) and
+  [typeclass law tests](./tests/fast-check.spec.ts) for the `fast-check`
+  _Arbitrary_ type.
 * _Randomness_. Uses `fast-check` property testing. For
   _parameterized type_ typeclass laws, all functions are randomly generated as
   well.
@@ -145,6 +149,18 @@ pnpm i -D effect-ts-laws
 API is [documented here](https://middle-ages.github.io/effect-ts-laws-docs/).
 
 ## Project
+
+### Play
+
+You can run the project tests online at any of these online sandboxes by opening
+a terminal and calling `pnpm install && pnpm test-run`. `pnpm coverage` will give
+you the always 100% coverage report.
+
+1. [StackBlitz](https://stackblitz.com/~/github.com/middle-ages/effect-ts-laws).
+   Note _coverage_ does not work on StackBlitz.
+2. [replit](https://replit.com/@middle-ages/effect-ts-laws) requires you fork
+   the repository first by clicking the green `Fork` button.
+3. [CodeSandbox](https://codesandbox.io/p/github/middle-ages/effect-ts-laws/main?import=true).
 
 ### Status
 

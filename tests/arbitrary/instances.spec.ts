@@ -1,9 +1,9 @@
-import {Effect as EF, flow, pipe} from 'effect'
-import {Monad} from 'effect-ts-laws/arbitrary'
+import {Effect as EF, flow, Number as NU, pipe} from 'effect'
+import {getEquivalence, Monad, tinyInteger} from 'effect-ts-laws/arbitrary'
 import fc from 'fast-check'
 
-describe('arbitrary Monad instance', () => {
-  test('flatMap', () => {
+describe('arbitrary instances', () => {
+  test('Monad.flatMap', () => {
     const greaterThanOne = (i: number): EF.Effect<string, Error> =>
       i > 1 ? EF.succeed('OK') : EF.fail(new Error('KO'))
 
@@ -24,5 +24,19 @@ describe('arbitrary Monad instance', () => {
         ),
       ),
     )
+  })
+
+  describe('getEquivalence', () => {
+    const equals = getEquivalence(NU.Equivalence)
+
+    test('≠', () => {
+      expect(
+        equals(tinyInteger, Monad.map(tinyInteger, NU.multiply(2))),
+      ).toBeFalsy()
+    })
+
+    test('=', () => {
+      expect(equals(tinyInteger, tinyInteger)).toBeTruthy()
+    })
   })
 })

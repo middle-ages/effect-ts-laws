@@ -8,7 +8,7 @@ import {
 } from 'effect/Order'
 import fc from 'fast-check'
 import {Law} from '../../../law.js'
-import {ConcreteGiven, defineConcreteLaws} from './harness/given.js'
+import {ConcreteGiven, defineConcreteLaws} from './given.js'
 
 /**
  * Test typeclass laws for `Order`.
@@ -83,7 +83,7 @@ const buildLaws =
       )((a, b) => BO.implies(op(a, b), !complement(a, b))),
     )(sym)
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ConcreteLambdas {
     Order: OrderTypeLambda
   }

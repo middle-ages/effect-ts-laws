@@ -21,8 +21,8 @@ import fc from 'fast-check'
 import {option, unary, unaryToKind} from '../../../arbitrary.js'
 import {composeApplicative} from '../../../compose.js'
 import {addLawSet, Law, lawTests} from '../../../law.js'
+import {ParameterizedGiven as Given} from './given.js'
 import {withOuterOption} from './harness/compose.js'
-import {ParameterizedGiven as Given} from './harness/given.js'
 
 /**
  * Test typeclass laws for `Traversable`.
@@ -156,7 +156,7 @@ export interface TraversableTypeLambda extends TypeLambda {
   readonly type: TA.Traversable<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     Traversable: TraversableTypeLambda
   }

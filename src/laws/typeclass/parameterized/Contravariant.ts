@@ -3,7 +3,7 @@ import {flow, identity, pipe} from 'effect'
 import {TypeLambda} from 'effect/HKT'
 import {addLawSet, Law, lawTests} from '../../../law.js'
 import {invariantLaws} from './Invariant.js'
-import {ParameterizedGiven as Given, unfoldGiven} from './harness/given.js'
+import {ParameterizedGiven as Given, unfoldGiven} from './given.js'
 
 /**
  * Test typeclass laws for `Contravariant` and its requirement: `Invariant`.
@@ -67,7 +67,7 @@ export interface ContravariantTypeLambda extends TypeLambda {
   readonly type: CN.Contravariant<this['Target'] & TypeLambda>
 }
 
-declare module './harness/given.js' {
+declare module './given.js' {
   interface ParameterizedLambdas {
     Contravariant: ContravariantTypeLambda
   }

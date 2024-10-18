@@ -5,14 +5,14 @@ import {
   buildConcreteTypeclassLaws,
   Concrete,
   ConcreteClass,
-} from './concrete/harness/catalog.js'
+} from './concrete/catalog.js'
+import {GivenConcerns} from './parameterized/given.js'
 import {
   buildParameterizedTypeclassLaws,
   isParameterizedTypeclassName,
   Parameterized,
   ParameterizedClass,
 } from './parameterized/harness/catalog.js'
-import {GivenConcerns} from './parameterized/harness/given.js'
 
 /**
  * Union of all typeclass names.
