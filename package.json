@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "effect-ts law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -59,7 +59,6 @@
     "eslint-plugin-prettier": "^5.2.3",
     "fast-check": "^3.23.2",
     "prettier": "^3.4.2",
-    "tsx": "^4.19.2",
     "typedoc": "^0.27.6",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0",
