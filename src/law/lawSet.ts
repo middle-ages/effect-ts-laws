@@ -2,8 +2,8 @@
  * @module lawSet The LawSet type and functions for working with_sets_ of laws.
  */
 import {Array as AR, Option as OP, pipe, Tuple as TU} from 'effect'
-import type {ParameterOverrides} from './law.js'
-import {checkLaw, Law} from './law.js'
+import type {ParameterOverrides, UnknownLaw} from './law.js'
+import {checkLaw} from './law.js'
 
 /**
  * A `LawSet` is a recursive data structure with an array of {@link Law}s
@@ -54,7 +54,7 @@ export interface LawSet {
   /**
    * Possibly empty list laws that must pass for the law set to pass.
    */
-  laws: Law<any>[]
+  laws: UnknownLaw[]
 }
 
 /**
@@ -96,14 +96,14 @@ export const LawSet =
     /**
      * List of {@link Law}s that must pass for this `LawSet` to pass.
      */
-    ...laws: Law<any>[]
+    ...laws: UnknownLaw[]
   ): LawSet => ({name, laws, sets})
 
 /**
  * Just like {@link LawSet}, but with an empty list of `LawSet`s.
  * @category constructors
  */
-export const lawTests = (name = '', ...laws: Law<any>[]): LawSet => ({
+export const lawTests = (name = '', ...laws: UnknownLaw[]): LawSet => ({
   name,
   laws: laws,
   sets: [],
@@ -117,7 +117,7 @@ export const lawTests = (name = '', ...laws: Law<any>[]): LawSet => ({
  * @param laws - Laws under test.
  * @category constructors
  */
-export const anonymousLawTests = (...laws: Law<any>[]): LawSet =>
+export const anonymousLawTests = (...laws: UnknownLaw[]): LawSet =>
   lawTests('', ...laws)
 
 /**
@@ -134,7 +134,7 @@ export const lawSetTests = (...sets: LawSet[]): LawSet =>
  * @category combinators
  */
 export const addLaws =
-  (...add: Law<any>[]) =>
+  (...add: UnknownLaw[]) =>
   ({laws, ...rest}: LawSet): LawSet => ({
     ...rest,
     laws: [...laws, ...add],

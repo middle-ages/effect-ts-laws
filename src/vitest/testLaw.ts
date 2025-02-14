@@ -1,7 +1,7 @@
-import {test} from 'vitest'
-import {asAssert} from '../law.js'
-import type {Law, UnknownArgs} from '../law.js'
 import type {TestAPI} from 'vitest'
+import {test} from 'vitest'
+import type {Law, UnknownArgs} from '../law.js'
+import {asAssert} from '../law.js'
 
 /**
  * @internal
@@ -49,8 +49,8 @@ export const testLaw = (() => {
       skip: testLawWith(test.skip),
       only: testLawWith(test.only),
 
-      skipIf: (condition: any) => testLawWith(test.skipIf(condition)),
-      runIf: (condition: any) => testLawWith(test.runIf(condition)),
+      skipIf: (condition: unknown) => testLawWith(test.skipIf(condition)),
+      runIf: (condition: unknown) => testLawWith(test.runIf(condition)),
     },
   )
 })()

@@ -74,9 +74,9 @@ export const testLaws = (() => {
       skip: testLawsWith(describe.skip, test.skip),
       only: testLawsWith(describe.only, test.only),
 
-      skipIf: (condition: any) =>
+      skipIf: (condition: unknown) =>
         testLawsWith(describe.skipIf(condition), test.skipIf(condition)),
-      runIf: (condition: any) =>
+      runIf: (condition: unknown) =>
         testLawsWith(describe.runIf(condition), test.runIf(condition)),
     },
   )

@@ -177,6 +177,15 @@ export const asAssert = <Ts extends UnknownArgs>(
 export type UnknownArgs = [unknown, ...unknown[]]
 
 /**
+ * When you need to work with laws but do not need to preserve the predicate
+ * argument types.
+ * @category model
+ * @internal
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type UnknownLaw = Law<any>
+
+/**
  * `fast-check` runtime
  * [parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
  * Fields with a type that depends on the property argument list

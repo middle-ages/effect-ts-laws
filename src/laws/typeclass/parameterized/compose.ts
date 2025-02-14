@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Equivalence as EQ, Option as OP, pipe} from 'effect'
 import type {Kind, TypeLambda} from 'effect/HKT'
 import type {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
 import type {LiftArbitrary} from '../../../arbitrary.js'
 import {option} from '../../../arbitrary.js'
+import type {ComposeKey, ComposeTypeLambda} from '../../../compose.js'
 import {composeMap} from '../../../compose.js'
-import type {ComposeKey} from '../../../compose.js'
-import type {ComposeTypeLambda} from '../../../compose.js'
 import type {LiftEquivalence} from '../../../law.js'
 import type {ParameterizedGiven} from './given.js'
 
@@ -36,10 +36,13 @@ export const liftGiven =
     A,
     B = A,
     C = A,
+    R = never,
+    O = unknown,
+    E = unknown,
   >() =>
   <
     K extends ComposeKey,
-    Os extends ParameterizedGiven<Class, F, A, B, C, any, any, any>,
+    Os extends ParameterizedGiven<Class, F, A, B, C, R, O, E>,
   >(
     /**
      * Type of composition requested: `Of`, `Invariant`, `Covariant`,
@@ -86,6 +89,8 @@ export const withOuterOption = <
   A,
   B = A,
   C = A,
+  R = never,
+  O = unknown,
   E = unknown,
 >(
   /**
@@ -99,11 +104,11 @@ export const withOuterOption = <
    * it is _before_ composition.
    *
    */
-  given: ParameterizedGiven<Class, F, A, B, C, any, any, E>,
+  given: ParameterizedGiven<Class, F, A, B, C, R, O, E>,
   /**
    * The instance of `Option` for the typeclass under test.
    */
-  optionInstance: Kind<Class, unknown, never, E, OptionTypeLambda>,
+  optionInstance: Kind<Class, R, O, E, OptionTypeLambda>,
 ) =>
   pipe(
     {
@@ -111,14 +116,14 @@ export const withOuterOption = <
       getEquivalenceG: OP.getEquivalence,
       getArbitraryG: option,
     },
-    liftGiven<Class, F, OptionTypeLambda, A, B, C>()(key, 'Option<F>', given),
+    liftGiven<Class, F, OptionTypeLambda, A, B, C, R, O, E>()(
+      key,
+      'Option<F>',
+      given,
+    ),
   )
 
-/**
- * @internal
- * @category composition
- */
-export type ComposeGiven<
+type ComposeGiven<
   Class extends TypeLambda,
   F extends TypeLambda,
   G extends TypeLambda,
@@ -149,11 +154,7 @@ export type ComposeGiven<
       }
     : never
 
-/**
- * @internal
- * @category composition
- */
-export type FromGiven<
+type FromGiven<
   Class extends TypeLambda,
   F extends TypeLambda,
   G extends TypeLambda,
