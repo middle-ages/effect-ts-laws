@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "effect-ts law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -34,7 +34,6 @@
     "build:tests": "tsc --project tests/tsconfig.json",
     "build:all": "dev/rebuild",
     "build:latex": "dev/build-latex",
-    "docgen": "docgen",
     "run:examples": "dev/run-examples",
     "build:docs": "dev/build-docs",
     "ls:deps": "pnpm ls --prod",
@@ -43,7 +42,6 @@
     "npm": "dev/publish"
   },
   "devDependencies": {
-    "@effect/docgen": "^0.5.2",
     "@eslint/js": "^9.21.0",
     "@fast-check/vitest": "0.1.5",
     "@tsconfig/node-lts": "^22.0.1",

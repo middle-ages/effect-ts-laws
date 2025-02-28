@@ -2,9 +2,10 @@
 
 set -Eeuo pipefail
 
-cp config/docgen.json .
+# until dogen stops using lodash
 
-pnpm docgen
+# cp config/docgen.json .
+# pnpm docgen
 
-rm docgen.json docs/_config.yml docs/index.md docs/modules/index.md
+# rm docgen.json docs/_config.yml docs/index.md docs/modules/index.md
 
