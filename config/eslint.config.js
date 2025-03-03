@@ -10,6 +10,7 @@ export default tseslint.config(
       parserOptions: {
         projectService: true,
         ecmaVersion: 'latest',
+        warnOnUnsupportedTypeScriptVersion: false,
       },
     },
   },

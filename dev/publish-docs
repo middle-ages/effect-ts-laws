@@ -8,5 +8,3 @@ cd ../effect-ts-laws-docs
 git add .
 git commit -m publish
 git push
-cd ../effect-ts-laws
-
