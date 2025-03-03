@@ -1,5 +1,5 @@
 import {Effect as EF, flow, Number as NU, pipe} from 'effect'
-import {getEquivalence, Monad, tinyInteger} from 'effect-ts-laws'
+import {getEquivalence, Monad, tinyInteger} from '#effect-ts-laws'
 import fc from 'fast-check'
 
 describe('arbitrary instances', () => {

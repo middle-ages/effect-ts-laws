@@ -1,42 +1,40 @@
-import {Contravariant as CN} from '@effect/typeclass'
-import {Contravariant} from '@effect/typeclass/data/Predicate'
-import {Boolean as BO} from 'effect'
 import {
-  buildContravariantLaws,
-  checkLawSets,
-  getMonoUnaryEquivalence,
-  Mono,
-  predicate,
-} from 'effect-ts-laws'
-import {testLawSets} from 'effect-ts-laws/vitest'
-import {dual, flow, pipe, tupled} from 'effect/Function'
+  contravariantLaws,
+  ContravariantTypeLambda,
+  unfoldMonoGiven,
+} from '#laws'
+import {testLawSets} from '#test'
+import {Contravariant as lawful} from '@effect/typeclass/data/Predicate'
+import {Boolean as BO, Predicate as PR} from 'effect'
+import {dual, flow, pipe} from 'effect/Function'
 import {Kind} from 'effect/HKT'
-import {PredicateTypeLambda} from 'effect/Predicate'
+import {testFailure} from './helpers.js'
 
-const build = buildContravariantLaws<PredicateTypeLambda>({
-  Arbitrary: predicate<Mono>(),
-  Equivalence: getMonoUnaryEquivalence(BO.Equivalence),
-})
+const laws = flow(
+  unfoldMonoGiven.contravariant<
+    ContravariantTypeLambda,
+    PR.PredicateTypeLambda
+  >,
+  contravariantLaws,
+)
 
 const numRuns = 2
 
 describe('Contravariant laws self-test', () => {
-  pipe({Contravariant}, build, tupled(testLawSets({numRuns})))
+  pipe(lawful, laws, testLawSets({numRuns}))
 
-  test('unlawful', () => {
-    const unlawful: CN.Contravariant<PredicateTypeLambda> = {
-      ...Contravariant,
+  testFailure(
+    'unlawful',
+    laws({
+      ...lawful,
       contramap: dual(
         2,
         <R, O, E, A, B>(
-          self: Kind<PredicateTypeLambda, R, O, E, A>,
+          self: Kind<PR.PredicateTypeLambda, R, O, E, A>,
           f: (b: B) => A,
-        ): Kind<PredicateTypeLambda, R, O, E, B> =>
-          flow(Contravariant.contramap(self, f), BO.not),
+        ): Kind<PR.PredicateTypeLambda, R, O, E, B> =>
+          flow(lawful.contramap(self, f), BO.not),
       ),
-    }
-    const laws = build({Contravariant: unlawful})
-
-    expect(checkLawSets({numRuns})(...laws).length).toBeGreaterThan(0)
-  })
+    }),
+  )
 })

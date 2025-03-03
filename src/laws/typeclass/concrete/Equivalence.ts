@@ -1,17 +1,20 @@
+import {Law, lawTests} from '#law'
 import {Boolean as BO} from 'effect'
 import type {EquivalenceTypeLambda} from 'effect/Equivalence'
-import {Law, LawSet, lawTests} from '../../../law.js'
-import type {ConcreteGiven} from './given.js'
+import {UnderlyingArbitrary} from '../../../arbitrary.js'
+import type {BuildConcrete} from './given.js'
 
 /**
  * Build laws for `Equivalence`.
  * @category typeclass laws
  */
-export const equivalenceLaws = <A>({
+export const equivalenceLaws: BuildConcrete<EquivalenceTypeLambda> = ({
   F,
   a,
-}: ConcreteGiven<EquivalenceTypeLambda, A>): LawSet =>
-  lawTests(
+}) => {
+  type A = UnderlyingArbitrary<typeof a>
+
+  return lawTests(
     'Equivalence',
     Law(
       'transitivity',
@@ -25,6 +28,7 @@ export const equivalenceLaws = <A>({
 
     Law('reflexivity', 'a=a', a)((a: A) => F(a, a)),
   )
+}
 
 declare module './given.js' {
   interface ConcreteLambdas {

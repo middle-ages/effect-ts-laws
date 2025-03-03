@@ -1,3 +1,4 @@
+import {Law} from '#law'
 import {Boolean as BO, Equivalence as EQ} from 'effect'
 import type {OrderTypeLambda} from 'effect/Order'
 import {
@@ -7,20 +8,19 @@ import {
   lessThanOrEqualTo,
 } from 'effect/Order'
 import fc from 'fast-check'
-import {Law} from '../../../law.js'
-import type {ConcreteGiven} from './given.js'
+import type {BuildConcrete} from './given.js'
 import {defineConcreteLaws} from './given.js'
 
 /**
  * Build typeclass laws for `Order`.
  * @category typeclass laws
  */
-export const orderLaws = <A>({
+export const orderLaws: BuildConcrete<OrderTypeLambda> = ({
   F,
   a,
   equalsA,
   suffix,
-}: ConcreteGiven<OrderTypeLambda, A>) => {
+}) => {
   const build = buildLaws(a, equalsA),
     [lt, gt, lte, gte] = [
       lessThan(F),

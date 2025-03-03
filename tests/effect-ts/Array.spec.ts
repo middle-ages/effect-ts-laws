@@ -7,9 +7,9 @@ import {
   Traversable,
 } from '@effect/typeclass/data/Array'
 import {Array as AR} from 'effect'
-import {Mono, monoEquivalence, monoOrder, tinyArray} from 'effect-ts-laws'
-import {RightFoldable} from 'effect-ts-laws/typeclass/data/Array'
-import {testTypeclassLaws} from 'effect-ts-laws/vitest'
+import {Mono, monoEquivalence, monoOrder, tinyArray} from '#effect-ts-laws'
+import {RightFoldable} from '#typeclass/data/Array'
+import {testTypeclassLaws} from '#test'
 import {ReadonlyArrayTypeLambda} from 'effect/Array'
 
 describe('@effect/typeclass/data/Array', () => {

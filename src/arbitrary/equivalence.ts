@@ -2,7 +2,7 @@
  * Predicates for statistical testing of equality between functions.
  * @module
  */
-import {Equivalence as EQ, Option as OP, pipe} from 'effect'
+import {Boolean as BO, Equivalence as EQ, Option as OP, pipe} from 'effect'
 import {constFalse, constTrue} from 'effect/Function'
 import fc from 'fast-check'
 
@@ -102,3 +102,16 @@ export const testEndoEquivalence =
     that: typeof self,
   ): boolean =>
     testUnaryEquivalence(a, equalsA, parameters)(self, that)
+
+/**
+ * Same as `testUnaryEquivalence` but for functions of type `Predicate<A>`.
+ * @param a - An arbitrary for the function argument type `A`.
+ * @param equalsA - Equivalence for the type `A`.
+ * @param parameters - Optional [fast-check parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
+ * @returns True if no counterexample found, else false.
+ * @category equivalence
+ */
+export const testPredicateEquivalence = <A>(
+  a: fc.Arbitrary<A>,
+  parameters?: fc.Parameters<A>,
+) => testUnaryEquivalence(a, BO.Equivalence, parameters)

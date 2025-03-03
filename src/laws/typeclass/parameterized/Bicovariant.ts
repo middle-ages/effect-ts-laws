@@ -1,17 +1,17 @@
+import {LawSet} from '#law'
 import {Bicovariant as BI, Covariant as CO} from '@effect/typeclass'
 import {identity, pipe} from 'effect'
 import {dual} from 'effect/Function'
-import {LawSet} from '../../../law.js'
-import {covariantLaws} from './Covariant.js'
-import type {ParameterizedGiven as Given} from './given.js'
 import type {Kind, TypeLambda} from 'effect/HKT'
+import {covariantLaws} from './Covariant.js'
+import type {BuildParameterized, ParameterizedGiven as Given} from './given.js'
 
 /**
  * Typeclass laws for `Bicovariant`.
  * @category typeclass laws
  */
-export const bicovariantLaws = <
-  F extends TypeLambda,
+export const bicovariantLaws: BuildParameterized<BicovariantTypeLambda> = <
+  F1 extends TypeLambda,
   A,
   B = A,
   C = A,
@@ -19,25 +19,26 @@ export const bicovariantLaws = <
   O = unknown,
   E = unknown,
 >(
-  given: Given<BicovariantTypeLambda, F, A, B, C, R, O, E>,
+  given: Given<BicovariantTypeLambda, F1, A, B, C, R, O, E>,
+  suffix?: string,
 ) => {
   const {F} = given
-  const [mapFirst, mapSecond]: Pair<CO.Covariant<F>['map']> = [
-    dual(2, <A, B>(fa: Kind<F, R, O, E, A>, ab: (a: A) => B) =>
+  const [mapFirst, mapSecond]: Pair<CO.Covariant<F1>['map']> = [
+    dual(2, <A, B>(fa: Kind<F1, R, O, E, A>, ab: (a: A) => B) =>
       pipe(fa, F.bimap(identity, ab)),
     ),
-    dual(2, <D, E>(fa: Kind<F, R, O, D, A>, od: (a: D) => E) =>
+    dual(2, <D, E>(fa: Kind<F1, R, O, D, A>, od: (a: D) => E) =>
       pipe(fa, F.bimap(od, identity)),
     ),
   ]
 
-  const [first, second]: Pair<CO.Covariant<F>> = [
-    {map: mapFirst, imap: CO.imap<F>(mapFirst)},
-    {map: mapSecond, imap: CO.imap<F>(mapSecond)},
+  const [first, second]: Pair<CO.Covariant<F1>> = [
+    {map: mapFirst, imap: CO.imap<F1>(mapFirst)},
+    {map: mapSecond, imap: CO.imap<F1>(mapSecond)},
   ]
 
   return pipe(
-    'Bicovariant',
+    `Bicovariant${suffix ?? ''}`,
     LawSet(
       covariantLaws({...given, F: first}, '₁'),
       covariantLaws({...given, F: second}, '₂'),

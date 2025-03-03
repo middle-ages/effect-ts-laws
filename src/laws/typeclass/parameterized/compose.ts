@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type {LiftArbitrary} from '#arbitrary'
+import {option} from '#arbitrary'
+import type {LiftEquivalence} from '#law'
 import {Equivalence as EQ, Option as OP, pipe} from 'effect'
 import type {Kind, TypeLambda} from 'effect/HKT'
 import type {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
-import type {LiftArbitrary} from '../../../arbitrary.js'
-import {option} from '../../../arbitrary.js'
 import type {ComposeKey, ComposeTypeLambda} from '../../../compose.js'
 import {composeMap} from '../../../compose.js'
-import type {LiftEquivalence} from '../../../law.js'
 import type {ParameterizedGiven} from './given.js'
 
 /**
@@ -185,3 +185,10 @@ type FromGiven<
         getArbitraryG: LiftArbitrary<G, R, O, E>
       }
     : never
+
+/*
+export addOuterOptionLaws = <F extends TypeLambda, A, B, C, R, O, E>(
+  name: string,
+  given: Given<InvariantTypeLambda, F, A, B, C, R, O, E>,
+) => {
+*/

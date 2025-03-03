@@ -1,6 +1,8 @@
+import {tinyInteger} from '#arbitrary'
+import {equivalenceLaws} from '#laws'
+import {testLaws} from '#test'
 import {Equivalence as EQ, Number as NU, pipe} from 'effect'
-import {checkLaws, equivalenceLaws, tinyInteger} from 'effect-ts-laws'
-import {testLaws} from 'effect-ts-laws/vitest'
+import {testFailure} from './helpers.js'
 
 const instance = NU.Equivalence
 
@@ -11,14 +13,10 @@ describe('Equivalence laws self-test', () => {
   pipe(instance, laws, testLaws)
 
   describe('failure', () => {
-    test('“less than” is not symmetric', () => {
-      expect(pipe(NU.lessThan, laws, checkLaws)[0]).toMatch(/symmetry/)
-    })
-
-    test('“sum > 0” is not transitive', () => {
-      expect(
-        pipe((a: number, b: number) => a + b > 0, laws, checkLaws)[0],
-      ).toMatch(/transitivity/)
-    })
+    testFailure('“less than” is not symmetric', laws(NU.lessThan))
+    testFailure(
+      '“sum > 0” is not transitive',
+      laws((a, b) => a + b > 0),
+    )
   })
 })

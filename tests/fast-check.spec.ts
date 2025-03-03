@@ -4,8 +4,8 @@ import {
   getEquivalence,
   Monad,
   monoEquivalence,
-} from 'effect-ts-laws'
-import {testTypeclassLaws} from 'effect-ts-laws/vitest'
+} from '#effect-ts-laws'
+import {testTypeclassLaws} from '#test'
 import fc from 'fast-check'
 
 describe('fast-check Arbitrary datatype typeclass laws', () => {

@@ -1,7 +1,7 @@
+import type {LawSet} from '#law'
 import {Array as AR, pipe} from 'effect'
 import type {Kind, TypeLambda} from 'effect/HKT'
 import type {UnionToIntersection} from 'effect/Types'
-import type {LawSet} from '../../../law.js'
 import {alternativeLaws} from './Alternative.js'
 import {applicativeLaws} from './Applicative.js'
 import {bicovariantLaws} from './Bicovariant.js'
@@ -9,8 +9,7 @@ import {contravariantLaws} from './Contravariant.js'
 import {covariantLaws} from './Covariant.js'
 import {filterableLaws} from './Filterable.js'
 import {foldableLaws} from './Foldable.js'
-import type {GivenConcerns} from './given.js'
-import type {ParameterizedGiven, ParameterizedLambdas} from './given.js'
+import type {GivenConcerns, ParameterizedLambdas} from './given.js'
 import {invariantLaws} from './Invariant.js'
 import {monadLaws} from './Monad.js'
 import {rightFoldableLaws} from './RightFoldable.js'
@@ -47,14 +46,13 @@ export type ParameterizedClass = keyof typeof parameterizedLaws
  * Maps typeclass name to its instance type.
  * @category harness
  */
-export type Parameterized<F extends TypeLambda> = {
-  [Key in ParameterizedClass]: Kind<
-    ParameterizedLambdas[Key],
-    never,
-    unknown,
-    unknown,
-    F
-  >
+export type Parameterized<
+  F extends TypeLambda,
+  R = never,
+  O = unknown,
+  E = unknown,
+> = {
+  [Key in ParameterizedClass]: Kind<ParameterizedLambdas[Key], R, O, E, F>
 }
 
 /**
@@ -64,37 +62,6 @@ export type Parameterized<F extends TypeLambda> = {
 export const isParameterizedTypeclassName = (
   o: string,
 ): o is ParameterizedClass => o in parameterizedLaws
-
-/**
- * Get the typeclass laws for the given typeclass name. Returns a function that
- * when given the required options, will run the typeclass law tests.
- * @category harness
- */
-export const parameterizedLawsFor = <
-  const Typeclass extends ParameterizedClass,
->(
-  name: Typeclass,
-) =>
-  parameterizedLaws[name] as <
-    F extends TypeLambda,
-    A,
-    B = A,
-    C = A,
-    R = never,
-    O = unknown,
-    E = unknown,
-  >(
-    given: ParameterizedGiven<
-      ParameterizedLambdas[Typeclass],
-      F,
-      A,
-      B,
-      C,
-      R,
-      O,
-      E
-    >,
-  ) => LawSet
 
 /**
  * Build [parameterized type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#parameterized-types)
@@ -126,7 +93,7 @@ export const buildParameterizedTypeclassLaws =
     return pipe(
       Object.keys(instances) as ParameterizedClass[],
       AR.map(<K extends ParameterizedClass>(key: K) =>
-        parameterizedLawsFor(key)(
+        parameterizedLaws[key](
           Object.assign({F: mergedInstances}, given) as never,
         ),
       ),

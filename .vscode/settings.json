@@ -27,6 +27,7 @@
     "endo",
     "𝑒𝑥𝑡𝑒𝑛𝑑𝑒𝑑",
     "𝑒𝑥𝑡𝑒𝑛𝑑𝑠",
+    "façade",
     "foldables",
     "footnotesize",
     "Giulio",
@@ -98,7 +99,7 @@
     "MD041": false
   },
   "eslint.options": {
-    "overrideConfigFile": "config/eslint.config.js"
+    "overrideConfigFile": "config/eslint.config.ts"
   },
   "eslint.workingDirectories": [
     {

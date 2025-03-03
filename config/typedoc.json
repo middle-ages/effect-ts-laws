@@ -14,7 +14,7 @@
   "searchInComments": true,
   "json": "../.dev/typedoc-index.json",
   "searchInDocuments": true,
-  "tsconfig": "./tsconfig.build.json",
+  "tsconfig": "./tsconfig.lib.json",
   "githubPages": true,
   "cleanOutputDir": false,
   "navigation": {

@@ -1,28 +1,56 @@
+import type {ParameterOverrides} from '#law'
+import type {
+  Mono,
+  MonomorphicGiven,
+  MonomorphicGivenOf,
+  TypeclassInstances,
+} from '#laws'
+import {buildMonomorphicLaws, monoArbitrary, monoEquivalence} from '#laws'
 import {getMonoid} from '@effect/typeclass/data/Array'
 import {pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
-import type {ParameterOverrides} from '../law.js'
-import type {
-  MonomorphicGiven,
-  TypeclassInstances,
-} from '../laws/typeclass/harness.js'
 import {
-  buildContravariantLaws,
-  buildTypeclassLaws,
-} from '../laws/typeclass/harness.js'
-import type {ContravariantGiven} from '../laws/typeclass/monomorphic/contravariant.js'
-import type {Mono} from '../laws/typeclass/monomorphic/helpers.js'
-import {
-  monoArbitrary,
-  monoEquivalence,
-} from '../laws/typeclass/monomorphic/helpers.js'
-import {testLawSets} from './testLaws.js'
+  MonoProps,
+  propsArbitrary,
+  propsEquivalence,
+  propsMonoid,
+} from '../laws/typeclass/monomorphic/props.js'
+import {verboseLawSets} from './testLaws.js'
 
 /**
- * Test typeclass laws for the given instances of some datatype.
- * All functions monomorphic on an underlying type of `readonly number[]`.
- * At_the `contravariant` key of this function, you will find the
- * version of this function for contravariant datatypes.
+ * Test typeclass laws on the given instances of some datatype `F`.  All laws are
+ * monomorphic on an underlying type `A`.
+ * @param given - Test options for the datatype under test.
+ * @category vitest
+ */
+export const testTypeclassLawsFor =
+  <F extends TypeLambda, A, R = never, O = unknown, E = unknown>(
+    given: MonomorphicGivenOf<F, A, R, O, E>,
+  ) =>
+  <Ins extends TypeclassInstances<F, A, R, O, E>>(
+    /**
+     * Instances to test. Key is typeclass name and value is the instance under
+     * test. For example, `{ Monad: Option.Monad }` will run the monad typeclass
+     * laws on `Option`.
+     */
+    instances: Ins,
+    /** Optional runtime `fast-check` parameters. */
+    parameters?: ParameterOverrides,
+  ): void => {
+    pipe(
+      instances,
+      buildMonomorphicLaws(given),
+      verboseLawSets.withParameters(parameters),
+    )
+  }
+
+/**
+ * Test typeclass laws on the given instances of some datatype `F`. All laws are
+ * monomorphic on an underlying type of `readonly number[]`.
+ * At the property `testTypeclassLaws.underlyingProps` you will find the same
+ * function, except it uses the underlying type `{x: number; y: string}, useful
+ * when testing laws on React components, as they can only accept a single
+ * object argument.
  * @param given - Test options for the datatype under test.
  * @category vitest
  */
@@ -32,50 +60,46 @@ export const testTypeclassLaws =
   ) =>
   <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
     /**
-     * Instances to test. Key is typeclass name and value is the
-     * instance under test. For example, `{ Monad: Option.Monad }` will run
-     * the monad typeclass laws on `Option`.
+     * Instances to test. Key is typeclass name and value is the instance under
+     * test. For example, `{ Monad: Option.Monad }` will run the monad typeclass
+     * laws on `Option`.
      */
     instances: Ins,
     /** Optional runtime `fast-check` parameters. */
     parameters?: ParameterOverrides,
   ) => {
-    testLawSets({verbose: true, ...parameters})(
-      ...buildTypeclassLaws<F, R, O, E>({
-        a: monoArbitrary,
-        equalsA: monoEquivalence,
-        Monoid: getMonoid<number>(),
-        ...given,
-      })(instances),
-    )
+    testTypeclassLawsFor({
+      ...given,
+      a: monoArbitrary,
+      equalsA: monoEquivalence,
+      Monoid: getMonoid<number>(),
+    })(instances, parameters)
+  }
+
+const underlyingProps =
+  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
+    given: MonomorphicGiven<F, R, O, E>,
+  ) =>
+  <Ins extends TypeclassInstances<F, MonoProps, R, O, E>>(
+    instances: Ins,
+    /** Optional runtime `fast-check` parameters. */
+    parameters?: ParameterOverrides,
+  ) => {
+    testTypeclassLawsFor({
+      ...given,
+      a: propsArbitrary,
+      equalsA: propsEquivalence,
+      Monoid: propsMonoid,
+    })(instances, parameters)
   }
 
 /**
- * Test typeclass laws for the given instances of some _contravariant_
- * datatype: a higher-kinded datatype where the constructor type
- * parameter appears in the contravariant position, for example
- * `Predicate`. The underlying types used will all be
- * `readonly number[]`. This is a version of {@link testTypeclassLaws}
- * for contravariant datatypes.
- * @param given - Contravariant test options for the datatype under
- * test.
+ * Test typeclass laws on the given instances of some datatype `F`. All laws are
+ * monomorphic on an underlying type of `{x: number; y: string}`.
+ * @param given - Test options for the datatype under test.
+ * @param instances - Instances to test. Key is typeclass name and value is the
+ * instance under test. For example, `{ Monad: Option.Monad }` will run the
+ * monad typeclass laws on `Option`.
  * @category vitest
  */
-export const testContravariantLaws =
-  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
-    given: ContravariantGiven<F, R, O, E>,
-  ) =>
-  <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
-    /**
-     * Instances to test. Key is typeclass name and value is the
-     * instance under test. For example, `{ Invariant: Predicate.Invariant }`
-     * will run the Invariant typeclass laws on the datatype `Predicate`.
-     */
-    instances: Ins,
-    /** Optional runtime `fast-check` parameters. */
-    parameters?: ParameterOverrides,
-  ) => {
-    testLawSets(parameters)(...pipe(instances, buildContravariantLaws(given)))
-  }
-
-testTypeclassLaws.contravariant = testContravariantLaws
+testTypeclassLaws.underlyingProps = underlyingProps

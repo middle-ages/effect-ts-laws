@@ -1,11 +1,7 @@
 /** Typeclass law tests for the `effect-ts` linked-list type. */
-import {list as getArbitrary, monoEquivalence} from 'effect-ts-laws'
-import {
-  ListTypeLambda,
-  Monad,
-  RightFoldable,
-} from 'effect-ts-laws/typeclass/data/List'
-import {testTypeclassLaws} from 'effect-ts-laws/vitest'
+import {list as getArbitrary, monoEquivalence} from '#effect-ts-laws'
+import {testTypeclassLaws} from '#test'
+import {ListTypeLambda, Monad, RightFoldable} from '#typeclass/data/List'
 import {getEquivalence} from 'effect/List'
 
 describe('effect/List', () => {

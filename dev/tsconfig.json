@@ -1,13 +1,8 @@
 {
-  "extends": ["../config/tsconfig.base.json"],
+  "extends": ["../config/tsconfig.dev.json"],
   "compilerOptions": {
-    "rootDir": "..",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "incremental": true,
-    "outDir": "../.dev/demo"
+    "outDir": "../.dev/demo",
+    "sourceMap": true
   },
-  "include": ["./demo.ts"],
-  "types": ["node"]
+  "include": ["./demo.ts"]
 }

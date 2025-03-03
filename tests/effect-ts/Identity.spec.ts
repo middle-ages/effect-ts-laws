@@ -9,8 +9,8 @@ import {
   Traversable,
 } from '@effect/typeclass/data/Identity'
 import {identity as id} from 'effect'
-import {monoSemigroup} from 'effect-ts-laws'
-import {testTypeclassLaws} from 'effect-ts-laws/vitest'
+import {monoSemigroup} from '#effect-ts-laws'
+import {testTypeclassLaws} from '#test'
 
 describe('@effect/typeclass/data/Identity', () => {
   testTypeclassLaws<IdentityTypeLambda>({getEquivalence: id, getArbitrary: id})(

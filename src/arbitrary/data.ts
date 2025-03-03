@@ -48,6 +48,15 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
 })
 
 /**
+ * A arbitrary for a tiny, possibly empty, string.
+ * @category arbitraries
+ */
+export const tinyString: fc.Arbitrary<string> = fc.string({
+  minLength: 0,
+  maxLength: 3,
+})
+
+/**
  * An integer in the range 1…100.
  * @category arbitraries
  */

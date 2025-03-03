@@ -1,6 +1,8 @@
+import {tinyInteger} from '#arbitrary'
+import {orderLaws} from '#laws'
+import {testLaws} from '#test'
 import {Number as NU, Order as OD, pipe} from 'effect'
-import {checkLaws, orderLaws, tinyInteger} from 'effect-ts-laws'
-import {testLaws} from 'effect-ts-laws/vitest'
+import {testFailure} from './helpers.js'
 
 const instance = NU.Order,
   equalsA = NU.Equivalence,
@@ -10,11 +12,8 @@ const instance = NU.Order,
 describe('Order laws self-test', () => {
   pipe(instance, laws, testLaws)
 
-  describe('failure', () => {
-    test('“less than” is not symmetric', () => {
-      expect(
-        pipe((a: number, b: number) => (a < b ? -1 : 1), laws, checkLaws)[0],
-      ).toMatch(/reflexivity/)
-    })
-  })
+  testFailure(
+    '“less than” is not symmetric',
+    laws((a, b) => (a < b ? -1 : 1)),
+  )
 })

@@ -1,7 +1,7 @@
+import {Law, LawSet} from '#law'
 import {Arbitrary, Equivalence as EQ, Option as OP, pipe, Schema} from 'effect'
 import {constFalse, constTrue} from 'effect/Function'
 import fc from 'fast-check'
-import {Law, LawSet} from '../law.js'
 import {equivalenceLaws} from './typeclass/concrete/Equivalence.js'
 
 /**

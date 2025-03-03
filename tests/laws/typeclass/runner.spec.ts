@@ -1,13 +1,10 @@
+import {tinyInteger} from '#arbitrary'
+import {testConcreteTypeclassLaws, testParameterizedTypeclassLaws} from '#test'
 import {
   Covariant as identityCovariant,
   IdentityTypeLambda,
 } from '@effect/typeclass/data/Identity'
 import {identity, Number as NU} from 'effect'
-import {tinyInteger} from 'effect-ts-laws'
-import {
-  testConcreteTypeclassLaws,
-  testParameterizedTypeclassLaws,
-} from 'effect-ts-laws/vitest'
 import {numericGiven} from './helpers.js'
 
 describe('typeclass test runners', () => {

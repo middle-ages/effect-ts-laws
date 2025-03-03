@@ -1,7 +1,8 @@
+import {Law} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
 import type {TypeLambda} from 'effect/HKT'
-import {Law} from '../../../law.js'
-import type {ConcreteGiven} from './given.js'
+import {UnderlyingArbitrary} from '../../../arbitrary.js'
+import type {BuildConcrete} from './given.js'
 import {defineConcreteLaws} from './given.js'
 import {semigroupLaws} from './Semigroup.js'
 
@@ -9,8 +10,9 @@ import {semigroupLaws} from './Semigroup.js'
  * Build typeclass laws for `Monoid` and its requirement `Semigroup` laws.
  * @category typeclass laws
  */
-export const monoidLaws = <A>(given: ConcreteGiven<MonoidTypeLambda, A>) => {
+export const monoidLaws: BuildConcrete<MonoidTypeLambda> = given => {
   const {F, equalsA, a, suffix} = given
+  type A = UnderlyingArbitrary<typeof a>
 
   return defineConcreteLaws(
     'Monoid',

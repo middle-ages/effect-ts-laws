@@ -1,3 +1,11 @@
+import {tinyArray as getArbitrary, tinyInteger} from '#arbitrary'
+import {
+  foldableLaws,
+  monoArbitrary,
+  monoEquivalence,
+  unfoldMonomorphicGiven,
+} from '#laws'
+import {testLaws} from '#test'
 import {Foldable as FO, Monoid as MO} from '@effect/typeclass'
 import {
   Foldable as arrayFoldable,
@@ -5,15 +13,6 @@ import {
 } from '@effect/typeclass/data/Array'
 import {MonoidSum} from '@effect/typeclass/data/Number'
 import {Equivalence as EQ, Number as NU, pipe} from 'effect'
-import {
-  foldableLaws,
-  tinyArray as getArbitrary,
-  monoArbitrary,
-  monoEquivalence,
-  tinyInteger,
-  unfoldGivenConcerns,
-} from 'effect-ts-laws'
-import {testLaws} from 'effect-ts-laws/vitest'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
 import fc from 'fast-check'
 
@@ -25,11 +24,14 @@ const buildLaws =
   <A>(Monoid: MO.Monoid<A>, a: fc.Arbitrary<A>, equalsA: EQ.Equivalence<A>) =>
   (instance: Instance) =>
     foldableLaws({
+      ...unfoldMonomorphicGiven<ReadonlyArrayTypeLambda, A>({
+        a,
+        equalsA,
+        getArbitrary,
+        getEquivalence,
+        Monoid,
+      }),
       F: instance,
-      ...unfoldGivenConcerns(a, equalsA),
-      getEquivalence,
-      getArbitrary,
-      Monoid,
     })
 
 describe('Foldable laws self-test', () => {

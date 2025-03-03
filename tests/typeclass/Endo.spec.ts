@@ -1,7 +1,7 @@
+import {endo, testEndoEquivalence, tinyInteger} from '#effect-ts-laws'
+import {testMonoid} from '#test'
+import {getMonoid} from '#typeclass/data/Endo'
 import {Number as NU} from 'effect'
-import {endo, testEndoEquivalence, tinyInteger} from 'effect-ts-laws'
-import {getMonoid} from 'effect-ts-laws/typeclass/data/Endo'
-import {testMonoid} from 'effect-ts-laws/vitest'
 
 testMonoid(
   endo(tinyInteger),

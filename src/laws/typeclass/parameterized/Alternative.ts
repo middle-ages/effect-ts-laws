@@ -1,3 +1,4 @@
+import {addLawSets, Law, lawTests} from '#law'
 import {
   Alternative as AL,
   Applicative as AP,
@@ -5,47 +6,32 @@ import {
 } from '@effect/typeclass'
 import {pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
-import {addLawSets, Law, lawTests} from '../../../law.js'
-import type {ParameterizedGiven as Given} from './given.js'
+import {UnderlyingArbitrary} from '../../../arbitrary.js'
+import type {BuildParameterized, ParameterizedGiven as Given} from './given.js'
 import {unfoldGiven} from './given.js'
+import {BuildInternal} from './internal.js'
 import {semiAlternativeLaws} from './SemiAlternative.js'
 
 /**
  * Typeclass laws for `Alternative`.
  * @category typeclass laws
  */
-export const alternativeLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  given: Given<AlternativeTypeLambda, F, A, B, C, R, O, E>,
+export const alternativeLaws: BuildParameterized<AlternativeTypeLambda> = (
+  given,
+  suffix?,
 ) =>
   pipe(
-    buildLaws('Alternative', given),
+    buildLaws(`Alternative${suffix ?? ''}`, given),
     pipe(given, semiAlternativeLaws, addLawSets),
   )
 
-const buildLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  name: string,
-  given: Given<AlternativeTypeLambda, F, A, B, C, R, O, E>,
-) => {
-  const {F, equalsFa, fa} = unfoldGiven(given),
-    {coproduct, coproductAll} = F
+const buildLaws: BuildInternal<AlternativeTypeLambda> = (name, given) => {
+  const unfolded = unfoldGiven(given),
+    {F, equalsFa, fa} = unfolded,
+    {coproduct, coproductAll} = F,
+    isApplicative = 'productAll' in F && 'of' in F
 
-  const isApplicative = 'productAll' in F && 'of' in F
+  type A = UnderlyingArbitrary<(typeof unfolded)['a']>
 
   return lawTests(
     name,
@@ -72,6 +58,7 @@ const buildLaws = <
   )
 }
 
+// Extra laws for alternatives that have an applicative instance.
 const buildApplicativeLaws = <
   F extends TypeLambda,
   A,

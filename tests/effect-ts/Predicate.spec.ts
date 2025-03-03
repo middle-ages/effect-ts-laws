@@ -1,4 +1,12 @@
 /** Typeclass law tests for the `Predicate` datatype. */
+import {predicate} from '#arbitrary'
+import {
+  ContravariantTypeLambda,
+  getMonoUnaryEquivalence,
+  Mono,
+  unfoldMonoGiven,
+} from '#laws'
+import {testMonoids, testTypeclassLaws} from '#test'
 import {
   Contravariant,
   getMonoidEqv,
@@ -6,9 +14,7 @@ import {
   getMonoidSome,
   getMonoidXor,
 } from '@effect/typeclass/data/Predicate'
-import {Boolean as BO, pipe} from 'effect'
-import {getMonoUnaryEquivalence, Mono, predicate} from 'effect-ts-laws'
-import {testMonoids, testTypeclassLaws} from 'effect-ts-laws/vitest'
+import {Boolean as BO, pipe, Predicate as PR} from 'effect'
 import {PredicateTypeLambda} from 'effect/Predicate'
 
 const Arbitrary = predicate<Mono>()
@@ -17,10 +23,12 @@ const Equivalence = getMonoUnaryEquivalence(BO.Equivalence)
 const numRuns = 10
 
 describe('@effect/typeclass/data/Predicate', () => {
-  testTypeclassLaws.contravariant<PredicateTypeLambda>({
-    Arbitrary,
-    Equivalence,
-  })({Contravariant}, {numRuns})
+  const given = unfoldMonoGiven.contravariant<
+    ContravariantTypeLambda,
+    PR.PredicateTypeLambda
+  >(Contravariant)
+
+  testTypeclassLaws<PredicateTypeLambda>(given)({Contravariant}, {numRuns})
 
   describe('Semigroup/monoid', () => {
     pipe(

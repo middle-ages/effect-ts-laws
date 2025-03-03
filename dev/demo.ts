@@ -10,7 +10,7 @@ import {
 } from '@effect/typeclass/data/Array'
 import type {LawSet, Mono} from 'effect-ts-laws'
 import {
-  buildTypeclassLaws,
+  buildMonomorphicLaws,
   checkLawSets,
   monoEquivalence,
   monoOrder,
@@ -18,8 +18,6 @@ import {
   unfoldMonoGiven,
 } from 'effect-ts-laws'
 import {RightFoldable} from 'effect-ts-laws/typeclass/data/Array'
-//import {} from 'effect-ts-laws/typeclass'
-//import {} from 'effect-ts-laws/vitest'
 import type {ReadonlyArrayTypeLambda} from 'effect/Array'
 import {getEquivalence, getOrder, isNonEmptyArray} from 'effect/Array'
 
@@ -28,7 +26,7 @@ const given = unfoldMonoGiven<ReadonlyArrayTypeLambda>(
   tinyArray,
 )
 
-const laws: LawSet[] = buildTypeclassLaws(given)({
+const laws: LawSet[] = buildMonomorphicLaws(given)({
   Equivalence: getEquivalence(monoEquivalence),
   Order: getOrder(monoOrder),
   Monoid: getMonoid<Mono>(),

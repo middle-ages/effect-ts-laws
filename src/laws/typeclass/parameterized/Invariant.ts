@@ -1,38 +1,29 @@
+import {addLawSets, Law, lawTests} from '#law'
 import {Invariant as IN} from '@effect/typeclass'
 import {Covariant as optionInvariant} from '@effect/typeclass/data/Option'
 import {flow, identity, pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
-import {addLawSets, Law, lawTests} from '../../../law.js'
 import {withOuterOption} from './compose.js'
+import type {BuildParameterized} from './given.js'
 import {unfoldGiven} from './given.js'
-import type {ParameterizedGiven as Given} from './given.js'
+import {BuildInternal} from './internal.js'
 
 /**
  * Typeclass laws for `Invariant`.
  * @category typeclass laws
  */
-export const invariantLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  given: Given<InvariantTypeLambda, F, A, B, C, R, O, E>,
+export const invariantLaws: BuildParameterized<InvariantTypeLambda> = (
+  given,
+  suffix?,
 ) =>
   pipe(
-    buildLaws('Invariant', given),
+    buildLaws(`Invariant${suffix ?? ''}`, given),
     addLawSets(
       buildLaws(...withOuterOption('Invariant', given, optionInvariant)),
     ),
   )
 
-const buildLaws = <F extends TypeLambda, A, B, C, R, O, E>(
-  name: string,
-  given: Given<InvariantTypeLambda, F, A, B, C, R, O, E>,
-) => {
+const buildLaws: BuildInternal<InvariantTypeLambda> = (name, given) => {
   const {
     F: {imap},
     fa,

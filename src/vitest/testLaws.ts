@@ -91,9 +91,7 @@ export const testLaws = (() => {
 export const testLawSets =
   (parameters?: ParameterOverrides) =>
   (
-    /**
-     * The law sets to test.
-     */
+    /** The law sets to test. */
     ...sets: LawSet[]
   ): void => {
     testLaws(lawSetTests(...sets), parameters)
@@ -112,3 +110,25 @@ export const verboseLaws = (
 ): void => {
   testLaws(lawSet, {...parameters, verbose: true})
 }
+
+/**
+ * Just like {@link testLawSets} except the `fast-check` verbosity flag is
+ * turned on so that law _notes_ will be shown with test results.
+ * @param sets - Law sets under test.
+ * @param parameters - Optional runtime `fast-check` parameters.
+ * @category vitest
+ */
+export const verboseLawSets = (
+  sets: LawSet[],
+  parameters?: ParameterOverrides,
+): void => {
+  testLawSets({verbose: true, ...parameters})(...sets)
+}
+
+const withParameters =
+  (parameters?: ParameterOverrides) =>
+  (sets: LawSet[]): void => {
+    verboseLawSets(sets, parameters)
+  }
+
+verboseLawSets.withParameters = withParameters

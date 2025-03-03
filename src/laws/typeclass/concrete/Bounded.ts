@@ -1,19 +1,18 @@
+import {Law} from '#law'
 import type {BoundedTypeLambda} from '@effect/typeclass/Bounded'
 import {Order as OD} from 'effect'
-import {Law} from '../../../law.js'
+import type {BuildConcrete} from './given.js'
 import {defineConcreteLaws} from './given.js'
-import type {ConcreteGiven} from './given.js'
 
 /**
  * Build typeclass laws for `Bounded`.
  * @category typeclass laws
  */
-export const boundedLaws = <A>(given: ConcreteGiven<BoundedTypeLambda, A>) => {
+export const boundedLaws: BuildConcrete<BoundedTypeLambda> = given => {
   const {F, a, suffix} = given
-  const order: OD.Order<A> = F.compare
   const [lte, gte] = [
-    OD.greaterThanOrEqualTo(order),
-    OD.lessThanOrEqualTo(order),
+    OD.greaterThanOrEqualTo(F.compare),
+    OD.lessThanOrEqualTo(F.compare),
   ]
 
   return defineConcreteLaws(

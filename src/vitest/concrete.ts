@@ -3,8 +3,8 @@ import {Equivalence as EQ} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
 import type {ParameterOverrides} from '../law.js'
-import type {Concrete, ConcreteGiven} from '../laws/typeclass/harness.js'
-import {buildConcreteTypeclassLaws} from '../laws/typeclass/harness.js'
+import type {Concrete, ConcreteGiven} from '../laws.js'
+import {buildConcreteTypeclassLaws} from '../laws.js'
 import {testLawSets} from './testLaws.js'
 /**
  * Test [concrete type](https://github.com/Effect-TS/effect/blob/main/packages/typeclass/README.md#concrete-types)

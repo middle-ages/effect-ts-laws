@@ -23,6 +23,11 @@ export type Typeclass = ParameterizedClass | ConcreteClass
  * Some subset of all typeclass instances implemented for a single data
  * type. Can include both typeclasses for _parameterized_ and _concrete_
  * types.
+ *
+ * The keys in this object are the typeclass names, and the values are
+ * the instances under test, where each value is the instance of the
+ * typeclass for the corresponding key, and all are instances of their
+ * typeclasses for the single data type under test.
  * @category harness
  */
 export type TypeclassInstances<
@@ -35,6 +40,8 @@ export type TypeclassInstances<
 
 /**
  * Build typeclass laws for the given instances of some datatype.
+ * Any instances of typeclasses with laws can be tested, concrete or
+ * parameterized.
  * @category harness
  */
 export const buildTypeclassLawsFor = <
@@ -58,9 +65,7 @@ export const buildTypeclassLawsFor = <
 
   const [concrete, parameterized] = pipe(
     Object.entries(instances) as Entry[],
-    AR.partition(([typeclass]: Entry) =>
-      isParameterizedTypeclassName(typeclass),
-    ),
+    AR.partition(([typeclass]) => isParameterizedTypeclassName(typeclass)),
     TU.mapBoth({
       onFirst: entries =>
         Object.fromEntries(entries) as Partial<Concrete<ConcreteA>>,

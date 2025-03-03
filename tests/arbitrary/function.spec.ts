@@ -4,7 +4,7 @@ import {
   tinyInteger,
   unaryFromKind,
   unaryInKind,
-} from 'effect-ts-laws'
+} from '#effect-ts-laws'
 import {constFalse, constTrue} from 'effect/Function'
 import {isNumber} from 'effect/Number'
 import {OptionTypeLambda} from 'effect/Option'

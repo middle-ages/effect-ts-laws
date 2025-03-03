@@ -1,12 +1,11 @@
-import {pipe} from 'effect'
+import type {LawSet} from '#law'
 import type {Kind, TypeLambda} from 'effect/HKT'
-import type {LawSet} from '../../../law.js'
 import {boundedLaws} from './Bounded.js'
 import {equivalenceLaws} from './Equivalence.js'
 import {monoidLaws} from './Monoid.js'
 import {orderLaws} from './Order.js'
 import {semigroupLaws} from './Semigroup.js'
-import type {ConcreteGiven, ConcreteLambdas} from './given.js'
+import type {BuildConcrete, ConcreteGiven, ConcreteLambdas} from './given.js'
 
 /** Maps typeclass name to its laws, for typeclasses of concrete types. */
 export const concreteLaws = {
@@ -18,7 +17,7 @@ export const concreteLaws = {
 } as const
 
 /**
- * Union of all names of typeclasses for concrete types.
+ * Union of all typeclasses names for concrete types.
  * @category harness
  */
 export type ConcreteClass = keyof typeof concreteLaws
@@ -53,28 +52,16 @@ export const buildConcreteTypeclassLaws = <A>(
   const results: LawSet[] = []
   for (const key of Object.keys(instances)) {
     const typeclass = key as ConcreteClass
+    type Typeclass = ConcreteLambdas[typeof typeclass]
 
-    results.push(
-      pipe(
-        {...given, F: instances[typeclass]} as ConcreteGiven<
-          ConcreteLambdas[typeof typeclass],
-          A
-        >,
-        concreteLawsFor(typeclass),
-      ),
-    )
+    const laws = concreteLaws[typeclass] as BuildConcrete<Typeclass>
+    const args = {...given, F: instances[typeclass]} as ConcreteGiven<
+      Typeclass,
+      A
+    >
+
+    results.push(laws(args))
   }
 
   return results
 }
-
-/**
- * Get the typeclass laws for the given typeclass name.
- * @category harness
- */
-export const concreteLawsFor = <const Typeclass extends ConcreteClass>(
-  name: Typeclass,
-) =>
-  concreteLaws[name] as <A>(
-    options: ConcreteGiven<ConcreteLambdas[Typeclass], A>,
-  ) => LawSet

@@ -1,6 +1,6 @@
 {
   "name": "effect-ts-laws",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "effect-ts law testing using fast-check.",
   "type": "module",
   "author": "Ran Eilam <ran@haag59.com> (https://middle-ages.github.io/)",
@@ -19,19 +19,14 @@
   ],
   "scripts": {
     "clean": "dev/clean",
-    "lint": "eslint --config config/eslint.config.js src tests",
-    "lint:fix": "eslint --config config/eslint.config.js --fix src tests",
-    "typecheck:src": "tsc --project config/tsconfig.build.json",
-    "typecheck:tests": "tsc --project tests/tsconfig.json",
-    "typecheck": "pnpm typecheck:src && pnpm typecheck:tests",
+    "lint": "eslint --config config/eslint.config.ts src tests",
+    "lint:fix": "eslint --config config/eslint.config.ts --fix src tests",
+    "typecheck": "tsc -b",
     "test": "vitest -c config/vitest.config.ts --reporter=verbose",
     "coverage": "vitest -c config/vitest.config.ts run --reporter=verbose --coverage",
-    "circular": "depcruise src -c config/dependency-cruiser.cjs",
-    "graph:dependencies": "dev/graph-dependencies",
     "test:run": "vitest -c config/vitest.config.ts run",
-    "build": "tsc --project config/tsconfig.build.json",
-    "build:demo": "tsc --project dev/tsconfig.json",
-    "build:tests": "tsc --project tests/tsconfig.json",
+    "circular": "madge --circular .",
+    "build": "tsc --build",
     "build:all": "dev/rebuild",
     "build:latex": "dev/build-latex",
     "run:examples": "dev/run-examples",
@@ -42,28 +37,29 @@
     "npm": "dev/publish"
   },
   "devDependencies": {
-    "@eslint/js": "^9.21.0",
-    "@fast-check/vitest": "0.1.5",
+    "@eslint/js": "^9.22.0",
+    "@fast-check/vitest": "0.1.6",
     "@tsconfig/node-lts": "^22.0.1",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^22.13.8",
-    "@vitest/coverage-v8": "^3.0.7",
-    "@vitest/ui": "^3.0.7",
-    "dependency-cruiser": "^16.10.0",
-    "eslint": "^9.21.0",
-    "eslint-config-prettier": "^10.0.2",
+    "@types/node": "^22.13.10",
+    "@vitest/coverage-v8": "^3.0.8",
+    "@vitest/ui": "^3.0.8",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "fast-check": "^3.23.2",
+    "fast-check": "^4.0.0",
+    "jiti": "^2.4.2",
+    "madge": "^8.0.0",
     "prettier": "^3.5.3",
     "typedoc": "^0.27.9",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.25.0",
-    "vite": "^6.2.0",
-    "vitest": "^3.0.7"
+    "typescript-eslint": "^8.26.1",
+    "vite": "^6.2.1",
+    "vitest": "^3.0.8"
   },
   "dependencies": {
-    "@effect/typeclass": "^0.32.4",
-    "effect": "^3.13.4"
+    "@effect/typeclass": "^0.32.10",
+    "effect": "^3.13.10"
   },
   "peerDependencies": {
     "@effect/typeclass": "workspace:^",
@@ -91,7 +87,7 @@
     }
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "exports": {
     ".": {
@@ -117,6 +113,36 @@
         "types": "./src/vitest.d.ts",
         "import": "./src/vitest.js"
       }
+    }
+  },
+  "imports": {
+    "#effect-ts-laws": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "#test": {
+      "types": "./src/vitest.d.ts",
+      "import": "./src/vitest.js"
+    },
+    "#law": {
+      "types": "./src/law.d.ts",
+      "import": "./src/law.js"
+    },
+    "#laws": {
+      "types": "./src/laws.d.ts",
+      "import": "./src/laws.js"
+    },
+    "#util": {
+      "types": "./src/util.d.ts",
+      "import": "./src/util.js"
+    },
+    "#arbitrary": {
+      "types": "./src/arbitrary.d.ts",
+      "import": "./src/arbitrary.js"
+    },
+    "#typeclass/*": {
+      "types": "./src/typeclass/*.d.ts",
+      "import": "./src/typeclass/*.js"
     }
   }
 }

@@ -1,3 +1,5 @@
+import {option, unary, unaryToKind} from '#arbitrary'
+import {addLawSets, Law, lawTests} from '#law'
 import {Covariant as CO, Traversable as TA} from '@effect/typeclass'
 import {Applicative as arrayApplicative} from '@effect/typeclass/data/Array'
 import {Applicative as identityApplicative} from '@effect/typeclass/data/Identity'
@@ -15,39 +17,30 @@ import {
   pipe,
 } from 'effect'
 import type {ReadonlyArrayTypeLambda} from 'effect/Array'
+import type {Kind, TypeLambda} from 'effect/HKT'
 import type {OptionTypeLambda} from 'effect/Option'
 import fc from 'fast-check'
-import {option, unary, unaryToKind} from '../../../arbitrary.js'
 import {composeApplicative} from '../../../compose.js'
-import {addLawSets, Law, lawTests} from '../../../law.js'
 import {withOuterOption} from './compose.js'
-import type {ParameterizedGiven as Given} from './given.js'
-import type {Kind, TypeLambda} from 'effect/HKT'
+import type {BuildParameterized, ParameterizedGiven as Given} from './given.js'
 
 /**
  * Typeclass laws for `Traversable`.
  * @category typeclass laws
  */
-export const traversableLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  given: Given<TraversableTypeLambda, F, A, B, C, R, O, E>,
+export const traversableLaws: BuildParameterized<TraversableTypeLambda> = (
+  given,
+  suffix?,
 ) =>
   pipe(
-    buildLaws('Traversable', given),
+    buildLaws(`Traversable${suffix ?? ''}`, given),
     addLawSets(
       buildLaws(...withOuterOption('Traversable', given, optionTraversable)),
     ),
   )
 
 const buildLaws = <
-  F extends TypeLambda,
+  F1 extends TypeLambda,
   A,
   B = A,
   C = A,
@@ -66,14 +59,14 @@ const buildLaws = <
     a,
     b,
     c,
-  }: Given<TraversableTypeLambda, F, A, B, C, R, O, E>,
+  }: Given<TraversableTypeLambda, F1, A, B, C, R, O, E>,
 ) => {
   type Data<I extends TypeLambda, T> = Kind<I, R, O, E, T>
 
   type G = OptionTypeLambda
   type H = ReadonlyArrayTypeLambda
 
-  type DataF<T> = Data<F, T>
+  type DataF<T> = Data<F1, T>
   type DataG<T> = Data<G, T>
   type DataH<T> = Data<H, T>
 
@@ -122,12 +115,12 @@ const buildLaws = <
       fa,
       agb,
       bhc,
-    )((fa, agb, bhc) => {
-      const left = pipe(fa, traverseG(agb), mapG(traverseH(bhc)))
-      const right = pipe(fa, traverseGH(flow(agb, mapG(bhc))))
-
-      return equalsGHFc(left, right)
-    }),
+    )((fa, agb, bhc) =>
+      equalsGHFc(
+        pipe(fa, traverseG(agb), mapG(traverseH(bhc))),
+        pipe(fa, traverseGH(flow(agb, mapG(bhc)))),
+      ),
+    ),
 
     ...('map' in F
       ? [
@@ -137,7 +130,7 @@ const buildLaws = <
             fa,
             ab,
           )((fa, ab) => {
-            const map = F.map as CO.Covariant<F>['map']
+            const map = F.map as CO.Covariant<F1>['map']
             return equalsFb(pipe(fa, map(ab)), pipe(fa, traverseIdentity(ab)))
           }),
         ]

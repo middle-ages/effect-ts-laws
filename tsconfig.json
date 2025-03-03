@@ -1,7 +1,8 @@
 {
-  "compilerOptions": {
-    "noEmit": true
-  },
-  "extends": ["./config/tsconfig.base.json"],
-  "exclude": ["./tests", "./dev/demo.ts"]
+  "files": [],
+  "references": [
+    {"path": "./config/tsconfig.lib.json"},
+    {"path": "./config/tsconfig.tests.json"},
+    {"path": "./dev/tsconfig.json"}
+  ]
 }

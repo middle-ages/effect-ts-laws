@@ -1,9 +1,10 @@
+import {monoidLaws, tinyInteger} from '#effect-ts-laws'
+import {testLaws} from '#test'
 import {Monoid as MO} from '@effect/typeclass'
 import {getMonoid} from '@effect/typeclass/data/Array'
 import {Array as AR, Number as NU, pipe} from 'effect'
-import {checkLaws, monoidLaws, tinyInteger} from 'effect-ts-laws'
-import {testLaws} from 'effect-ts-laws/vitest'
 import fc from 'fast-check'
+import {testFailure} from './helpers.js'
 
 const intArray = fc.array(tinyInteger),
   instance = getMonoid<number>(),
@@ -14,9 +15,8 @@ const intArray = fc.array(tinyInteger),
 describe('Monoid laws self-test', () => {
   pipe(instance, laws, testLaws)
 
-  test('fail: “non-empty zero” fails left-identity law', () => {
-    expect(pipe({...instance, empty: [1]}, laws, checkLaws)[0]).toMatch(
-      /left identity/,
-    )
-  })
+  testFailure(
+    'fail: “non-empty zero” fails left-identity law',
+    laws({...instance, empty: [1]}),
+  )
 })

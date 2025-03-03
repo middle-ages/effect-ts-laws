@@ -4,13 +4,27 @@
     "@tsconfig/node-lts/tsconfig.json"
   ],
   "compilerOptions": {
-    "esModuleInterop": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "strictNullChecks": true,
+    "tsBuildInfoFile": "../node_modules/.tmp/tsconfig.tsbuildinfo",
+
+    "rootDir": "..",
+    "noEmit": true,
+    "allowJs": true,
+    "moduleDetection": "force",
     "incremental": true,
-    "noErrorTruncation": true
+    "noErrorTruncation": true,
+
+    "strictNullChecks": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": false,
+    "noUncheckedSideEffectImports": true,
+
+    "paths": {
+      "#effect-ts-laws": ["./src/index.ts"],
+      "#law": ["./src/law.ts"],
+      "#laws": ["./src/laws.ts"],
+      "#test": ["./src/vitest.ts"],
+      "#util": ["./src/util.ts"],
+      "#typeclass/*": ["./src/typeclass/*.ts"]
+    }
   }
 }

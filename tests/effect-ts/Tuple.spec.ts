@@ -1,8 +1,8 @@
 /** Typeclass law tests for the tuple datatype. */
 import {Bicovariant} from '@effect/typeclass/data/Tuple'
 import {Equivalence as EQ, pipe, String as STR, Tuple as TU} from 'effect'
-import {monoEquivalence, monoOrder} from 'effect-ts-laws'
-import {testTypeclassLaws} from 'effect-ts-laws/vitest'
+import {monoEquivalence, monoOrder} from '#effect-ts-laws'
+import {testTypeclassLaws} from '#test'
 import {TupleTypeLambda} from 'effect/Tuple'
 import fc from 'fast-check'
 

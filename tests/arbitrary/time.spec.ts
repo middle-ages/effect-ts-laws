@@ -1,4 +1,4 @@
-import {boundedDuration, duration, zoned} from 'effect-ts-laws'
+import {boundedDuration, duration, zoned} from '#effect-ts-laws'
 import fc from 'fast-check'
 
 describe('time', () => {

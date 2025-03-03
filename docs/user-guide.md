@@ -19,10 +19,9 @@ Most use-cases can skip the [Model](#model) section, and go directly from
       1. [Typeclass Laws For Concrete Types](#typeclass-laws-for-concrete-types)
       2. [Typeclass Laws For Parameterized Types](#typeclass-laws-for-parameterized-types)
       3. [Typeclass Law Testing API](#typeclass-law-testing-api)
-      4. [Contravariant Typeclass Laws](#contravariant-typeclass-laws)
-      5. [Schema Laws](#schema-laws)
-      6. [Writing New Laws](#writing-new-laws)
-      7. [Configure fast-check Runtime](#configure-fast-check-runtime)
+      4. [Schema Laws](#schema-laws)
+      5. [Writing New Laws](#writing-new-laws)
+      6. [Configure fast-check Runtime](#configure-fast-check-runtime)
    2. [Checking Laws](#checking-laws)
    3. [Arbitraries for effect-ts Datatypes and Functions of Higher-Kinded Types](#arbitraries-for-effect-ts-datatypes-and-functions-of-higher-kinded-types)
 
@@ -159,9 +158,15 @@ The single type we used for typeclass testing is `readonly number[]`. Thus when
 testing the `Option` datatype, for example, the actual type used in the tests
 will be `Option<Mono> ≡ Option<readonly number[]>`.
 
+In some cases, this underlying type breaks the test. For example,
+[React](https://react.dev/) functional components are functions that will only
+accept a single argument of type `object`, simulating named arguments. The
+alternative underlying type for such cases is available,and is called
+[MonoProps](https://github.com/middle-ages/effect-ts-laws/blob/main/src/laws/typeclass/monomorphic/monoProps.ts).
+
 The
-[monomorphic](https://github.com/middle-ages/effect-ts-laws/blob/main/src/laws/typeclass/monomorphic/helpers.ts)
-module exports can be useful when working with this type.
+[monomorphic](https://github.com/middle-ages/effect-ts-laws/blob/main/src/laws/typeclass/monomorphic)
+module exports can be useful when working with these underlying types.
 
 ### Extends Relation
 
@@ -410,10 +415,6 @@ are _composable_, so for example the `Covariant` typeclass law tests are run
 once by themselves, and once again when composed inside of an `Option`:
 
 <img style="min-width:700;max-width:700px" src="resources/screenshots/option-typeclass-laws.png" alt="vitest results for integer addition semigroup laws verbose OFF">
-
-#### Contravariant Typeclass Laws
-
-🚧
 
 #### Schema Laws
 

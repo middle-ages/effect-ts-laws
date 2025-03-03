@@ -31,3 +31,33 @@ export type EquivalenceToArbitrary<Eq extends EQ.Equivalence<never>> = (
 export type ArbitraryToEquivalence<Arb extends fc.Arbitrary<never>> = (
   arb: Arb,
 ) => Arb extends fc.Arbitrary<infer A> ? fc.Arbitrary<A> : never
+
+/**
+ * Extract the underlying type of the given arbitrary.
+ * @category types
+ */
+export type UnderlyingArbitrary<Fa extends fc.Arbitrary<unknown>> =
+  Fa extends fc.Arbitrary<infer A> ? A : never
+
+/**
+ * Extract the HKT type and its main underlying _covariant_ type from a type
+ * that was built from an HKT.
+ * @category types
+ */
+export type UnderlyingHkt<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Fa extends Kind<TypeLambda, never, unknown, unknown, any>,
+> = {
+  Child: Fa extends Kind<TypeLambda, never, unknown, unknown, infer A>
+    ? A
+    : never
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Parent: Fa extends Kind<infer F, never, unknown, unknown, any> ? F : never
+}
+
+/**
+ * Extract the underlying type of the given equivalence.
+ * @category types
+ */
+export type UnderlyingEquivalence<Fa extends EQ.Equivalence<never>> =
+  Fa extends EQ.Equivalence<infer A> ? A : never

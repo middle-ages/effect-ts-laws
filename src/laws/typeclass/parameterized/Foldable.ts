@@ -1,48 +1,32 @@
+import {addLawSets, Law, lawTests} from '#law'
 import {Foldable as FO} from '@effect/typeclass'
 import {Monad as identityMonad} from '@effect/typeclass/data/Identity'
 import {Foldable as optionFoldable} from '@effect/typeclass/data/Option'
 import {Array as AR, identity, pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
-import {addLawSets, Law, LawSet, lawTests} from '../../../law.js'
+import {UnderlyingArbitrary, UnderlyingEquivalence} from '../../../arbitrary.js'
 import {Endo} from '../../../typeclass.js'
 import {withOuterOption} from './compose.js'
-import type {ParameterizedGiven as Given} from './given.js'
+import type {BuildParameterized} from './given.js'
 import {unfoldGiven} from './given.js'
+import {BuildInternal} from './internal.js'
 
 /**
  * Typeclass laws for `Foldable`.
  * @category typeclass laws
  */
-export const foldableLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  given: Given<FoldableTypeLambda, F, A, B, C, R, O, E>,
+export const foldableLaws: BuildParameterized<FoldableTypeLambda> = (
+  given,
+  suffix?,
 ) =>
   pipe(
-    buildLaws('Foldable', given),
+    buildLaws(`Foldable${suffix ?? ''}`, given),
     addLawSets(
       buildLaws(...withOuterOption('Foldable', given, optionFoldable)),
     ),
   )
 
-const buildLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  name: string,
-  given: Given<FoldableTypeLambda, F, A, B, C, R, O, E>,
-): LawSet => {
+const buildLaws: BuildInternal<FoldableTypeLambda> = (name, given) => {
   const {Monoid: monoid, F, fa, b, bab, equalsA, equalsB} = unfoldGiven(given),
     {reduce} = F,
     toArray = FO.toArray(F),
@@ -52,6 +36,9 @@ const buildLaws = <
     combineMap = pipe(monoid, FO.combineMap(F)),
     arrayAppend = <T>(accumulator: T[], value: T): T[] =>
       AR.append(accumulator, value)
+
+  type A = UnderlyingEquivalence<typeof equalsA>
+  type B = UnderlyingArbitrary<typeof b>
 
   return pipe(
     lawTests(

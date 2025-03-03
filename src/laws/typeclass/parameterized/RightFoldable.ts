@@ -1,27 +1,18 @@
+import {Law, LawSet} from '#law'
+import * as RF from '#typeclass/RightFoldable'
 import {Foldable as FO} from '@effect/typeclass'
 import {pipe} from 'effect'
-import type {TypeLambda} from 'effect/HKT'
-import {Law, LawSet} from '../../../law.js'
-import {RightFoldable as RF} from '../../../typeclass.js'
 import {foldableLaws} from './Foldable.js'
-import type {ParameterizedGiven as Given} from './given.js'
+import type {BuildParameterized} from './given.js'
 import {unfoldGiven} from './given.js'
 
 /**
  * Typeclass laws for `RightFoldable`.
  * @category typeclass laws
  */
-export const rightFoldableLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  given: Given<RF.RightFoldableTypeLambda, F, A, B, C, R, O, E>,
-): LawSet => {
+export const rightFoldableLaws: BuildParameterized<
+  RF.RightFoldableTypeLambda
+> = (given, suffix?): LawSet => {
   const {Monoid: monoid, F, fa, endoA, equalsA} = unfoldGiven(given)
 
   const combineMap = pipe(monoid, FO.combineMap(F)),
@@ -33,7 +24,7 @@ export const rightFoldableLaws = <
     foldableLaws,
     LawSet,
   )(
-    'RightFoldable',
+    `RightFoldable${suffix ?? ''}`,
 
     Law(
       'reduceRight',

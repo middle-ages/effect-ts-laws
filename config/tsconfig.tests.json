@@ -1,0 +1,11 @@
+{
+  "extends": ["./tsconfig.base.json"],
+  "compilerOptions": {
+    "outDir": "../.dev/tests",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "types": ["vitest/globals"]
+  },
+  "include": ["../tests/**/*.ts", "vitest.config.ts"]
+}

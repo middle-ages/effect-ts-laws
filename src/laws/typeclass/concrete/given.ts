@@ -1,8 +1,8 @@
+import type {Law, UnknownArgs} from '#law'
+import {LawSet} from '#law'
 import {Equivalence as EQ} from 'effect'
 import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import type {Law, UnknownArgs} from '../../../law.js'
-import {LawSet} from '../../../law.js'
 
 /**
  * Common options for testing _concrete type_ typeclass laws. These are
@@ -86,5 +86,12 @@ export const defineConcreteLaws =
  * to add entries here for a new typeclasses.
  * @category harness
  */
-
 export interface ConcreteLambdas {}
+
+/**
+ * The type of function that builds concrete laws.
+ * @category harness
+ */
+export interface BuildConcrete<Typeclass extends TypeLambda> {
+  <A>(given: ConcreteGiven<Typeclass, A>): LawSet
+}

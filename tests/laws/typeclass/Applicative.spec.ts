@@ -4,10 +4,10 @@ import {
   Product,
 } from '@effect/typeclass/data/Array'
 import {Array as AR, pipe} from 'effect'
-import {numericGiven} from './helpers.js'
+import {expectFailure, numericGiven} from './helpers.js'
 
-import {applicativeLaws, checkLaws} from 'effect-ts-laws'
-import {testLaws} from 'effect-ts-laws/vitest'
+import {applicativeLaws} from '#effect-ts-laws'
+import {testLaws} from '#test'
 import {ReadonlyArrayTypeLambda} from 'effect/Array'
 
 type Instance = AP.Applicative<ReadonlyArrayTypeLambda>
@@ -30,6 +30,6 @@ describe('Applicative laws self-test', () => {
       return Product.product(self.slice(0, length), that.slice(0, length))
     }
 
-    expect(pipe({...instance, product}, laws, checkLaws)[0]).toMatch(/identity/)
+    pipe({...instance, product}, laws, expectFailure)
   })
 })

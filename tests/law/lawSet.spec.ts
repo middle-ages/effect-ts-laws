@@ -12,8 +12,8 @@ import {
   lawTests,
   negateLaw,
   tinyInteger,
-} from 'effect-ts-laws'
-import {testLaws} from 'effect-ts-laws/vitest'
+} from '#effect-ts-laws'
+import {testLaws} from '#test'
 import fc from 'fast-check'
 
 const tinyPositive = fc.integer({min: 1, max: 100})
@@ -76,7 +76,7 @@ describe('lawSet', () => {
     })
 
     test('fail', () => {
-      expect(checkLaws(failSet)[0]).toMatch(/law₀/)
+      expect(checkLaws(failSet)[0]).toMatch(/Property failed/)
     })
   })
 

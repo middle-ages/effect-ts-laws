@@ -1,11 +1,3 @@
-import {Covariant as CO, Semigroup as SE} from '@effect/typeclass'
-import {
-  getOptionalMonoid,
-  Covariant as optionCovariant,
-  Monad as optionMonad,
-  Traversable as optionTraversable,
-} from '@effect/typeclass/data/Option'
-import {Array as AR, Number as NU, Option as OP, pipe} from 'effect'
 import {
   covariantLaws,
   GivenConcerns,
@@ -16,8 +8,16 @@ import {
   option,
   semigroupLaws,
   unfoldMonoGiven,
-} from 'effect-ts-laws'
-import {testLaws, testTypeclassLaws, verboseLaws} from 'effect-ts-laws/vitest'
+} from '#effect-ts-laws'
+import {testLaws, testTypeclassLaws, verboseLaws} from '#test'
+import {Covariant as CO, Semigroup as SE} from '@effect/typeclass'
+import {
+  getOptionalMonoid,
+  Covariant as optionCovariant,
+  Monad as optionMonad,
+  Traversable as optionTraversable,
+} from '@effect/typeclass/data/Option'
+import {Array as AR, Number as NU, Option as OP, pipe} from 'effect'
 import {dual} from 'effect/Function'
 import {TypeLambda} from 'effect/HKT'
 import {OptionTypeLambda} from 'effect/Option'

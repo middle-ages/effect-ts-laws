@@ -9,9 +9,7 @@ pnpm run:examples
 pnpm circular
 pnpm test:run
 pnpm build
-pnpm build:demo
-pnpm build:tests
 
 cp package.json .dev/dist
 cp package.json .dev/demo
-cp package.json .dev/test
+cp package.json .dev/tests

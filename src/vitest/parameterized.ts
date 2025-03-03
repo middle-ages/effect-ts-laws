@@ -1,7 +1,7 @@
 import type {TypeLambda} from 'effect/HKT'
 import type {ParameterOverrides} from '../law.js'
-import type {GivenConcerns, Parameterized} from '../laws/typeclass/harness.js'
-import {buildParameterizedTypeclassLaws} from '../laws/typeclass/harness.js'
+import type {GivenConcerns, Parameterized} from '../laws.js'
+import {buildParameterizedTypeclassLaws} from '../laws.js'
 import {testLawSets} from './testLaws.js'
 
 /**
@@ -32,10 +32,7 @@ export const testParameterizedTypeclassLaws =
      */
     parameters?: ParameterOverrides,
   ) => {
-    const lawSets = buildParameterizedTypeclassLaws<F, A, B, C>()(
-      instances,
-      given,
+    testLawSets(parameters)(
+      ...buildParameterizedTypeclassLaws<F, A, B, C>()(instances, given),
     )
-
-    testLawSets(parameters)(...lawSets)
   }

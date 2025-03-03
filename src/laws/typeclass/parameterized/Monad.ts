@@ -1,31 +1,24 @@
+import {Law, LawSet} from '#law'
 import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
-import {Law, LawSet} from '../../../law.js'
 import {covariantLaws} from './Covariant.js'
-import type {ParameterizedGiven as Given} from './given.js'
+import type {BuildParameterized} from './given.js'
 import {unfoldGiven} from './given.js'
 
 /**
  * Typeclass laws for `Monad`.
  * @category typeclass laws
  */
-export const monadLaws = <
-  F extends TypeLambda,
-  A,
-  B = A,
-  C = A,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  given: Given<MonadTypeLambda, F, A, B, C, R, O, E>,
+export const monadLaws: BuildParameterized<MonadTypeLambda> = (
+  given,
+  suffix?,
 ) => {
   const {a, F, fa, equalsFa, equalsFb, equalsFc, ab, afb, bfc} =
     unfoldGiven(given)
 
   return pipe(given, covariantLaws, LawSet)(
-    'Monad',
+    `Monad${suffix ?? ''}`,
     Law(
       'left identity',
       'of ∘ flatMap(afb) = afb',

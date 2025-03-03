@@ -1,26 +1,26 @@
 import {
   Applicative as AP,
   Monad as MD,
-  Monoid as MO,
   SemiApplicative as SA,
 } from '@effect/typeclass'
 import {Applicative as optionApplicative} from '@effect/typeclass/data/Option'
-import {Equivalence as EQ, identity, pipe} from 'effect'
+import {identity, pipe} from 'effect'
 import {apply, compose} from 'effect/Function'
+import type {TypeLambda} from 'effect/HKT'
 import {addLawSets, Law, lawTests} from '../../../law.js'
 import {monoidLaws} from '../concrete/Monoid.js'
 import {withOuterOption} from './compose.js'
 import {covariantLaws} from './Covariant.js'
+import type {BuildParameterized, ParameterizedGiven as Given} from './given.js'
 import {unfoldGiven} from './given.js'
-import type {ParameterizedGiven as Given} from './given.js'
-import type {Kind, TypeLambda} from 'effect/HKT'
+import {BuildInternal} from './internal.js'
 
 /**
  * Typeclass laws for `Applicative`.
  * @category typeclass laws
  */
-export const applicativeLaws = <
-  F extends TypeLambda,
+export const applicativeLaws: BuildParameterized<ApplicativeTypeLambda> = <
+  F1 extends TypeLambda,
   A,
   B = A,
   C = A,
@@ -28,12 +28,13 @@ export const applicativeLaws = <
   O = unknown,
   E = unknown,
 >(
-  given: Given<ApplicativeTypeLambda, F, A, B, C, R, O, E>,
+  given: Given<ApplicativeTypeLambda, F1, A, B, C, R, O, E>,
+  suffix?: string,
 ) => {
   const {Monoid: monoid, F, fa, equalsA, getEquivalence} = unfoldGiven(given)
 
   return pipe(
-    buildLaws('Applicative', given),
+    buildLaws(`Alternative${suffix ?? ''}`, given),
     pipe(given, covariantLaws, addLawSets),
     addLawSets(
       buildLaws(...withOuterOption('Applicative', given, optionApplicative)),
@@ -42,8 +43,8 @@ export const applicativeLaws = <
       {
         suffix: 'Applicative.getMonoid()',
         a: fa,
-        F: AP.getMonoid(F)(monoid) as MO.Monoid<Kind<F, R, O, E, A>>,
-        equalsA: getEquivalence(equalsA) as EQ.Equivalence<Kind<F, R, O, E, A>>,
+        F: pipe(monoid, AP.getMonoid(F)<A, R, O, E>),
+        equalsA: getEquivalence(equalsA),
       },
       monoidLaws,
       addLawSets,
@@ -51,7 +52,7 @@ export const applicativeLaws = <
   )
 }
 
-const buildLaws = <
+const buildLaws: BuildInternal<ApplicativeTypeLambda> = <
   F extends TypeLambda,
   A,
   B = A,
@@ -82,11 +83,7 @@ const buildLaws = <
       'ab ▹ of ▹ (a ▹ of ▹ ap) = a ▹ ab ▹ of',
       a,
       ab,
-    )((a, ab) => {
-      const left = pipe(ab, of, ap(of(a)))
-      const right = pipe(a, ab, of)
-      return equalsFb(left, right)
-    }),
+    )((a, ab) => equalsFb(pipe(ab, of, ap(of(a))), pipe(a, ab, of))),
 
     Law(
       'associative composition',
@@ -138,8 +135,8 @@ const buildLaws = <
       ),
     ),
 
-    // Some applicative do not have monads, for example when the
-    // applicative is composed we have no monad for this slot.
+    // Some applicatives do not have monads. For example: when the applicative is
+    // composed we have no monad for this law.
     ...('flatMap' in F
       ? [
           Law(

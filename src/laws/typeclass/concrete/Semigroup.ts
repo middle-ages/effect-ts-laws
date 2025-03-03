@@ -1,18 +1,18 @@
+import {Law} from '#law'
 import type {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
-import {Law} from '../../../law.js'
-import type {ConcreteGiven} from './given.js'
+import type {BuildConcrete} from './given.js'
 import {defineConcreteLaws} from './given.js'
 
 /**
  * Build typeclass laws for `Semigroup`.
  * @category typeclass laws
  */
-export const semigroupLaws = <A>({
+export const semigroupLaws: BuildConcrete<SemigroupTypeLambda> = ({
   F,
   equalsA,
   a,
   suffix,
-}: ConcreteGiven<SemigroupTypeLambda, A>) =>
+}) =>
   defineConcreteLaws(
     'Semigroup',
     Law(

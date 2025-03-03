@@ -1,31 +1,32 @@
 import eslint from '@eslint/js'
+import {Linter} from 'eslint'
 import allRecommended from 'eslint-plugin-prettier/recommended'
 import tseslint from 'typescript-eslint'
 
 const {languageOptions: _, ...recommended} = allRecommended
 
-export default tseslint.config(
+const config = tseslint.config(
+  {
+    ignores: [
+      '../node_modules/*',
+      '../.dev',
+      '../docs/catalog/js/poster-elements.js',
+    ],
+  },
+
+  eslint.configs.recommended,
+  tseslint.configs.strictTypeChecked,
+  recommended,
+
   {
     languageOptions: {
+      parser: tseslint.parser,
       parserOptions: {
         projectService: true,
         ecmaVersion: 'latest',
         warnOnUnsupportedTypeScriptVersion: false,
       },
     },
-  },
-
-  eslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-  recommended,
-
-  {
-    ignores: [
-      '../node_modules/*',
-      './dependency-cruiser.cjs',
-      '../.dev',
-      '../docs/catalog/js/poster-elements.js',
-    ],
   },
 
   {
@@ -43,4 +44,6 @@ export default tseslint.config(
       ],
     },
   },
-)
+) as Linter.Config[]
+
+export default config

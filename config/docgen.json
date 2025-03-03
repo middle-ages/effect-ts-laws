@@ -12,5 +12,5 @@
     "src/typeclass.ts",
     "src/laws/typeclass/harness.ts"
   ],
-  "parseCompilerOptions": "./config/tsconfig.build.json"
+  "parseCompilerOptions": "./config/tsconfig.lib.json"
 }

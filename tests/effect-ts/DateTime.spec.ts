@@ -1,7 +1,7 @@
 /** Typeclass law tests for `DateTime` datatype. */
 import {DateTime as DT, Equivalence as EQ} from 'effect'
-import {utc} from 'effect-ts-laws'
-import {testConcreteTypeclassLaws} from 'effect-ts-laws/vitest'
+import {utc} from '#effect-ts-laws'
+import {testConcreteTypeclassLaws} from '#test'
 import {Equivalence, Order} from 'effect/DateTime'
 
 describe('effect/DateTime', () => {
