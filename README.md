@@ -8,7 +8,7 @@
 
 A library for law testing. Test
 [@effect/typeclass](https://www.npmjs.com/package/@effect/typeclass) and
-[schema](https://www.npmjs.com/package/@effect/schema) laws using
+[schema](https://effect.website/docs/schema/introduction/) laws using
 [fast-check](https://github.com/dubzzz/fast-check). The typeclass laws implemented are
 [listed here](https://middle-ages.github.io/effect-ts-laws-docs/catalog-of-laws.html).
 
@@ -230,7 +230,7 @@ but will take a minute or two to run on the free tiers of the services above.
 
 ### Status
 
-[This matrix shows](docs/status.html)
+[This matrix shows](https://middle-ages.github.io/effect-ts-laws-docs/media/status.html)
 _data-types_ (in columns) vs. _typeclass law tests_ (in rows). Each intersection
 of datatype and typeclass can be either: **ready** (✅), **not ready** (❌), or
 **not relevant** (☐).
@@ -244,7 +244,7 @@ project. Click a _typeclass name_ (in row header) to open its laws as defined in
 * [User guide](docs/user-guide.md).
 * [API documentation](https://middle-ages.github.io/effect-ts-laws-docs/).
 * [Catalog of laws](https://middle-ages.github.io/effect-ts-laws-docs/catalog-of-laws.html).
-* [Status of effect.ts datatype tests](https://middle-ages.github.io/effect-ts-laws-docs/status.html).
+* [Status of effect.ts datatype tests](https://middle-ages.github.io/effect-ts-laws-docs/media/status.html).
 * `README` for the [arbitraries](src/arbitrary/README.md) exported.
 * `README` for the [law](src/law/README.md) module.
 * `README` at [the laws for typeclasses](src/laws/typeclass/concrete/README.md) on concrete types.
