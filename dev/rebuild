@@ -13,3 +13,5 @@ pnpm build
 cp package.json .dev/dist
 cp package.json .dev/demo
 cp package.json .dev/tests
+
+cp README.md .dev/dist

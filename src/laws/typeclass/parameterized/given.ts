@@ -43,8 +43,9 @@ export interface ParameterizedGiven<
  * These are set as the union of all arguments required by the law predicates
  * for parameterized typeclass laws.
  *
- * For example, the field `aob` is required by the {@link Filterable}
- * _composition_ typeclass law, and `bab` by the {@link Foldable} _reduce_ law.
+ * For example, the field `aob` is required by the
+ * {@link filterableLaws} _composition_ typeclass law, and `bab` by * the the
+ * _reduce_ law of {@link foldableLaws}.
  *
  * The nomenclature is based on the types of expressions, and is designed to
  * make it easy, or at least easy as possible, for the author of law tests

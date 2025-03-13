@@ -10,25 +10,7 @@ import type {ComposeKey, ComposeTypeLambda} from '../../../compose.js'
 import {composeMap} from '../../../compose.js'
 import type {ParameterizedGiven} from './given.js'
 
-/**
- * Convert the `LawSet` options of a typeclass test into the options
- * of a composed typeclass test.
- *
- * For example if we are testing `Covariant` laws on `MyTuple`, and
- * the underlying types are all `number`, then the correct `given`
- * type required for these tests, is
- * `ParameterizedGiven<CovariantTypeLambda, MyTupleLambda, number>`.
- *
- * If we wanted to run the same law test but on a _composed instance_
- * of `MyTuple` inside an `Option`, then we could use this function
- * to convert the options to the required type. Then we can run these
- * new options to test typeclass laws on the composed instance.
- * @typeParam Class - Type lambda for the typeclass under test.
- * @typeParam F - Type lambda for _inner datatype.
- * @typeParam G - Type lambda for _outer datatype.
- * @category composition
- */
-export const liftGiven =
+const liftGiven =
   <
     Class extends TypeLambda,
     F extends TypeLambda,
@@ -76,8 +58,16 @@ export const liftGiven =
 /**
  * Return the given options transformed into options for a composed
  * typeclass test, where the outer composed datatype is an `Option`.
- * This is a version of {@link liftGiven} fixed on composing with the
- * `Option` as outer datatype.
+ *
+ * For example if we are testing `Covariant` laws on `MyTuple`, and
+ * the underlying types are all `number`, then the correct `given`
+ * type required for these tests, is
+ * `ParameterizedGiven<CovariantTypeLambda, MyTupleLambda, number>`.
+ *
+ * If we wanted to run the same law test but on a _composed instance_
+ * of `MyTuple` inside an `Option`, then we could use this function
+ * to convert the options to the required type. Then we can run these
+ * new options to test typeclass laws on the composed instance.
  * @returns Typeclass test options for the `F` datatype when it is
  * wrapped in an `Option`.
  * @category composition
@@ -123,7 +113,11 @@ export const withOuterOption = <
     ),
   )
 
-type ComposeGiven<
+/**
+ * Composed typeclass law test options.
+ * @category composition
+ */
+export type ComposeGiven<
   Class extends TypeLambda,
   F extends TypeLambda,
   G extends TypeLambda,
@@ -185,10 +179,3 @@ type FromGiven<
         getArbitraryG: LiftArbitrary<G, R, O, E>
       }
     : never
-
-/*
-export addOuterOptionLaws = <F extends TypeLambda, A, B, C, R, O, E>(
-  name: string,
-  given: Given<InvariantTypeLambda, F, A, B, C, R, O, E>,
-) => {
-*/

@@ -1,6 +1,7 @@
 {
   "extends": ["./tsconfig.base.json"],
   "compilerOptions": {
+    "noEmit": false,
     "outDir": "../.dev/tests",
     "sourceMap": true,
     "declaration": true,

@@ -81,6 +81,11 @@ const underlyingProps =
     given: MonomorphicGiven<F, R, O, E>,
   ) =>
   <Ins extends TypeclassInstances<F, MonoProps, R, O, E>>(
+    /**
+     * Instances to test. Key is typeclass name and value is the
+     * instance under test. For example, `{ Monad: Option.Monad }` will run the
+     * monad typeclass laws on `Option`.
+     */
     instances: Ins,
     /** Optional runtime `fast-check` parameters. */
     parameters?: ParameterOverrides,
@@ -97,9 +102,6 @@ const underlyingProps =
  * Test typeclass laws on the given instances of some datatype `F`. All laws are
  * monomorphic on an underlying type of `{x: number; y: string}`.
  * @param given - Test options for the datatype under test.
- * @param instances - Instances to test. Key is typeclass name and value is the
- * instance under test. For example, `{ Monad: Option.Monad }` will run the
- * monad typeclass laws on `Option`.
  * @category vitest
  */
 testTypeclassLaws.underlyingProps = underlyingProps

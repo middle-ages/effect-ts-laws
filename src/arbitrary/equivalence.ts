@@ -106,7 +106,6 @@ export const testEndoEquivalence =
 /**
  * Same as `testUnaryEquivalence` but for functions of type `Predicate<A>`.
  * @param a - An arbitrary for the function argument type `A`.
- * @param equalsA - Equivalence for the type `A`.
  * @param parameters - Optional [fast-check parameters](https://fast-check.dev/api-reference/interfaces/Parameters.html).
  * @returns True if no counterexample found, else false.
  * @category equivalence
