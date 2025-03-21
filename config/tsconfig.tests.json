@@ -8,5 +8,5 @@
     "declarationMap": true,
     "types": ["vitest/globals"]
   },
-  "include": ["../tests/**/*.ts", "vitest.config.ts"]
+  "include": ["../tests"]
 }
