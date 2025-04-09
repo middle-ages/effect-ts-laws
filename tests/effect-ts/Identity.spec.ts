@@ -1,4 +1,6 @@
 /** Typeclass law tests for the `Identity` datatype. */
+import {monoMonoid} from '#effect-ts-laws'
+import {testTypeclassLaws} from '#test'
 import {SemiAlternative as SA} from '@effect/typeclass'
 import {
   Applicative,
@@ -9,8 +11,6 @@ import {
   Traversable,
 } from '@effect/typeclass/data/Identity'
 import {identity as id} from 'effect'
-import {monoSemigroup} from '#effect-ts-laws'
-import {testTypeclassLaws} from '#test'
 
 describe('@effect/typeclass/data/Identity', () => {
   testTypeclassLaws<IdentityTypeLambda>({getEquivalence: id, getArbitrary: id})(
@@ -20,7 +20,7 @@ describe('@effect/typeclass/data/Identity', () => {
       Monad,
       Traversable,
       SemiAlternative: getSemiAlternative(
-        monoSemigroup,
+        monoMonoid,
       ) as SA.SemiAlternative<IdentityTypeLambda>,
     },
   )

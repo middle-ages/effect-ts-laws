@@ -2,6 +2,8 @@ import {Law} from '#law'
 import type {SemigroupTypeLambda} from '@effect/typeclass/Semigroup'
 import type {BuildConcrete} from './given.js'
 import {defineConcreteLaws} from './given.js'
+import {associativity} from '#algebra'
+import {UnderlyingArbitrary} from '#arbitrary'
 
 /**
  * Build typeclass laws for `Semigroup`.
@@ -12,18 +14,12 @@ export const semigroupLaws: BuildConcrete<SemigroupTypeLambda> = ({
   equalsA,
   a,
   suffix,
-}) =>
-  defineConcreteLaws(
+}) => {
+  type A = UnderlyingArbitrary<typeof a>
+
+  return defineConcreteLaws(
     'Semigroup',
-    Law(
-      'associativity',
-      '(a ⊕ b) ⊕ c = a ⊕ (b ⊕ c)',
-      a,
-      a,
-      a,
-    )((a, b, c) =>
-      equalsA(F.combine(F.combine(a, b), c), F.combine(a, F.combine(b, c))),
-    ),
+    associativity<A>({a, f: F.combine, equals: equalsA}),
 
     Law(
       'combineMany associativity',
@@ -35,6 +31,7 @@ export const semigroupLaws: BuildConcrete<SemigroupTypeLambda> = ({
       equalsA(F.combineMany(a, [b, c]), F.combine(a, F.combine(b, c))),
     ),
   )(suffix)
+}
 
 declare module './given.js' {
   interface ConcreteLambdas {

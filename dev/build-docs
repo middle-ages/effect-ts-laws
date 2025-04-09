@@ -4,9 +4,9 @@ set -Eeuo pipefail
 
 mkdir -p .dev
 
-pnpm build:latex
-
 rm -rf ../effect-ts-laws-docs/*
+
+pnpm coverage
 
 typedoc --options config/typedoc.json
 
@@ -15,3 +15,5 @@ cp -r docs/status.html \
       docs/catalog \
       docs/resources \
       ../effect-ts-laws-docs
+
+cp -r .dev/coverage ../effect-ts-laws-docs

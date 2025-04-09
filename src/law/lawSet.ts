@@ -185,9 +185,7 @@ export const checkLaws = (
 export const checkLawSets =
   (parameters?: ParameterOverrides) =>
   (
-    /**
-     * The law sets to test.
-     */
+    /** The law sets to test. */
     ...sets: LawSet[]
   ): string[] =>
     checkLaws(lawSetTests(...sets), parameters)

@@ -1,12 +1,13 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
-    "../src/arbitrary.ts",
-    "../src/compose.ts",
-    "../src/law.ts",
-    "../src/laws.ts",
+    "../src/index.ts",
+    "../src/vitest.ts",
     "../src/typeclass.ts",
-    "../src/vitest.ts"
+    "../src/arbitrary.ts",
+    "../src/laws.ts",
+    "../src/laws/typeclass/harness.ts",
+    "../src/law.ts"
   ],
   "out": "../../effect-ts-laws-docs",
   "readme": "../README.md",

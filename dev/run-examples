@@ -2,8 +2,7 @@
 
 set -Eeuo pipefail
 
-# until dogen stops using lodash
-
+# Until docgen does not depend on doctrine which depends on lodash
 # cp config/docgen.json .
 # pnpm docgen
 

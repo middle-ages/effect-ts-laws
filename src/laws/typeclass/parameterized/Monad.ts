@@ -32,6 +32,9 @@ export const monadLaws: BuildParameterized<MonadTypeLambda> = (
       fa,
     )(fa => equalsFa(pipe(fa, F.flatMap(F.of)), fa)),
 
+    // f(f(a, b), c), f(a, f(b, c))
+    // flatMap(bfc, flatMap(fa, afb)
+    // flatMap(flatMap(bfc, flatMap(fa, afb)
     Law(
       'associativity',
       'fa ▹ flatMap(afb) ▹ flatMap(bfc) = fa ▹ flatMap(flatMap(bfc) ∘ afb)',

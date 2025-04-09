@@ -17,9 +17,9 @@ import fc from 'fast-check'
  * `Option<number>`.
  * @category harness
  */
-export interface ConcreteGiven<F extends TypeLambda, A> {
+export interface ConcreteGiven<F extends TypeLambda, A, E = unknown> {
   /**
-   * An arbitrary for the values used to test the typeclass. For example when
+   * An equivalence for the values used to test the typeclass. For example when
    * testing `Monoid` on `Option<number>`, this should return an equivalence
    * for an `Option<number>`.
    */
@@ -38,7 +38,7 @@ export interface ConcreteGiven<F extends TypeLambda, A> {
    * `number`, then the type parameter `A` would be set at `Option<number>` and
    * this field at `Monoid<Option<number>>`.
    */
-  F: Kind<F, never, unknown, unknown, A>
+  F: Kind<F, never, unknown, E, A>
 
   /**
    * Optional suffix to attach to `LawTest` label.

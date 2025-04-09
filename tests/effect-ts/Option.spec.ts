@@ -1,10 +1,5 @@
 /** Typeclass law tests for the `Option` datatype. */
-import {
-  monoEquivalence,
-  monoOrder,
-  monoSemigroup,
-  option,
-} from '#effect-ts-laws'
+import {monoEquivalence, monoOrder, monoMonoid, option} from '#effect-ts-laws'
 import {testTypeclassLaws} from '#test'
 import {RightFoldable} from '#typeclass/data/Option'
 import {
@@ -28,7 +23,7 @@ describe('@effect/typeclass/data/Option', () => {
     Equivalence: OP.getEquivalence(monoEquivalence),
     Filterable,
     Monad,
-    Monoid: getOptionalMonoid(monoSemigroup),
+    Monoid: getOptionalMonoid(monoMonoid),
     Order: OP.getOrder(monoOrder),
     RightFoldable,
     Traversable,

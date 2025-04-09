@@ -249,6 +249,7 @@ project. Click a _typeclass name_ (in row header) to open its laws as defined in
 * `README` for the [law](src/law/README.md) module.
 * `README` at [the laws for typeclasses](src/laws/typeclass/concrete/README.md) on concrete types.
 * `README` at [the laws for typeclasses](src/laws/typeclass/parameterized/README.md) on parameterized types.
+* [Test coverage report](https://middle-ages.github.io/effect-ts-laws-docs/coverage/index.html) on parameterized types.
 
 ### Roadmap
 

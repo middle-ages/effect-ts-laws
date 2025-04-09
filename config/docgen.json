@@ -6,11 +6,12 @@
   "exclude": [
     "src/index.ts",
     "src/vitest.ts",
-    "src/laws.ts",
-    "src/law.ts",
-    "src/arbitrary.ts",
     "src/typeclass.ts",
-    "src/laws/typeclass/harness.ts"
+    "src/arbitrary.ts",
+    "src/laws.ts",
+    "src/laws/typeclass/harness.ts",
+    "src/law.ts"
   ],
-  "parseCompilerOptions": "./config/tsconfig.lib.json"
+  "parseCompilerOptions": "./config/tsconfig.lib.json",
+  "$schema": "node_modules/@effect/docgen/schema.json"
 }

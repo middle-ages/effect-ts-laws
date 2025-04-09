@@ -1,8 +1,9 @@
 import {Law, lawTests} from '#law'
-import {Boolean as BO} from 'effect'
+import {implies, Equivalence as BooleanEquivalence} from 'effect/Boolean'
 import type {EquivalenceTypeLambda} from 'effect/Equivalence'
-import {UnderlyingArbitrary} from '../../../arbitrary.js'
+import {UnderlyingArbitrary} from '#arbitrary'
 import type {BuildConcrete} from './given.js'
+import {symmetry} from '#algebra'
 
 /**
  * Build laws for `Equivalence`.
@@ -22,9 +23,16 @@ export const equivalenceLaws: BuildConcrete<EquivalenceTypeLambda> = ({
       a,
       a,
       a,
-    )((a: A, b: A, c: A) => BO.implies(F(a, b) && F(b, c), F(a, c))),
+    )((a: A, b: A, c: A) => implies(F(a, b) && F(b, c), F(a, c))),
 
-    Law('symmetry', 'a=b ⇔ b=a', a, a)((a: A, b: A) => F(a, b) === F(b, a)),
+    symmetry<A, boolean>(
+      {
+        f: F,
+        a,
+        equals: BooleanEquivalence,
+      },
+      'a=b ⇔ b=a',
+    ),
 
     Law('reflexivity', 'a=a', a)((a: A) => F(a, a)),
   )

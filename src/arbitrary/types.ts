@@ -45,13 +45,11 @@ export type UnderlyingArbitrary<Fa extends fc.Arbitrary<unknown>> =
  * @category types
  */
 export type UnderlyingHkt<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Fa extends Kind<TypeLambda, never, unknown, unknown, any>,
 > = {
   Child: Fa extends Kind<TypeLambda, never, unknown, unknown, infer A>
     ? A
     : never
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Parent: Fa extends Kind<infer F, never, unknown, unknown, any> ? F : never
 }
 

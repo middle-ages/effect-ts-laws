@@ -10,8 +10,21 @@ export default defineConfig({
     setupFiles: ['./tests/vitest.setup.ts'],
     coverage: {
       provider: 'v8',
-      reportsDirectory: './.dev',
-      exclude: ['.dev', 'dev', 'config', 'docs', 'tests'],
+      reportsDirectory: './.dev/coverage',
+      exclude: [
+        '.dev',
+        'dev',
+        'config',
+        'docs',
+        'tests',
+        'src/index.ts',
+        'src/vitest.ts',
+        'src/typeclass.ts',
+        'src/arbitrary.ts',
+        'src/laws.ts',
+        'src/laws/typeclass/harness.ts',
+        'src/law.ts',
+      ],
     },
   },
 })

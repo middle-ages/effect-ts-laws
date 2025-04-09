@@ -3,14 +3,12 @@ import {
   foldableLaws,
   monoArbitrary,
   monoEquivalence,
+  monoMonoid,
   unfoldMonomorphicGiven,
 } from '#laws'
 import {testLaws} from '#test'
 import {Foldable as FO, Monoid as MO} from '@effect/typeclass'
-import {
-  Foldable as arrayFoldable,
-  getMonoid,
-} from '@effect/typeclass/data/Array'
+import {Foldable as arrayFoldable} from '@effect/typeclass/data/Array'
 import {MonoidSum} from '@effect/typeclass/data/Number'
 import {Equivalence as EQ, Number as NU, pipe} from 'effect'
 import {getEquivalence, ReadonlyArrayTypeLambda} from 'effect/Array'
@@ -42,7 +40,7 @@ describe('Foldable laws self-test', () => {
   describe('on readonly number[]', () => {
     pipe(
       instance,
-      buildLaws(getMonoid<number>(), monoArbitrary, monoEquivalence),
+      buildLaws(monoMonoid, monoArbitrary, monoEquivalence),
       testLaws,
     )
   })

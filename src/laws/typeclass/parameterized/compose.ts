@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {LiftArbitrary} from '#arbitrary'
 import {option} from '#arbitrary'
 import type {LiftEquivalence} from '#law'

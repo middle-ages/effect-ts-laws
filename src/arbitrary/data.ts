@@ -48,6 +48,15 @@ export const tinyInteger: fc.Arbitrary<number> = fc.integer({
 })
 
 /**
+ * A non-negative integer arbitrary small enough so that we can avoid having to
+ * think about numeric overflows in generated functions.
+ * @category arbitraries
+ */
+export const tinyNonNegative: fc.Arbitrary<number> = fc.integer({
+  min: 0,
+  max: 100,
+})
+/**
  * A arbitrary for a tiny, possibly empty, string.
  * @category arbitraries
  */

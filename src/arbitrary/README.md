@@ -2,18 +2,9 @@
 
 `fast-check` utilities and arbitraries for `effect-ts` datatypes.
 
-1. [Importing](#importing)
-2. [Modules](#modules)
-   1. [instances](#instances)
-   2. [data](#data)
-   3. [time](#time)
-   4. [function](#function)
-   5. [equivalence](#equivalence)
-   6. [effect](#effect)
-
 ## Importing
 
-Every type and function below can be imported directly from
+Every type and function here can be imported directly from
 `effect-ts-laws`.
 
 <details><summary>Example</summary>
@@ -70,35 +61,3 @@ const oneThirdFail: fc.Arbitrary<EF.Effect<string, Error>> = pipe(
 ```
 
 </details>
-
-<img src="docs/instances.svg" title="instances.ts" alt="fast-check effect-ts instances" style="min-width:731pt">
-
-### [data](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/data.ts)
-
-Arbitraries for some basic `effect-ts` datatypes.
-
-<img src="docs/data.svg" title="data.ts" alt="data arbitraries" style="min-width:607pt">
-
-### [time](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/time.ts)
-
-Arbitraries for `effect-ts` temporal types.
-
-<img src="docs/time.svg" title="time.ts" alt="time arbitraries" style="min-width:685pt">
-
-### [function](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/function.ts)
-
-Function arbitraries.
-
-<img src="docs/function.svg" title="function.ts" alt="function arbitraries" style="min-width:974pt">
-
-### [equivalence](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/equivalence.ts)
-
-Helpers for sampling equivalence between functions.
-
-<img src="docs/equivalence.svg" title="equivalence.ts" alt="equivalence of functions" style="min-width:980">
-
-### [effect](https://github.com/middle-ages/effect-ts-laws/blob/main/src/arbitrary/effect.ts)
-
-Arbitraries for the `Effect` type.
-
-<img src="docs/effect.svg" title="effect.ts" alt="effect arbitraries" style="min-width:590pt">

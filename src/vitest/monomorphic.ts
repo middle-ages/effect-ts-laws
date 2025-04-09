@@ -5,8 +5,12 @@ import type {
   MonomorphicGivenOf,
   TypeclassInstances,
 } from '#laws'
-import {buildMonomorphicLaws, monoArbitrary, monoEquivalence} from '#laws'
-import {getMonoid} from '@effect/typeclass/data/Array'
+import {
+  buildMonomorphicLaws,
+  monoArbitrary,
+  monoEquivalence,
+  monoMonoid,
+} from '#laws'
 import {pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
 import {
@@ -46,7 +50,7 @@ export const testTypeclassLawsFor =
 
 /**
  * Test typeclass laws on the given instances of some datatype `F`. All laws are
- * monomorphic on an underlying type of `readonly number[]`.
+ * monomorphic on an underlying type of `Option<number@.`.
  * At the property `testTypeclassLaws.underlyingProps` you will find the same
  * function, except it uses the underlying type `{x: number; y: string}, useful
  * when testing laws on React components, as they can only accept a single
@@ -72,7 +76,7 @@ export const testTypeclassLaws =
       ...given,
       a: monoArbitrary,
       equalsA: monoEquivalence,
-      Monoid: getMonoid<number>(),
+      Monoid: monoMonoid,
     })(instances, parameters)
   }
 

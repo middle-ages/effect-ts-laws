@@ -24,6 +24,8 @@
       "#laws": ["./src/laws.ts"],
       "#test": ["./src/vitest.ts"],
       "#util": ["./src/util.ts"],
+      "#algebra": ["./src/laws/algebra.ts"],
+      "#typeclass": ["./src/typeclass.ts"],
       "#typeclass/*": ["./src/typeclass/*.ts"]
     }
   }

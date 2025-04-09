@@ -1,5 +1,6 @@
 import type {LiftArbitrary} from '#arbitrary'
 import {
+  option,
   predicate,
   stringKeyRecord,
   testPredicateEquivalence,
@@ -7,46 +8,33 @@ import {
   tinyInteger,
 } from '#arbitrary'
 import type {LiftEquivalence} from '#law'
-import {LawSet} from '#law'
-import {Monoid as MO, Semigroup as SG} from '@effect/typeclass'
-import {
-  getMonoid as arrayMonoid,
-  getSemigroup as arraySemigroup,
-} from '@effect/typeclass/data/Array'
-import {
-  Array as AR,
-  Equivalence as EQ,
-  Number as NU,
-  Order as OD,
-  Predicate as PR,
-  Record as RC,
-} from 'effect'
+import {Monoid} from '@effect/typeclass'
+import {MonoidSum} from '@effect/typeclass/data/Number'
+import {getOptionalMonoid} from '@effect/typeclass/data/Option'
+import {Number as NU, Order as OD, Predicate as PR, Record as RC} from 'effect'
+import {type Equivalence} from 'effect/Equivalence'
 import {constant} from 'effect/Function'
 import type {Kind, TypeLambda} from 'effect/HKT'
+import {getEquivalence, getOrder, type Option} from 'effect/Option'
 import fc from 'fast-check'
-import {TypeclassInstances} from '../build.js'
 import type {GivenConcerns, ParameterizedGiven} from '../parameterized/given.js'
-import {buildMonomorphicLaws} from './build.js'
-import {MonomorphicGivenOf, unfoldMonomorphicGiven} from './given.js'
+import {unfoldMonomorphicGiven} from './given.js'
 
 /**
  * The underlying type used for monomorphic typeclass law tests.
- * This means that, for example, if we are testing the `Option`
+ * This means that, for example, if we are testing the `Array`
  * datatype, the actual type used in the tests will be
- * `Option<Mono> ≡ Option<readonly number[]>`.
+ * `Array<Mono> ≡ Option<Option<number>>`.
  * @category monomorphic
  */
-export type Mono = readonly number[]
+export type Mono = Option<number>
 
 /**
  * An arbitrary for the underlying type of the
  * {@link vitest.testTypeclassLaws} unit under test.
  * @category monomorphic
  */
-export const monoArbitrary: fc.Arbitrary<Mono> = fc.array(tinyInteger, {
-  minLength: 0,
-  maxLength: 4,
-})
+export const monoArbitrary: fc.Arbitrary<Mono> = option(tinyInteger)
 
 /**
  * Arbitrary for a record with string keys and `Mono` values.
@@ -64,15 +52,13 @@ export const monoPredicateArbitrary: fc.Arbitrary<PR.Predicate<Mono>> =
  * The equivalence used for {@link vitest.testTypeclassLaws}.
  * @category monomorphic
  */
-export const monoEquivalence: EQ.Equivalence<Mono> = AR.getEquivalence(
-  NU.Equivalence,
-)
+export const monoEquivalence: Equivalence<Mono> = getEquivalence(NU.Equivalence)
 
 /**
  * Equivalence for a record with string keys and `Mono` values.
  * @category monomorphic
  */
-export const monoRecordEquivalence: EQ.Equivalence<
+export const monoRecordEquivalence: Equivalence<
   RC.ReadonlyRecord<string, Mono>
 > = RC.getEquivalence(monoEquivalence)
 
@@ -80,19 +66,13 @@ export const monoRecordEquivalence: EQ.Equivalence<
  * The order used for {@link vitest.testTypeclassLaws}.
  * @category monomorphic
  */
-export const monoOrder: OD.Order<Mono> = AR.getOrder(NU.Order)
-
-/**
- * The semigroup used for {@link vitest.testTypeclassLaws}.
- * @category monomorphic
- */
-export const monoSemigroup: SG.Semigroup<Mono> = arraySemigroup<number>()
+export const monoOrder: OD.Order<Mono> = getOrder(NU.Order)
 
 /**
  * Monoid instance for the `Mono` type.
  * @category monomorphic
  */
-export const monoMonoid: MO.Monoid<Mono> = arrayMonoid<number>()
+export const monoMonoid: Monoid.Monoid<Mono> = getOptionalMonoid(MonoidSum)
 
 /**
  * Build a sampling equivalence between functions of type
@@ -100,15 +80,15 @@ export const monoMonoid: MO.Monoid<Mono> = arrayMonoid<number>()
  * @category monomorphic
  */
 export const getMonoUnaryEquivalence = <A>(
-  equalsA: EQ.Equivalence<A>,
-): EQ.Equivalence<(numArray: Mono) => A> =>
+  equalsA: Equivalence<A>,
+): Equivalence<(numArray: Mono) => A> =>
   testUnaryEquivalence(monoArbitrary, equalsA)
 
 /**
  * Build a sampling equivalence for predicates of the underlying `Mono` type.
  * @category monomorphic
  */
-export const monoPredicateEquivalence: EQ.Equivalence<PR.Predicate<Mono>> =
+export const monoPredicateEquivalence: Equivalence<PR.Predicate<Mono>> =
   testPredicateEquivalence(monoArbitrary)
 
 /**
@@ -134,15 +114,6 @@ export const unfoldMonoGiven = <
     getEquivalence,
     getArbitrary,
   })
-
-export const buildMonoLaws =
-  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
-    given: MonomorphicGivenOf<F, Mono, R, O, E>,
-  ) =>
-  <Ins extends TypeclassInstances<F, Mono, R, O, E>>(
-    instances: Ins,
-  ): LawSet[] =>
-    buildMonomorphicLaws<F, Mono, R, O, E>(given)(instances)
 
 const contravariant = <
   Typeclass extends TypeLambda,

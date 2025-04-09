@@ -1,23 +1,16 @@
+import {testTypeclassLaws} from '#test'
+import {Covariant as ArrayCovariant} from '@effect/typeclass/data/Array'
 import {
-  contravariantLaws,
-  ContravariantTypeLambda,
-  unfoldPropsGiven,
-} from '#laws'
-import {testLawSets} from '#test'
-import {Contravariant as lawful} from '@effect/typeclass/data/Predicate'
-import {Predicate as PR} from 'effect'
-import {flow, pipe} from 'effect/Function'
+  getEquivalence as getArrayEquivalence,
+  ReadonlyArrayTypeLambda,
+} from 'effect/Array'
+import {tinyArray} from '../../../src/arbitrary.js'
 
-const laws = flow(
-  unfoldPropsGiven.contravariant<
-    ContravariantTypeLambda,
-    PR.PredicateTypeLambda
-  >,
-  contravariantLaws,
-)
-
-const numRuns = 2
-
-describe('Contravariant laws with underlyingProps', () => {
-  pipe(lawful, laws, testLawSets({numRuns}))
+describe('Array covariant laws with underlyingProps', () => {
+  testTypeclassLaws.underlyingProps<ReadonlyArrayTypeLambda>({
+    getArbitrary: tinyArray,
+    getEquivalence: getArrayEquivalence,
+  })({
+    Covariant: ArrayCovariant,
+  })
 })

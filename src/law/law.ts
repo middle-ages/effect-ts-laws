@@ -182,7 +182,6 @@ export type UnknownArgs = [unknown, ...unknown[]]
  * @category model
  * @internal
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type UnknownLaw = Law<any>
 
 /**

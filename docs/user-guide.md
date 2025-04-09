@@ -154,9 +154,9 @@ the API, and imitating the _ancestors_ of this library from the Scala
 and Haskell languages, the high-level typeclass law testing interface is
 monomorphic, I.e.: `A`=`B`=`C`.
 
-The single type we used for typeclass testing is `readonly number[]`. Thus when
-testing the `Option` datatype, for example, the actual type used in the tests
-will be `Option<Mono> ≡ Option<readonly number[]>`.
+The single type we used for typeclass testing is `Option<number>`. Thus when
+testing the `Array` datatype, for example, the actual type used in the tests
+will be `Array<Mono> ≡ Array<Option<number>>`.
 
 In some cases, this underlying type breaks the test. For example,
 [React](https://react.dev/) functional components are functions that will only
@@ -218,7 +218,7 @@ will build a Monoid using `Applicative.getMonoid` and run it through the
 
 In this example, the Monoid  laws are only run if a Monoid instance for the
 underlying datatype has been found. Because the typeclass law tests are
-[monomorphic](#monomorphic) and our underlying type is `readonly number[]`, we
+[monomorphic](#monomorphic) and our underlying type is `Option<number>`, we
 always have a Monoid instance for the underlying type.
 
 The Applicative laws are also related to the [Monad laws](https://github.com/middle-ages/effect-ts-laws/blob/main/src/laws/typeclass/parameterized/Monad.ts).

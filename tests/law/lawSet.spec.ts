@@ -3,6 +3,7 @@ import {
   addLaws,
   addLawSets,
   checkLaws,
+  checkLawSets,
   equivalenceLaws,
   filterLaws,
   filterLawsDeep,
@@ -77,6 +78,16 @@ describe('lawSet', () => {
 
     test('fail', () => {
       expect(checkLaws(failSet)[0]).toMatch(/Property failed/)
+    })
+  })
+
+  describe('checkLaws', () => {
+    test('pass', () => {
+      expect(checkLawSets()(setA)).toEqual([])
+    })
+
+    test('fail', () => {
+      expect(checkLawSets()(failSet)[0]).toMatch(/Property failed/)
     })
   })
 

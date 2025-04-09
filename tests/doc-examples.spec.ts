@@ -3,8 +3,8 @@ import {
   GivenConcerns,
   Mono,
   monoEquivalence,
+  monoMonoid,
   monoOrder,
-  monoSemigroup,
   option,
   semigroupLaws,
   unfoldMonoGiven,
@@ -77,7 +77,7 @@ describe('doc examples', () => {
     })({
       Equivalence: OP.getEquivalence(monoEquivalence),
       Order: OP.getOrder(monoOrder),
-      Monoid: getOptionalMonoid(monoSemigroup),
+      Monoid: getOptionalMonoid(monoMonoid),
       Monad: optionMonad,
       Traversable: optionTraversable,
     })

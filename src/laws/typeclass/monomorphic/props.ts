@@ -2,11 +2,10 @@ import type {LiftArbitrary} from '#arbitrary'
 import {
   predicate,
   testPredicateEquivalence,
-  testUnaryEquivalence,
   tinyPositive,
   tinyString,
 } from '#arbitrary'
-import type {LawSet, LiftEquivalence} from '#law'
+import type {LiftEquivalence} from '#law'
 import {Monoid as MO, Semigroup as SE} from '@effect/typeclass'
 import {
   Equivalence as EQ,
@@ -18,10 +17,8 @@ import {
 } from 'effect'
 import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
-import {TypeclassInstances} from '../build.js'
 import type {GivenConcerns, ParameterizedGiven} from '../parameterized/given.js'
-import {buildMonomorphicLaws} from './build.js'
-import {MonomorphicGivenOf, unfoldMonomorphicGiven} from './given.js'
+import {unfoldMonomorphicGiven} from './given.js'
 import {monoPredicateArbitrary} from './mono.js'
 
 /**
@@ -75,16 +72,6 @@ export const propsEquivalence: EQ.Equivalence<MonoProps> = ST.getEquivalence({
 })
 
 /**
- * Build a sampling equivalence between functions of type
- * `(props: MonoProps) ⇒ A`.
- * @category monomorphic
- */
-export const getPropsUnaryEquivalence = <A>(
-  equalsA: EQ.Equivalence<A>,
-): EQ.Equivalence<(props: MonoProps) => A> =>
-  testUnaryEquivalence(propsArbitrary, equalsA)
-
-/**
  * Build a sampling equivalence for predicates of the underlying `Mono` type.
  * @category monomorphic
  */
@@ -113,15 +100,6 @@ export const unfoldPropsGiven = <
     getEquivalence,
     getArbitrary,
   })
-
-export const buildPropsLaws =
-  <F extends TypeLambda, R = never, O = unknown, E = unknown>(
-    given: MonomorphicGivenOf<F, MonoProps, R, O, E>,
-  ) =>
-  <Ins extends TypeclassInstances<F, MonoProps, R, O, E>>(
-    instances: Ins,
-  ): LawSet[] =>
-    buildMonomorphicLaws<F, MonoProps, R, O, E>(given)(instances)
 
 const contravariant = <
   Typeclass extends TypeLambda,
