@@ -15,6 +15,7 @@ import {monadLaws} from './Monad.js'
 import {rightFoldableLaws} from './RightFoldable.js'
 import {semiAlternativeLaws} from './SemiAlternative.js'
 import {traversableLaws} from './Traversable.js'
+import {flatMapLaws} from './FlatMap.js'
 
 /**
  * Map of typeclass name to their laws, for typeclasses of parameterized
@@ -28,6 +29,7 @@ export const parameterizedLaws = {
   Contravariant: contravariantLaws,
   Covariant: covariantLaws,
   Filterable: filterableLaws,
+  FlatMap: flatMapLaws,
   Foldable: foldableLaws,
   Invariant: invariantLaws,
   Monad: monadLaws,

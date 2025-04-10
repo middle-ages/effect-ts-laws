@@ -3,6 +3,7 @@ import {Monad as MD} from '@effect/typeclass'
 import {flow, pipe} from 'effect'
 import type {TypeLambda} from 'effect/HKT'
 import {covariantLaws} from './Covariant.js'
+import {flatMapLaws} from './FlatMap.js'
 import type {BuildParameterized} from './given.js'
 import {unfoldGiven} from './given.js'
 
@@ -14,10 +15,9 @@ export const monadLaws: BuildParameterized<MonadTypeLambda> = (
   given,
   suffix?,
 ) => {
-  const {a, F, fa, equalsFa, equalsFb, equalsFc, ab, afb, bfc} =
-    unfoldGiven(given)
+  const {a, F, fa, equalsFa, equalsFb, ab, afb} = unfoldGiven(given)
 
-  return pipe(given, covariantLaws, LawSet)(
+  return LawSet(covariantLaws(given), flatMapLaws(given))(
     `Monad${suffix ?? ''}`,
     Law(
       'left identity',
@@ -31,22 +31,6 @@ export const monadLaws: BuildParameterized<MonadTypeLambda> = (
       'flatMap(of) = id',
       fa,
     )(fa => equalsFa(pipe(fa, F.flatMap(F.of)), fa)),
-
-    // f(f(a, b), c), f(a, f(b, c))
-    // flatMap(bfc, flatMap(fa, afb)
-    // flatMap(flatMap(bfc, flatMap(fa, afb)
-    Law(
-      'associativity',
-      'fa ▹ flatMap(afb) ▹ flatMap(bfc) = fa ▹ flatMap(flatMap(bfc) ∘ afb)',
-      fa,
-      afb,
-      bfc,
-    )((fa, afb, bfc) =>
-      equalsFc(
-        pipe(fa, F.flatMap(afb), F.flatMap(bfc)),
-        pipe(fa, F.flatMap(flow(afb, F.flatMap(bfc)))),
-      ),
-    ),
 
     Law(
       'map consistency',
