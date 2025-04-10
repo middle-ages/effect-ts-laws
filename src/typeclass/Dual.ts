@@ -19,13 +19,5 @@ export interface Dual<A> extends MO.Monoid<A> {}
  * Build the `Dual<A>` of a `Monoid<A>`.
  * @category typeclass
  */
-export const fromMonoid = <A>(monoid: MO.Monoid<A>): Dual<A> => {
-  const combine = (self: A, that: A) => monoid.combine(that, self),
-    combineMany = (self: A, collection: Iterable<A>) =>
-      Array.from(collection).reduce(
-        (accumulator, value) => combine(accumulator, value),
-        self,
-      )
-
-  return MO.fromSemigroup({combine, combineMany}, monoid.empty)
-}
+export const fromMonoid = <A>(monoid: MO.Monoid<A>): Dual<A> =>
+  MO.reverse(monoid)
