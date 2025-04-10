@@ -36,8 +36,8 @@ export const inverse = <A, B>(
     a: fc.Arbitrary<A>
     equals: Equivalence<A>
   },
-  name = 'inverse',
   note = 'g ⚬ f = id',
+  name = 'inverse',
 ) => Law(name, note, a)(a => equals(g(f(a)), a))
 
 /**
@@ -54,7 +54,7 @@ export const symmetry = <A, B>(
     a: fc.Arbitrary<A>
     equals: Equivalence<B>
   },
-  name = 'symmetry',
   note = 'f(a, b) = f(b, a)',
+  name = 'symmetry',
 ) =>
   Law(name, note, a, a)((left, right) => equals(f(left, right), f(right, left)))
