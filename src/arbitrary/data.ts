@@ -25,10 +25,13 @@ const {map, flatMap} = arbitraryMonad
  * @category arbitraries
  */
 export const either = <A, E>(
-  e: fc.Arbitrary<E>,
-  a: fc.Arbitrary<A>,
+  left: fc.Arbitrary<E>,
+  right: fc.Arbitrary<A>,
 ): fc.Arbitrary<EI.Either<A, E>> =>
-  fc.oneof(a.map<EI.Either<A, E>>(EI.right), e.map<EI.Either<A, E>>(EI.left))
+  fc.oneof(
+    right.map<EI.Either<A, E>>(EI.right),
+    left.map<EI.Either<A, E>>(EI.left),
+  )
 
 /**
  * Returns an `Option` arbitrary given an arbitrary for the underlying value.
@@ -122,7 +125,7 @@ export const liftArbitraries = <
   type Data<T> = Kind<F, R, O, E, T>
 
   return <const Arbs extends fc.Arbitrary<unknown>[]>(...arbs: Arbs) =>
-    AR.map(arbs, (arb: fc.Arbitrary<unknown>) => liftArbitrary(arb)) as {
+    AR.map(arbs, liftArbitrary<unknown>) as {
       [K in keyof Arbs]: fc.Arbitrary<
         Data<Arbs[K] extends fc.Arbitrary<infer T> ? T : never>
       >

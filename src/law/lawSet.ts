@@ -251,9 +251,9 @@ export const emptyLawSet: LawSet = anonymousLawTests()
 // Rebuilds the tree filtering out LawSets so that LawSet.name is unique
 const dedupe = (
   {name = '', sets: lawSets, laws = []}: LawSet,
-  argNames = new Set<string>(),
+  argumentNames = new Set<string>(),
 ): [LawSet, Set<string>] => {
-  let names = argNames
+  let names = argumentNames
 
   const sets = []
   for (const lawSet of lawSets) {
@@ -262,8 +262,8 @@ const dedupe = (
       sets.push(lawSet)
     } else {
       if (names.has(name)) continue
-      const [res, childNames] = dedupe({name, ...rest}, names.add(name))
-      sets.push(res)
+      const [result, childNames] = dedupe({name, ...rest}, names.add(name))
+      sets.push(result)
       names = childNames
     }
   }

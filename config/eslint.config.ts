@@ -1,36 +1,60 @@
-import eslint from '@eslint/js'
-import {Linter} from 'eslint'
-import allRecommended from 'eslint-plugin-prettier/recommended'
-import tseslint from 'typescript-eslint'
+import * as eslint from '@eslint/js'
+import prettierRecommended from 'eslint-plugin-prettier/recommended'
+import eslintPluginUnicorn from 'eslint-plugin-unicorn'
+import * as globals from 'globals'
+import {globalIgnores} from 'eslint/config'
+import tslint from 'typescript-eslint'
+import sonarjs from 'eslint-plugin-sonarjs'
 
-const {languageOptions: _, ...recommended} = allRecommended
-
-const config = tseslint.config(
-  {
-    ignores: [
-      '../node_modules/*',
-      '../.dev',
-      '../docs/catalog/js/poster-elements.js',
-    ],
-  },
+const config = tslint.config(
+  globalIgnores([
+    '../node_modules',
+    '../dist',
+    './dependency-cruiser.cjs',
+    './storybook-static',
+  ]),
 
   eslint.configs.recommended,
-  tseslint.configs.strictTypeChecked,
-  recommended,
+  ...tslint.configs.recommended,
+  eslint.configs.recommended,
+  tslint.configs.strictTypeChecked,
+  eslintPluginUnicorn.configs.recommended,
+  sonarjs.configs.recommended,
+  prettierRecommended,
 
   {
+    ignores: ['../test/**/*.ts'],
     languageOptions: {
-      parser: tseslint.parser,
       parserOptions: {
         projectService: true,
         ecmaVersion: 'latest',
         warnOnUnsupportedTypeScriptVersion: false,
+        tsconfigRootDir: import.meta.dirname + '/..',
       },
+      globals: globals.node,
     },
-  },
-
-  {
     rules: {
+      // Unicorn gets confused between methods and functions.
+      'unicorn/no-array-callback-reference': 'off',
+      'unicorn/no-array-method-this-argument': 'off',
+      'unicorn/consistent-function-scoping': 'off',
+
+      'unicorn/prevent-abbreviations': [
+        'error',
+        {
+          allowList: {
+            Args: true,
+            Props: true,
+            args: true,
+            props: true,
+          },
+        },
+      ],
+
+      'unicorn/filename-case': 'off',
+
+      'sonarjs/arguments-order': 'off',
+
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -45,6 +69,16 @@ const config = tseslint.config(
       ],
     },
   },
-) as Linter.Config[]
+
+  {
+    files: ['../tests/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.vitest,
+      },
+    },
+  },
+)
 
 export default config

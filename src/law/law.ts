@@ -98,7 +98,7 @@ export const Law =
   ) =>
   (
     /** Law predicate. Its argument type is encoded in `Ts`. */
-    predicate: (...args: Ts) => boolean,
+    predicate: (...arguments_: Ts) => boolean,
     /** `fast-check` runtime parameters. */
     parameters?: ParameterOverrides,
   ): Law<Ts> => ({
@@ -107,7 +107,7 @@ export const Law =
     predicate: tupled(predicate),
     arbitrary: fc.tuple<Ts>(...arbitraries),
     /* v8 ignore next 1 */
-    ...(parameters !== undefined ? {parameters} : {}),
+    ...parameters,
   })
 
 /**
@@ -139,10 +139,10 @@ export const checkLaw = <Ts extends UnknownArgs>(
 
   try {
     asAssert(law, parameters)
-  } catch (e) {
+  } catch (error) {
     /* v8 ignore next 2 */
-    if (!(e instanceof Error)) throw new Error(e as string)
-    failMessage = e.message
+    if (!(error instanceof Error)) throw new Error(error as string)
+    failMessage = error.message
   }
 
   return OP.fromNullable(failMessage)
@@ -161,8 +161,8 @@ export const asAssert = <Ts extends UnknownArgs>(
   overrides?: ParameterOverrides,
 ): void => {
   fc.assert(
-    fc.property<[Ts]>(arbitrary, (args: Ts) => {
-      if (predicate(args)) return true
+    fc.property<[Ts]>(arbitrary, (arguments_: Ts) => {
+      if (predicate(arguments_)) return true
       throw new Error(`${name}: ${note}`)
     }),
     {...parameters, ...overrides},

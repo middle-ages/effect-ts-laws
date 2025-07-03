@@ -81,7 +81,7 @@ export const monoMonoid: Monoid.Monoid<Mono> = getOptionalMonoid(MonoidSum)
  */
 export const getMonoUnaryEquivalence = <A>(
   equalsA: Equivalence<A>,
-): Equivalence<(numArray: Mono) => A> =>
+): Equivalence<(numericArray: Mono) => A> =>
   testUnaryEquivalence(monoArbitrary, equalsA)
 
 /**

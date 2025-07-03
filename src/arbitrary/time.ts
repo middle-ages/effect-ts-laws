@@ -40,7 +40,7 @@ export const boundedDuration: fc.Arbitrary<
     })
 
     return fc.tuple(
-      fc.constant(map(fc.integer({min, max}), i => DU.millis(i))),
+      pipe({min, max}, fc.integer, map(DU.millis), fc.constant),
       bounded,
     )
   }),
