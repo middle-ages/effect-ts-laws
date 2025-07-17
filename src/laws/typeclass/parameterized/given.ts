@@ -1,5 +1,5 @@
 import type {LiftArbitrary} from '#arbitrary'
-import {binary, liftArbitraries, option, unary, unaryToKind} from '#arbitrary'
+import {binary, option, unary, unaryToKind} from '#arbitrary'
 import type {LawSet, LiftEquivalence} from '#law'
 import {liftEquivalences} from '#law'
 import {Monoid as MO} from '@effect/typeclass'
@@ -173,7 +173,9 @@ export const unfoldGiven = <
       equalsB,
       equalsC,
     ),
-    [fa, fb, fc] = liftArbitraries(getArbitrary)(a, b, c),
+    fa = getArbitrary(a),
+    fb = getArbitrary(b),
+    fc = getArbitrary(c),
     endoA = unary<A>()(a),
     ab = unary<A>()(b),
     bc = unary<B>()(c),

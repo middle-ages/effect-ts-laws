@@ -14,6 +14,7 @@ const stringIso: Isomorphism.Isomorphism<number, string> = {
 }
 
 const arrayIso: Isomorphism.Isomorphism<number, null[]> = {
+  // eslint-disable-next-line unicorn/no-null
   to: n => (n === 0 ? [] : Array.replicate(n)(null)),
   from: array => array.length,
 }
@@ -33,6 +34,7 @@ const string: IsomorphismGiven<number, string> = {
 const array: IsomorphismGiven<number, null[]> = {
   ...common,
   F: arrayIso,
+  // eslint-disable-next-line unicorn/no-null
   b: tinyPositive.map(n => Array.replicate(n)(null)),
   equalsB: (self, that) => self.length === that.length,
 }

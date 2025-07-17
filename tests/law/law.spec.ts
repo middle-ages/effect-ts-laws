@@ -61,7 +61,7 @@ describe('law', () => {
           law,
           negateLaw,
           checkLaw,
-          OP.map(s => s.match(/Property failed/) !== null),
+          OP.map(s => new RegExp(/Property failed/).exec(s) !== null),
         ),
       ).toEqual(OP.some(true))
     })

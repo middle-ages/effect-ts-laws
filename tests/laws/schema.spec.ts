@@ -17,6 +17,7 @@ describe('schema laws self-tests', () => {
     const arbitrary = () => (fc: typeof FastCheck) =>
       fc.oneof(
         fc.string(),
+        // eslint-disable-next-line sonarjs/no-nested-functions
         fc.nat().map(n => n.toString()),
       )
 
@@ -74,7 +75,7 @@ describe('schema laws self-tests', () => {
     // We expect the counterexample to fail
     const errors = checkLaws(schemaLaws(Person), {
       numRuns: 1,
-      seed: -1512491049,
+      seed: -1_512_491_049,
       path: '38',
     })
 

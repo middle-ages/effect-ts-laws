@@ -1,4 +1,5 @@
 /** The object with the keys `keys` and all its values set to `value`. */
+// eslint-disable-next-line unicorn/prevent-abbreviations
 export const monoRecord =
   <V>(value: V) =>
   <KS extends readonly string[]>(...keys: KS): Record<KS[number], V> => {

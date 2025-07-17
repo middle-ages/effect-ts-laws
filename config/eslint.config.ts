@@ -47,13 +47,22 @@ const config = tslint.config(
             Props: true,
             args: true,
             props: true,
+            cb: true,
+            ab: true,
+            bc: true,
+            i: true,
+            numRuns: true,
           },
         },
       ],
 
       'unicorn/filename-case': 'off',
+      'unicorn/prefer-spread': 'off',
+      'unicorn/prefer-number-properties': 'off',
+      'unicorn/no-array-reduce': 'off',
 
       'sonarjs/arguments-order': 'off',
+      'sonarjs/no-empty-test-file': 'off',
 
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',

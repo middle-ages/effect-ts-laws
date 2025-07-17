@@ -12,10 +12,8 @@ import {
   pipe,
   String as STR,
 } from 'effect'
-import type {Kind, TypeLambda} from 'effect/HKT'
 import fc from 'fast-check'
 import {Monad as arbitraryMonad} from './instances.js'
-import type {LiftArbitrary} from './types.js'
 
 const {map, flatMap} = arbitraryMonad
 
@@ -90,47 +88,6 @@ export const tinyArray = <A>(a: fc.Arbitrary<A>): fc.Arbitrary<A[]> =>
  */
 export const tinyIntegerArray: fc.Arbitrary<readonly number[]> =
   tinyArray(tinyInteger)
-
-/**
- * Given a {@link LiftArbitrary} function, and 1..n `Arbitrary`s for
- * different types `A₁, A₂, ...Aₙ`, returns the given list except every
- * arbitrary for type `Aᵢ` has been replaced by an arbitrary for type
- * `Kind<F, R, O, E, Aᵢ>`. For example:
- * @example
- * import {option, liftArbitraries, tinyPositive, tinyIntegerArray} from 'effect-ts-laws'
- * import {OptionTypeLambda} from 'effect/Option'
- * import fc from 'fast-check'
- *
- * const [positive, integerArray] = liftArbitraries<OptionTypeLambda>(
- *   option,
- * )(
- *   tinyPositive,
- *   tinyIntegerArray,
- * )
- * // typeof positive     ≡ fc.Arbitrary<Option<number>>
- * // typeof integerArray ≡ fc.Arbitrary<Option<readonly number[]>>
- *
- * console.log(fc.sample(positive, {numRuns: 1}))
- * console.table(fc.sample(integerArray, {numRuns: 1}))
- * @category lifting
- */
-export const liftArbitraries = <
-  F extends TypeLambda,
-  R = never,
-  O = unknown,
-  E = unknown,
->(
-  liftArbitrary: LiftArbitrary<F, R, O, E>,
-) => {
-  type Data<T> = Kind<F, R, O, E, T>
-
-  return <const Arbs extends fc.Arbitrary<unknown>[]>(...arbs: Arbs) =>
-    AR.map(arbs, liftArbitrary<unknown>) as {
-      [K in keyof Arbs]: fc.Arbitrary<
-        Data<Arbs[K] extends fc.Arbitrary<infer T> ? T : never>
-      >
-    }
-}
 
 /**
  * Build an arbitrary error from an arbitrary of a message.

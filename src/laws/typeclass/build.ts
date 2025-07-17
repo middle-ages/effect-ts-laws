@@ -76,13 +76,13 @@ export const buildTypeclassLawsFor = <
   const {getEquivalence, equalsA, getArbitrary, a} = given
 
   return [
-    ...(Object.keys(concrete).length !== 0
+    ...(Object.keys(concrete).length > 0
       ? buildConcreteTypeclassLaws(concrete, {
           a: getArbitrary(a),
           equalsA: getEquivalence(equalsA),
         })
       : []),
-    ...(Object.keys(parameterized).length !== 0
+    ...(Object.keys(parameterized).length > 0
       ? buildParameterizedTypeclassLaws<F, A, B, C>()(parameterized, given)
       : []),
   ]

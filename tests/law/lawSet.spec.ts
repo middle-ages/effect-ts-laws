@@ -23,6 +23,7 @@ describe('lawSet', () => {
   const setA: LawSet = lawTests(
     'some unit under test',
     Law('law₁', '∀n ∈ ℕ: n = n', tinyPositive)(x => x === x),
+    // eslint-disable-next-line sonarjs/no-identical-expressions
     Law('law₂', '∀n ∈ ℕ: n ≤ n', tinyPositive)(x => x <= x),
   )
 

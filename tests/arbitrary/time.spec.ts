@@ -15,8 +15,8 @@ describe('time', () => {
   test('zoned', () => {
     fc.assert(
       fc.property(
-        zoned({min: new Date(0), max: new Date(3_600)}),
-        z => z.epochMillis <= 3_600 * 1_000,
+        zoned({min: new Date(0), max: new Date(3600)}),
+        z => z.epochMillis <= 3600 * 1000,
       ),
     )
   })
