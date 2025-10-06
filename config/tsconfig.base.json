@@ -14,8 +14,6 @@
     "noErrorTruncation": true,
 
     "strictNullChecks": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": false,
     "noUncheckedSideEffectImports": true,
 
     "paths": {

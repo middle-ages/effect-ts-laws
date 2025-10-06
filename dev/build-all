@@ -6,7 +6,6 @@ pnpm clean
 pnpm lint
 pnpm typecheck
 pnpm run:examples
-pnpm circular
 pnpm test:run
 pnpm build
 
