@@ -17,7 +17,7 @@ describe('schema laws self-tests', () => {
     const arbitrary = () => (fc: typeof FastCheck) =>
       fc.oneof(
         fc.string(),
-        // eslint-disable-next-line sonarjs/no-nested-functions
+
         fc.nat().map(n => n.toString()),
       )
 

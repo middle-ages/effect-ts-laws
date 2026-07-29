@@ -237,7 +237,9 @@ export interface GivenConcerns<
   R = never,
   O = unknown,
   E = unknown,
-> extends GivenArbitraries<F, A, B, C, R, O, E>,
+>
+  extends
+    GivenArbitraries<F, A, B, C, R, O, E>,
     GivenEquivalence<F, A, B, C, R, O, E>,
     GivenPredicates<A, B, C> {
   /**

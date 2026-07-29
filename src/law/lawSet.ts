@@ -250,7 +250,7 @@ export const emptyLawSet: LawSet = anonymousLawTests()
 
 // Rebuilds the tree filtering out LawSets so that LawSet.name is unique
 const dedupe = (
-  {name = '', sets: lawSets, laws = []}: LawSet,
+  {name = '', sets: lawSets, laws}: LawSet,
   argumentNames = new Set<string>(),
 ): [LawSet, Set<string>] => {
   let names = argumentNames

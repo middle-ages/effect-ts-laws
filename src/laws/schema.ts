@@ -46,7 +46,7 @@ import {equivalenceLaws} from './typeclass/concrete/Equivalence.js'
  * @category schema laws
  */
 export const schemaLaws = <A, I>(schema: Schema.Schema<A, I>): LawSet => {
-  const [a, equalsA] = [Arbitrary.make(schema), Schema.equivalence(schema)]
+  const [a, equalsA] = project(schema)
 
   return pipe(
     {a, equalsA, F: equalsA},
@@ -136,9 +136,18 @@ export const encodeDecodeLaws = <A, I>(
   ]
 }
 
+/**
+ * The single boundary where an arbitrary built by `effect` enters our world.
+ *
+ * `effect` depends on fast-check v3 while we build laws with v4. The two
+ * `Arbitrary` types are interchangeable at runtime, but as of fast-check
+ * 4.9.0 the `Stream` returned by `shrink` declares a private field, so the
+ * v3 type is no longer structurally assignable to the v4 one. Until `effect`
+ * moves to v4, we bridge the versions here.
+ */
 const project = <A, I>(
   schema: Schema.Schema<A, I>,
 ): [fc.Arbitrary<A>, EQ.Equivalence<A>] => [
-  Arbitrary.make(schema),
+  Arbitrary.make(schema) as unknown as fc.Arbitrary<A>,
   Schema.equivalence(schema),
 ]
